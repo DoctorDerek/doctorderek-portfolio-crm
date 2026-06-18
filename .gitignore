@@ -3,8 +3,12 @@
 # dependencies
 /node_modules
 /.pnp
-.pnp.js
-
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 # testing
 /coverage
 
@@ -31,11 +35,26 @@ yarn-error.log*
 # vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
+# Other Next.js
+node_modules
+target
+dist
+logs
+.cache
+.vscode
+.DS_Store
+.idea
+.next
+yarn-error.log
+npm-debug.log
+
+# Next.js env types
 next-env.d.ts
 
-# yarn (zero installs)
+# typescript
+*.tsbuildinfo
+
+# Yarn https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 .yarn/*
 !.yarn/cache
 !.yarn/patches
@@ -43,3 +62,16 @@ next-env.d.ts
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+!.yarn/install-state.gz
+
+# Repomix output & temporary intermediary files
+repomix-output.*
+repomix-temp.*
+
+# IP sovereignty & private files
+constitution.txt
+gdd.txt
+reference/
+git_files_list.txt
+vendor
+asset

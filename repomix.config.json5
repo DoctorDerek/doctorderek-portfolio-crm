@@ -1,0 +1,52 @@
+{
+  input: {
+    maxFileSize: 50000000,
+  },
+  output: {
+    filePath: "repomix-output.txt",
+    style: "plain",
+    // Supposedly this makes it "parsable" and more tokens:
+    parsableStyle: true,
+    compress: false,
+    headerText: "Custom header information for the packed file.",
+    fileSummary: true,
+    directoryStructure: true,
+    files: true,
+    removeComments: false,
+    removeEmptyLines: false,
+    topFilesLength: 5,
+    tokenCountTree: false, // or true, or a number like 10 for minimum token threshold
+    showLineNumbers: false,
+    truncateBase64: false,
+    copyToClipboard: false,
+    // Include full directory structure for reference (but not full file list):
+    includeFullDirectoryStructure: true,
+    includeEmptyDirectories: true,
+    git: {
+      sortByChanges: true,
+      sortByChangesMaxCommits: 100,
+      includeDiffs: false,
+    },
+  },
+  include: [
+    "**/*.css",
+    "**/*.html",
+    "**/*.js",
+    "**/*.json",
+    "**/*.rs",
+    "**/*.toml",
+    "**/*.ts",
+    "**/*.tsx",
+  ],
+  ignore: {
+    useGitignore: true,
+    useDefaultPatterns: true,
+    customPatterns: ["public/**/*"],
+  },
+  security: {
+    enableSecurityCheck: true,
+  },
+  tokenCount: {
+    encoding: "o200k_base",
+  },
+}

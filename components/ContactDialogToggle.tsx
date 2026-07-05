@@ -1,10 +1,9 @@
 "use client"
 
 // Specify this is a Client Component, not a Server Component.
+import classNames from "@/utils/classNames"
 import { Switch } from "@headlessui/react"
 import { Dispatch, SetStateAction } from "react"
-
-import classNames from "@/utils/classNames"
 
 /** This is the toggle to show the optional address fields. */
 export default function ContactDialogToggle({

@@ -1,11 +1,10 @@
-import { UserIcon } from "@heroicons/react/24/solid"
-import Image from "next/image"
-import { Dispatch, SetStateAction } from "react"
-
 import ButtonDelete from "@/components/ButtonDelete"
 import ContactCardName from "@/components/ContactCardName"
 import { DialogState } from "@/components/ContactDialog"
 import { Contact } from "@/contacts/CONTACTS"
+import { UserIcon } from "@heroicons/react/24/solid"
+import Image from "next/image"
+import { Dispatch, SetStateAction } from "react"
 
 /**
  * We have to specify the `sizes` prop when using `next/image` with `fill`.

@@ -1,11 +1,10 @@
 "use client"
 
 // Specify this is a Client Component, not a Server Component.
-import { Menu } from "@headlessui/react"
-import { Dispatch, SetStateAction, useState } from "react"
-
 import { AGE_RANGES } from "@/contacts/AGE_RANGES"
 import classNames from "@/utils/classNames"
+import { Menu } from "@headlessui/react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 /**
  * The `<SearchBar>` powers the "search by age range" feature, though the

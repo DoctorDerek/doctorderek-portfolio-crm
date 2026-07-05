@@ -1,6 +1,5 @@
-import { XMarkIcon } from "@heroicons/react/24/solid"
-
 import classNames from "@/utils/classNames"
+import { XMarkIcon } from "@heroicons/react/24/solid"
 
 /**
  * This close button is used in the `<CloseDialog>` and `<NavBar>` components. */

@@ -1,14 +1,13 @@
 "use client"
 
 // Specify this is a Client Component, not a Server Component.
-import { useEffect, useState } from "react"
-
 import ButtonCreate from "@/components/ButtonCreate"
 import ButtonReset from "@/components/ButtonReset"
 import ContactActionDialog, { DialogState } from "@/components/ContactDialog"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
 import usePhoneBookService from "@/utils/usePhoneBookService"
+import { useEffect, useState } from "react"
 
 /**
  * The `<PhoneBookApp>` handles our global state using 3 state handlers:

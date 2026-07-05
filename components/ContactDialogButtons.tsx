@@ -36,13 +36,13 @@ function ProgressIndicator({
   return (
     <li
       className={classNames(
-        "flex items-center border border-solid pr-2 rounded",
+        "flex items-center rounded border border-solid pr-2",
         slideIndex === thisSlideIndex
-          ? "text-blue-600 border-blue-600 dark:text-blue-400 dark:border-blue-400"
-          : "text-gray-600 border-gray-200 dark:text-gray-300 dark:border-gray-700"
+          ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
+          : "border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-300",
       )}
     >
-      <span className="font-bold w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-end">
+      <span className="flex h-6 w-6 items-center justify-end font-bold sm:h-8 sm:w-8">
         {slideIndex >= thisSlideIndex ? (
           <CheckMark />
         ) : (
@@ -56,7 +56,7 @@ function ProgressIndicator({
 
 function ProgressIndicators({ slideIndex }: { slideIndex: number }) {
   return (
-    <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base justify-between mt-4">
+    <ol className="mt-4 flex w-full items-center justify-between text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
       <ProgressIndicator slideIndex={slideIndex} thisSlideIndex={0}>
         Email
       </ProgressIndicator>
@@ -91,7 +91,7 @@ function ContactDialogButton({
       type={type}
       className={classNames(
         "rounded-md px-6 py-2 hover:outline hover:outline-1",
-        color
+        color,
       )}
       onClick={onClick}
     >

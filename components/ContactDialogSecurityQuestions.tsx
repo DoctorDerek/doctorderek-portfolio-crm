@@ -66,16 +66,16 @@ export default function ContactDialogSecurityQuestions({
       onChange={handleChange}
       className="relative top-3"
     >
-      <Combobox.Label className="absolute -top-3 left-3 inline-block bg-white px-1 text-sm font-medium text-gray-900 dark:bg-gray-800 dark:text-gray-100 z-10">
+      <Combobox.Label className="absolute -top-3 left-3 z-10 inline-block bg-white px-1 text-sm font-medium text-gray-900 dark:bg-gray-800 dark:text-gray-100">
         Security Question
       </Combobox.Label>
       <div className="relative mt-2">
         <Combobox.Input
           className={classNames(
-            "px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 dark:ring-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:focus:ring-gray-500 dark:disabled:bg-gray-950 dark:disabled:text-gray-800 dark:disabled:ring-gray-950 placeholder:px-2",
+            "block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:px-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:ring-gray-700 dark:focus:ring-gray-500 dark:disabled:bg-gray-950 dark:disabled:text-gray-800 dark:disabled:ring-gray-950 sm:text-sm sm:leading-6",
             errors?.securityQuestion
               ? "ring-2 ring-red-500 dark:ring-red-900"
-              : ""
+              : "",
           )}
           displayValue={(securityQuestion) =>
             (securityQuestion as SecurityQuestion)?.question
@@ -101,7 +101,7 @@ export default function ContactDialogSecurityQuestions({
                 className={({ active }) =>
                   classNames(
                     "relative cursor-default select-none py-2 pl-8 pr-4",
-                    active ? "bg-indigo-600 text-white" : "text-gray-900"
+                    active ? "bg-indigo-600 text-white" : "text-gray-900",
                   )
                 }
               >
@@ -113,7 +113,7 @@ export default function ContactDialogSecurityQuestions({
                         selectedSecurityQuestion?.question ===
                           securityQuestion.question
                           ? "font-semibold"
-                          : ""
+                          : "",
                       )}
                     >
                       {securityQuestion.question}
@@ -124,7 +124,7 @@ export default function ContactDialogSecurityQuestions({
                       <span
                         className={classNames(
                           "absolute inset-y-0 left-0 flex items-center pl-1.5",
-                          active ? "text-white" : "text-indigo-600"
+                          active ? "text-white" : "text-indigo-600",
                         )}
                       >
                         <CheckIcon className="h-5 w-5" aria-hidden="true" />

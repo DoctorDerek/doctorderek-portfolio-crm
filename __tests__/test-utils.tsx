@@ -7,7 +7,7 @@
 //
 // Note: This syntax replaces any imports from "@testing-library/react".
 //
-import { RenderOptions, render } from "@testing-library/react"
+import { render, RenderOptions } from "@testing-library/react"
 import { ReactElement, ReactNode } from "react"
 
 // **Global Mocks**
@@ -15,7 +15,7 @@ import { ReactElement, ReactNode } from "react"
 
 // We mock Next.js's useRouter hook using the "next-router-mock" package:
 jest.mock("next/dist/client/router", () =>
-  jest.requireActual("next-router-mock")
+  jest.requireActual("next-router-mock"),
 )
 jest.mock("next/dist/shared/lib/router-context", () => {
   const { createContext } = jest.requireActual("react")
@@ -33,7 +33,7 @@ const CustomProviders = ({ children }: { children: ReactNode }) =>
 
 const customRender = (
   ui: ReactElement,
-  options?: Omit<RenderOptions, "wrapper">
+  options?: Omit<RenderOptions, "wrapper">,
 ) => render(ui, { wrapper: CustomProviders, ...options })
 
 export * from "@testing-library/react"

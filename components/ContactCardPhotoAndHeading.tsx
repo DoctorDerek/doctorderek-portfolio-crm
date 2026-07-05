@@ -43,11 +43,11 @@ export default function ContactCardPhotoAndHeading({
         )}
         {/** If we don't have a photo, show a placeholder. */}
         {!photo && (
-          <div className="bg-gray-300 dark:bg-gray-200 rounded-full h-full w-full flex items-center justify-center">
+          <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-300 dark:bg-gray-200">
             <UserIcon className="h-3/4 w-3/4 text-gray-100 dark:text-gray-400" />
           </div>
         )}
-        <div className="invisible absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform group-hover:visible">
+        <div className="invisible absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform group-hover:visible">
           <ButtonDelete contact={contact} setDialogState={setDialogState} />
         </div>
       </div>

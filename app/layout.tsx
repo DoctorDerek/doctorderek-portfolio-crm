@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       {/* We suppress hydration warning to use next-themes for dark mode. */}
-      <body className="antialiased text-gray-950 dark:text-gray-100 bg-gray-100 dark:bg-gray-800">
+      <body className="bg-gray-100 text-gray-950 antialiased dark:bg-gray-800 dark:text-gray-100">
         <Providers>
           <NavBar />
           <main className="mx-auto flex min-h-screen w-[95vw] cursor-crosshair flex-col p-8">

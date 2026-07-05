@@ -21,7 +21,7 @@ describe("@/components/ContactCard", () => {
   const { birthYear, birthMonth, birthDay } = contact
   const birthdayTransformed = new RegExp(
     transformBirthday({ birthYear, birthMonth, birthDay }),
-    "i"
+    "i",
   )
   const streetAddress = new RegExp(contact.streetAddress || "", "i")
   const city = new RegExp(contact.city || "", "i")
@@ -57,7 +57,7 @@ describe("@/components/ContactCard", () => {
     // The src attribute should include the URL `/contacts/${photo}`.
     expect(image).toHaveAttribute(
       "src",
-      expect.stringMatching(`%2Fcontacts%2F${photo}`) // %2F is a forward slash.
+      expect.stringMatching(`%2Fcontacts%2F${photo}`), // %2F is a forward slash.
     )
   })
 

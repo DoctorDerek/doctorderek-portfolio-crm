@@ -172,7 +172,7 @@ export default function ContactDialog({
       <div className="fixed inset-0 flex items-center justify-center p-4">
         {/* The actual dialog panel, centered inside the box. */}
         <form onSubmit={handleSubmit(onDialogSubmit)}>
-          <Dialog.Panel className="relative mx-auto flex min-h-[75vh] max-w-lg flex-col justify-between rounded-lg bg-gray-100 dark:bg-gray-800 p-6 text-lg space-y-4">
+          <Dialog.Panel className="relative mx-auto flex min-h-[75vh] max-w-lg flex-col justify-between space-y-4 rounded-lg bg-gray-100 p-6 text-lg dark:bg-gray-800">
             <div>
               {/* Top section */}
               <ContactDialogClose closeDialog={closeDialog} />

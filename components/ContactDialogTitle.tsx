@@ -7,7 +7,7 @@ export default function ContactDialogTitle({
   dialogState: DialogState
 }) {
   return (
-    <Dialog.Title className="text-center text-2xl font-bold pb-4">
+    <Dialog.Title className="pb-4 text-center text-2xl font-bold">
       {/** We transform the dialog state to title case: "Update" */}
       {`${dialogState.type.slice(0, 1)}${dialogState.type
         .slice(1)

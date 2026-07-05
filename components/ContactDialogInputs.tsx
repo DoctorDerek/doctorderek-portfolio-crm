@@ -71,8 +71,8 @@ function ContactDialogInput({
         type={getInputType()}
         id={fieldName}
         className={classNames(
-          "px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 dark:ring-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:focus:ring-gray-500 dark:disabled:bg-gray-950 dark:disabled:text-gray-800 dark:disabled:ring-gray-950",
-          errors[fieldName] ? "ring-2 ring-red-500 dark:ring-red-900" : ""
+          "block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:ring-gray-700 dark:focus:ring-gray-500 dark:disabled:bg-gray-950 dark:disabled:text-gray-800 dark:disabled:ring-gray-950 sm:text-sm sm:leading-6",
+          errors[fieldName] ? "ring-2 ring-red-500 dark:ring-red-900" : "",
         )}
         placeholder={placeholderWithPreviousValue}
         {...register(fieldName, {
@@ -151,7 +151,7 @@ function ErrorMessage({
       "All fields are required."
     )
   }
-  return <div className="text-red-500 mt-2">{getErrorMessage()}</div>
+  return <div className="mt-2 text-red-500">{getErrorMessage()}</div>
 }
 
 /** This is the "interior" of the form, where the user inputs data. */
@@ -196,7 +196,7 @@ export default function ContactDialogInputs({
           errors={errors}
           addressEnabled={addressEnabled}
         />
-        <div className="flex items-center mt-4 justify-between text-sm">
+        <div className="mt-4 flex items-center justify-between text-sm">
           <div className="flex items-center">
             {(getValues("password")?.length || 0) >= 8 && (
               <CheckIcon className="ml-2 h-5 w-5 text-green-500" />
@@ -225,7 +225,7 @@ export default function ContactDialogInputs({
             <span className="ml-2">At least 1 symbol</span>
           </div>
         </div>
-        <div className="text-base italic pt-4">
+        <div className="pt-4 text-base italic">
           Note: The password is only to demonstrate password validation. Do not
           use a real password.
         </div>
@@ -354,7 +354,7 @@ export default function ContactDialogInputs({
           errors={errors}
           addressEnabled={addressEnabled}
         />
-        <div className="text-base italic pt-4">
+        <div className="pt-4 text-base italic">
           Note: The security question is only for demonstration purposes. Do not
           use a real security question.
         </div>
@@ -366,9 +366,9 @@ export default function ContactDialogInputs({
           )}
       </div>
       <div className="keen-slider__slide space-y-4 text-sm">
-        <div className="font-bold italic text-base">Review and Submit</div>
+        <div className="text-base font-bold italic">Review and Submit</div>
         <ContactCard contact={getValues()} setDialogState={() => {}} />
-        <div className="font-bold italic text-base pb-4">Security Question</div>
+        <div className="pb-4 text-base font-bold italic">Security Question</div>
         <span className="italic">{getValues("securityQuestion")}</span>
         <span className="font-bold">
           {" "}

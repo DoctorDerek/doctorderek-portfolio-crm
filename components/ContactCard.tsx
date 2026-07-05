@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from "react"
-
 import ContactCardEmail from "@/components/ContactCardEmail"
 import ContactCardLabelAndData from "@/components/ContactCardLabelAndData"
 import ContactCardPhoneNumber from "@/components/ContactCardPhoneNumber"
@@ -7,6 +5,7 @@ import ContactCardPhotoAndHeading from "@/components/ContactCardPhotoAndHeading"
 import { DialogState } from "@/components/ContactDialog"
 import { Contact } from "@/contacts/CONTACTS"
 import transformBirthday from "@/utils/transformBirthday"
+import { Dispatch, SetStateAction } from "react"
 
 function Address({ contact }: { contact: Contact }) {
   const { streetAddress, city, state, zipCode } = contact || {

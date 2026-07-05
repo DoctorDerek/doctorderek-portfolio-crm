@@ -1,10 +1,9 @@
-import { assign, createMachine } from "xstate"
-
 import CONTACTS_WITH_AGES, {
   Contact,
   calculateAge,
   sortByLastName,
 } from "@/contacts/CONTACTS"
+import { assign, createMachine } from "xstate"
 
 export const LOCALSTORAGE_KEY_AUTH = "phonebook-filter-by-age"
 

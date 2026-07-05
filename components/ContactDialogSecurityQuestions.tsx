@@ -1,3 +1,5 @@
+import { Contact } from "@/contacts/CONTACTS"
+import classNames from "@/utils/classNames"
 import { Combobox } from "@headlessui/react"
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid"
 import { useEffect, useState } from "react"
@@ -8,9 +10,6 @@ import {
   UseFormSetError,
   UseFormSetValue,
 } from "react-hook-form"
-
-import { Contact } from "@/contacts/CONTACTS"
-import classNames from "@/utils/classNames"
 
 type SecurityQuestion = {
   id: number

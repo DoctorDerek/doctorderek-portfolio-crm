@@ -1,10 +1,9 @@
-import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
-import { MutableRefObject, ReactNode } from "react"
-import { FieldErrorsImpl, UseFormRegister } from "react-hook-form"
-
 import { DialogState } from "@/components/ContactDialog"
 import { Contact } from "@/contacts/CONTACTS"
 import classNames from "@/utils/classNames"
+import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
+import { MutableRefObject, ReactNode } from "react"
+import { FieldErrorsImpl, UseFormRegister } from "react-hook-form"
 
 /** A checkmark from Heroicons.com */
 function CheckMark() {

@@ -1,15 +1,14 @@
 "use client"
 
 // Specify this is a Client Component, not a Server Component.
+import GlobalStateContext from "@/components/GlobalStateContext"
+import phoneBookMachine from "@/utils/phoneBookMachine"
 import { ThemeProvider } from "@wits/next-themes"
 import { useInterpret } from "@xstate/react"
 import { ReactNode } from "react"
 import { QueryClient, QueryClientProvider } from "react-query"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-
-import GlobalStateContext from "@/components/GlobalStateContext"
-import phoneBookMachine from "@/utils/phoneBookMachine"
 
 const queryClient = new QueryClient()
 

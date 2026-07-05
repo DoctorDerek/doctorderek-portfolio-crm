@@ -1,9 +1,8 @@
-import { Inter } from "next/font/google"
-import { ReactNode } from "react"
-
 import Providers from "@/app/providers"
 import NavBar from "@/components/NavBar"
 import "@/styles/globals.css"
+import { Inter } from "next/font/google"
+import { ReactNode } from "react"
 
 /**
  * We use Next.js's automatic font optimization feature to load Inter.

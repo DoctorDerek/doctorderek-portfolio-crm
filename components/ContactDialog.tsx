@@ -1,6 +1,14 @@
 "use client"
 
 // Specify this is a Client Component, not a Server Component.
+import ContactDialogClose from "@/components/ButtonCloseDialog"
+import ContactDialogButtons from "@/components/ContactDialogButtons"
+import ContactDialogDescription from "@/components/ContactDialogDescription"
+import ContactDialogInputs from "@/components/ContactDialogInputs"
+import ContactDialogTitle from "@/components/ContactDialogTitle"
+import ContactDialogWarning from "@/components/ContactDialogWarning"
+import { Contact } from "@/contacts/CONTACTS"
+import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
 import { Dialog } from "@headlessui/react"
 import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react.es"
@@ -12,15 +20,6 @@ import {
   useState,
 } from "react"
 import { useForm } from "react-hook-form"
-
-import ContactDialogClose from "@/components/ButtonCloseDialog"
-import ContactDialogButtons from "@/components/ContactDialogButtons"
-import ContactDialogDescription from "@/components/ContactDialogDescription"
-import ContactDialogInputs from "@/components/ContactDialogInputs"
-import ContactDialogTitle from "@/components/ContactDialogTitle"
-import ContactDialogWarning from "@/components/ContactDialogWarning"
-import { Contact } from "@/contacts/CONTACTS"
-import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
 
 export type DialogState = {
   type: "CLOSED" | "CREATE" | "UPDATE" | "DELETE" | "RESET"

@@ -7,7 +7,7 @@ describe("@/utils/transformBirthday", () => {
         birthYear: "1920",
         birthMonth: "03",
         birthDay: "15",
-      })
+      }),
     ).toBe("March 15, 1920")
   })
 })

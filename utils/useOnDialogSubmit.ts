@@ -1,5 +1,5 @@
 import { DialogState } from "@/components/ContactDialog"
-import { Contact, calculateAge } from "@/contacts/CONTACTS"
+import { calculateAge, Contact } from "@/contacts/CONTACTS"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 import { useMutation } from "react-query"
 import { toast } from "react-toastify"

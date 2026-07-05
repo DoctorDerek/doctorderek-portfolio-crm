@@ -1,6 +1,6 @@
 import CONTACTS_WITH_AGES, {
-  Contact,
   calculateAge,
+  Contact,
   sortByLastName,
 } from "@/contacts/CONTACTS"
 import { assign, createMachine } from "xstate"
@@ -92,7 +92,7 @@ const phoneBookMachine = createMachine(
           if (localStorageString)
             try {
               const localStorageObject = JSON.parse(
-                localStorageString
+                localStorageString,
               ) as Contact[]
               // We sort the phone book entries whenever we load them from disk.
               localStorageObject.sort(sortByLastName)
@@ -119,7 +119,7 @@ const phoneBookMachine = createMachine(
           const currentPhoneBookEntries = context.contacts
           const updatedContact = event.contact
           const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
-            ({ id }) => id !== updatedContact.id
+            ({ id }) => id !== updatedContact.id,
           )
           filteredPhoneBookEntries.push(updatedContact)
           return filteredPhoneBookEntries
@@ -130,7 +130,7 @@ const phoneBookMachine = createMachine(
           const currentPhoneBookEntries = context.contacts
           const deletedContact = event.contact
           const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
-            ({ id }) => id !== deletedContact.id
+            ({ id }) => id !== deletedContact.id,
           )
           return filteredPhoneBookEntries
         },
@@ -139,7 +139,7 @@ const phoneBookMachine = createMachine(
         try {
           localStorage.setItem(
             LOCALSTORAGE_KEY_AUTH,
-            JSON.stringify(context.contacts)
+            JSON.stringify(context.contacts),
           )
         } catch (error: any) {
           console.log(error) // Something went horribly, horribly wrong. 🤯
@@ -149,7 +149,7 @@ const phoneBookMachine = createMachine(
         contacts: (context, event) => CONTACTS_WITH_AGES,
       }),
     },
-  }
+  },
 )
 
 export default phoneBookMachine

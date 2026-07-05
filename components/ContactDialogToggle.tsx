@@ -16,7 +16,7 @@ export default function ContactDialogToggle({
   return (
     <Switch.Group
       as="div"
-      className="flex items-center justify-between pt-4 pb-2"
+      className="flex items-center justify-between pb-2 pt-4"
     >
       <span className="flex flex-grow flex-col">
         <Switch.Label
@@ -33,14 +33,14 @@ export default function ContactDialogToggle({
         onChange={setAddressEnabled}
         className={classNames(
           addressEnabled ? "bg-indigo-600" : "bg-gray-200 dark:bg-gray-700",
-          "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+          "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
         )}
       >
         <span className="sr-only">Use setting</span>
         <span
           className={classNames(
             addressEnabled ? "translate-x-5" : "translate-x-0",
-            "pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-gray-100 dark:bg-gray-800 shadow ring-0 transition duration-200 ease-in-out"
+            "pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-gray-100 shadow ring-0 transition duration-200 ease-in-out dark:bg-gray-800",
           )}
         >
           <span
@@ -48,7 +48,7 @@ export default function ContactDialogToggle({
               addressEnabled
                 ? "opacity-0 duration-100 ease-out"
                 : "opacity-100 duration-200 ease-in",
-              "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity"
+              "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity",
             )}
             aria-hidden="true"
           >
@@ -71,7 +71,7 @@ export default function ContactDialogToggle({
               addressEnabled
                 ? "opacity-100 duration-200 ease-in"
                 : "opacity-0 duration-100 ease-out",
-              "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity"
+              "absolute inset-0 flex h-full w-full items-center justify-center transition-opacity",
             )}
             aria-hidden="true"
           >

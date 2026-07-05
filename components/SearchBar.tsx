@@ -34,7 +34,7 @@ export default function SearchBar({
     setHidingDropdown(true)
     // We store the dropdown timeout to clear it if the user hovers.
     setDropdownTimeout(
-      setTimeout(() => setShowDropdown(false), 1000) // 1 second
+      setTimeout(() => setShowDropdown(false), 1000), // 1 second
     )
   }
 
@@ -77,7 +77,7 @@ export default function SearchBar({
                 <div
                   className={classNames(
                     "absolute top-full z-10 w-full transform-gpu transition-opacity duration-1000",
-                    hidingDropdown ? "opacity-0" : "opacity-100"
+                    hidingDropdown ? "opacity-0" : "opacity-100",
                   )}
                 >
                   <Menu.Items static>
@@ -93,7 +93,7 @@ export default function SearchBar({
                                 active // This is the  "on hover" style.
                                   ? "bg-blue-500 text-white dark:bg-blue-400 dark:text-gray-100"
                                   : "bg-gray-200 text-gray-500 dark:bg-gray-500 dark:text-gray-200",
-                                "w-full p-4 text-left font-medium uppercase tracking-widest"
+                                "w-full p-4 text-left font-medium uppercase tracking-widest",
                               )}
                               onClick={() => setFilterText(ageRangeString)}
                             >

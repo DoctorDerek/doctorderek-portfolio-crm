@@ -1,5 +1,6 @@
 "use client"
 
+// Specify this is a Client Component, not a Server Component.
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ReactConfetti from "@/components/ReactConfetti"
 import ThemeSwitch from "@/components/ThemeSwitch"
@@ -15,7 +16,7 @@ function NavBarLinks() {
       <Link
         href="#top"
         className="hover:text-gray-300 dark:hover:text-gray-500"
-        id="top"
+        id="top" // Used as the anchor link for itself
       >
         Home
       </Link>
@@ -53,7 +54,7 @@ function MobileNavigationMenu({
         <ReactConfetti />
         <div
           className="flex flex-col items-center space-y-12"
-          onClick={() => closeDialog()}
+          onClick={() => closeDialog()} // CLose when the user clicks a link.
         >
           <PhoneBookHeading />
           <NavBarLinks />

@@ -1,6 +1,7 @@
 import ButtonDelete from "@/components/ButtonDelete"
 import ContactCardName from "@/components/ContactCardName"
-import { Contact, DialogState } from "@/types"
+import { DialogState } from "@/components/ContactDialog"
+import { Contact } from "@/contacts/CONTACTS"
 import { UserIcon } from "@heroicons/react/24/solid"
 import Image from "next/image"
 import { Dispatch, SetStateAction } from "react"
@@ -30,11 +31,11 @@ export default function ContactCardPhotoAndHeading({
     <div className="flex items-center justify-center space-x-4">
       <div className="group relative h-20 w-20 flex-shrink-0">
         {/** We don't want to shrink and distort the image. */}
-        {photo && (
+        {photo && ( // Only show the photo if there's a `photo` URL.
           <Image
             src={`/contacts/${photo}`}
             alt={`${firstName} ${lastName}`}
-
+            // Screen readers announce "Image of `${firstName} ${lastName}`"
             fill
             className="object-fit rounded-full"
             sizes={IMAGE_SIZES}

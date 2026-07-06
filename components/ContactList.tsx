@@ -1,5 +1,6 @@
 import ContactCard from "@/components/ContactCard"
-import { Contact, DialogState } from "@/types"
+import { DialogState } from "@/components/ContactDialog"
+import { Contact } from "@/contacts/CONTACTS"
 import useFilterByAgeRange from "@/utils/useFilterByAgeRange"
 import { Dispatch, SetStateAction } from "react"
 
@@ -23,7 +24,7 @@ export default function ContactList({
     <div className="relative w-full space-y-6">
       {filteredPhoneBookEntries?.map((contact) => {
         const { id, firstName, lastName, phoneNumber, photo } = contact
-
+        // ID should be unique, but there's no penalty for adding to key.
         const key = `${id}${firstName}${lastName}${phoneNumber}${photo}`
         return (
           <ContactCard

@@ -85,7 +85,7 @@ importers:
         specifier: ^8.0.0
         version: 8.10.2(eslint@8.41.0)
       eslint-plugin-only-warn:
-        specifier: ^1.2.1
+        specifier: ^1
         version: 1.2.1
       postcss:
         specifier: ^8.0.0

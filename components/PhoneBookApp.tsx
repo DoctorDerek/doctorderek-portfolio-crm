@@ -1,12 +1,11 @@
 "use client"
 
-
 import ButtonCreate from "@/components/ButtonCreate"
 import ButtonReset from "@/components/ButtonReset"
 import ContactActionDialog from "@/components/ContactDialog"
-import { DialogState } from "@/types"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
+import { DialogState } from "@/types"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 import { useEffect, useState } from "react"
 
@@ -22,14 +21,12 @@ import { useEffect, useState } from "react"
  * This component also handles the layout of the main content area of the app.
  * */
 export default function PhoneBookApp() {
-  
   const { phoneBookState, send } = usePhoneBookService()
 
   /** READ the XState machine if it's `idle` or FINISH if it's `running`. */
   useEffect(() => {
-    
     if (phoneBookState.matches("idle")) send({ type: "READ" })
-    
+
     if (phoneBookState.matches("running")) send({ type: "FINISH" })
   }, [phoneBookState, send])
 
@@ -45,10 +42,7 @@ export default function PhoneBookApp() {
     type: "CLOSED",
   })
 
-  
   if (!phoneBookState.matches("ready")) return null
-  
-  
 
   return (
     <>

@@ -1,6 +1,5 @@
 import ContactCard from "@/components/ContactCard"
-import { DialogState } from "@/types"
-import { Contact } from "@/types"
+import { Contact, DialogState } from "@/types"
 import useFilterByAgeRange from "@/utils/useFilterByAgeRange"
 import { Dispatch, SetStateAction } from "react"
 
@@ -24,7 +23,7 @@ export default function ContactList({
     <div className="relative w-full space-y-6">
       {filteredPhoneBookEntries?.map((contact) => {
         const { id, firstName, lastName, phoneNumber, photo } = contact
-        
+
         const key = `${id}${firstName}${lastName}${phoneNumber}${photo}`
         return (
           <ContactCard

@@ -1,6 +1,5 @@
 "use client"
 
-
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ReactConfetti from "@/components/ReactConfetti"
 import ThemeSwitch from "@/components/ThemeSwitch"
@@ -16,7 +15,7 @@ function NavBarLinks() {
       <Link
         href="#top"
         className="hover:text-gray-300 dark:hover:text-gray-500"
-        id="top" 
+        id="top"
       >
         Home
       </Link>
@@ -54,7 +53,7 @@ function MobileNavigationMenu({
         <ReactConfetti />
         <div
           className="flex flex-col items-center space-y-12"
-          onClick={() => closeDialog()} 
+          onClick={() => closeDialog()}
         >
           <PhoneBookHeading />
           <NavBarLinks />

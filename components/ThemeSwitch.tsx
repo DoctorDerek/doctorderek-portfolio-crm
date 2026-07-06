@@ -1,6 +1,5 @@
 "use client"
 
-
 import { useTheme } from "@wits/next-themes"
 import { useEffect, useState } from "react"
 import { CSSTransition } from "react-transition-group"
@@ -20,18 +19,11 @@ export default function ThemeSwitch() {
       themes: The list of themes passed to ThemeProvider (with "system" appended, if enableSystem is true) */
   const { resolvedTheme, setTheme } = useTheme()
 
-  
-  
   const [inProp, setInProp] = useState(false)
   useEffect(() => {
     if (resolvedTheme === "dark") setInProp(true)
   }, [resolvedTheme])
 
-  
-  
-
-  
-  
   return (
     <CSSTransition
       aria-label="Toggle Dark Mode"

@@ -1,6 +1,5 @@
 "use client"
 
-
 import { AGE_RANGES } from "@/contacts/AGE_RANGES"
 import classNames from "@/utils/classNames"
 import { Menu } from "@headlessui/react"
@@ -32,10 +31,8 @@ export default function SearchBar({
    */
   const hideDropdown = () => {
     setHidingDropdown(true)
-    
-    setDropdownTimeout(
-      setTimeout(() => setShowDropdown(false), 1000), 
-    )
+
+    setDropdownTimeout(setTimeout(() => setShowDropdown(false), 1000))
   }
 
   return (
@@ -49,7 +46,7 @@ export default function SearchBar({
             {/* We don't need to reference `open` without `<Menu.Button>`. */}
             <label
               className="relative flex w-full flex-col space-y-1.5"
-              id="filter" 
+              id="filter"
             >
               <span className="text-xs font-semibold uppercase tracking-widest">
                 Age Ranges
@@ -58,22 +55,20 @@ export default function SearchBar({
                 type="text"
                 placeholder="TYPE TO SEARCH"
                 className="w-full bg-gray-200 p-4 tracking-widest placeholder:text-xs placeholder:font-medium placeholder:text-gray-500 dark:bg-gray-500 dark:placeholder:text-gray-300"
-                
+
                 onChange={(event) => setFilterText(event?.target?.value)}
                 onFocus={() => {
-                  
                   setShowDropdown(true)
-                  
+
                   setHidingDropdown(false)
                   if (dropdownTimeout) clearTimeout(dropdownTimeout)
                 }}
-                
+
                 onBlur={hideDropdown}
-                
+
                 value={filterText}
-                
               />
-              {showDropdown && ( 
+              {showDropdown && (
                 <div
                   className={classNames(
                     "absolute top-full z-10 w-full transform-gpu transition-opacity duration-1000",
@@ -90,7 +85,7 @@ export default function SearchBar({
                           return (
                             <button
                               className={classNames(
-                                active 
+                                active
                                   ? "bg-blue-500 text-white dark:bg-blue-400 dark:text-gray-100"
                                   : "bg-gray-200 text-gray-500 dark:bg-gray-500 dark:text-gray-200",
                                 "w-full p-4 text-left font-medium uppercase tracking-widest",

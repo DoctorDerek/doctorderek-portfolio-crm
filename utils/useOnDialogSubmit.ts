@@ -1,6 +1,6 @@
-import { calculateAge } from "@/utils/calculateAge"
-import { DialogState } from "@/types"
 import { calculateAge, Contact } from "@/contacts/CONTACTS"
+import { DialogState } from "@/types"
+import { calculateAge } from "@/utils/calculateAge"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 import { useMutation } from "react-query"
 import { toast } from "react-toastify"
@@ -21,7 +21,6 @@ export default function useOnDialogSubmit({
   contacts: Contact[]
   closeDialog: () => void
 }) {
-  
   const { send } = usePhoneBookService()
 
   /**
@@ -36,20 +35,19 @@ export default function useOnDialogSubmit({
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          
+
           "X-HttpStatus-Response-Contact": JSON.stringify(contact),
         },
-        
+
         body: JSON.stringify(contact),
       })
-      
+
       toast(JSON.stringify(await response.json()))
     },
   })
 
   const onDialogSubmit = (data: Contact) => {
     if (dialogState.type === "CREATE") {
-      
       const {
         firstName,
         lastName,
@@ -63,7 +61,7 @@ export default function useOnDialogSubmit({
         phoneNumber,
         email,
       } = data
-      
+
       const maxId = Math.max(...contacts?.map(({ id }) => id))
 
       /** This is the contact that's ready to send to the state machine. */
@@ -80,19 +78,17 @@ export default function useOnDialogSubmit({
         zipCode,
         phoneNumber,
         email,
-        
       }
 
-      
       send({ type: "CREATE", contact })
-      
+
       mutation.mutate(contact)
     }
 
     if (dialogState.type === "UPDATE") {
       /** We unpack the existing contact from the `dialogState`. */
       const oldContact = dialogState?.contact
-      
+
       const firstName = data.firstName || oldContact?.firstName || ""
       const lastName = data.lastName || oldContact?.lastName || ""
       const birthYear = data.birthYear || oldContact?.birthYear || ""
@@ -107,7 +103,7 @@ export default function useOnDialogSubmit({
       const email = data.email || oldContact?.email || ""
       /** The id should come from the existing entry, but we fall back to -1. */
       const id = oldContact?.id || -1
-      
+
       const photo = oldContact?.photo || ""
       const age =
         oldContact?.age ||
@@ -132,21 +128,17 @@ export default function useOnDialogSubmit({
         email,
       }
 
-      
       send({ type: "UPDATE", contact })
-      
+
       mutation.mutate(contact)
     }
 
     if (dialogState.type === "DELETE" && dialogState?.contact)
-      
       send({ type: "DELETE", contact: dialogState?.contact })
 
     if (dialogState.type === "RESET") send({ type: "RESET" })
 
-    
     closeDialog()
-    
   }
 
   return { onDialogSubmit }

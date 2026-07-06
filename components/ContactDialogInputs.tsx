@@ -1,8 +1,7 @@
 import ContactCard from "@/components/ContactCard"
-import { DialogState } from "@/types"
 import ContactDialogSecurityQuestions from "@/components/ContactDialogSecurityQuestions"
 import ContactDialogToggle from "@/components/ContactDialogToggle"
-import { Contact } from "@/types"
+import { Contact, DialogState } from "@/types"
 import classNames from "@/utils/classNames"
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
@@ -76,8 +75,6 @@ function ContactDialogInput({
         )}
         placeholder={placeholderWithPreviousValue}
         {...register(fieldName, {
-          
-          
           validate: (value) => {
             if (dialogState.type !== "CREATE") return true
             if (fieldName === "email") {
@@ -87,16 +84,15 @@ function ContactDialogInput({
               )
             }
             if (fieldName === "password") {
-              
               if (typeof value === "string" && value?.length < 8)
                 return "Please enter a password of at least 8 characters."
-              
+
               if (typeof value === "string" && !/\d/.test(value))
                 return "Please enter a password with at least one number."
-              
+
               if (typeof value === "string" && !/[!@#$%^&*]/.test(value))
                 return "Please enter a password with at least one symbol."
-              return true 
+              return true
             }
             if (
               fieldName === "firstName" ||
@@ -108,7 +104,6 @@ function ContactDialogInput({
               fieldName === "securityQuestion" ||
               fieldName === "securityQuestionAnswer"
             )
-              
               return Boolean(value) || "All fields are required."
             if (
               addressEnabled &&
@@ -118,7 +113,7 @@ function ContactDialogInput({
                 fieldName === "zipCode")
             )
               return Boolean(value) || "All fields are required."
-            return true 
+            return true
           },
         })}
         disabled={dialogState.type === "DELETE" || disabled}
@@ -170,10 +165,8 @@ export default function ContactDialogInputs({
 }) {
   const [addressEnabled, setAddressEnabled] = useState(false)
 
-  
   if (dialogState.type === "RESET") return null
 
-  
   if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
     return null
 
@@ -230,7 +223,6 @@ export default function ContactDialogInputs({
           use a real password.
         </div>
         {dialogState.type === "CREATE" &&
-          
           (errors?.email?.message || errors?.password?.message) && (
             <ErrorMessage errors={errors} />
           )}
@@ -328,7 +320,6 @@ export default function ContactDialogInputs({
           addressEnabled={addressEnabled}
         />
         {dialogState.type === "CREATE" &&
-          
           (errors?.firstName?.message ||
             errors?.lastName?.message ||
             errors?.birthMonth?.message ||
@@ -359,7 +350,6 @@ export default function ContactDialogInputs({
           use a real security question.
         </div>
         {dialogState.type === "CREATE" &&
-          
           (errors?.securityQuestion?.message ||
             errors?.securityQuestionAnswer?.message) && (
             <ErrorMessage errors={errors} />

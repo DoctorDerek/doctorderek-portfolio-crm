@@ -1,27 +1,24 @@
-import { sortByLastName } from "@/utils/sortByLastName"
-import { calculateAge } from "@/utils/calculateAge"
-import { Contact } from "@/types"
 import CONTACTS_WITH_AGES, {
   calculateAge,
-  
   sortByLastName,
 } from "@/contacts/CONTACTS"
+import { Contact } from "@/types"
+import { calculateAge } from "@/utils/calculateAge"
+import { sortByLastName } from "@/utils/sortByLastName"
 import { assign, createMachine } from "xstate"
 
 export const LOCALSTORAGE_KEY_AUTH = "phonebook-filter-by-age"
 
 const phoneBookMachine = createMachine(
   {
-    
     predictableActionArguments: true,
     id: "phoneBook",
-    
+
     tsTypes: {} as import("./phoneBookMachine.typegen").Typegen0,
     schema: {
-      
       context: {} as { contacts: Contact[] },
-      
-      events: {} as  
+
+      events: {} as
         | { type: "CREATE"; contact: Contact }
         | {
             type: "READ"
@@ -35,9 +32,9 @@ const phoneBookMachine = createMachine(
             type: "RESET"
           },
     },
-    
+
     initial: "idle",
-    
+
     context: {
       contacts: CONTACTS_WITH_AGES as Contact[],
     },
@@ -46,7 +43,7 @@ const phoneBookMachine = createMachine(
         on: {
           READ: {
             target: "ready",
-            
+
             actions: ["readPhoneBookFromLocalStorage"],
           },
         },
@@ -55,22 +52,22 @@ const phoneBookMachine = createMachine(
         on: {
           CREATE: {
             target: "running",
-            
+
             actions: ["createContact"],
           },
           UPDATE: {
             target: "running",
-            
+
             actions: ["updateContact"],
           },
           DELETE: {
             target: "running",
-            
+
             actions: ["deleteContact"],
           },
           RESET: {
             target: "running",
-            
+
             actions: ["resetPhoneBookEntries"],
           },
         },
@@ -79,7 +76,7 @@ const phoneBookMachine = createMachine(
         on: {
           FINISH: {
             target: "idle",
-            
+
             actions: ["writePhoneBookToLocalStorage"],
           },
         },
@@ -89,7 +86,6 @@ const phoneBookMachine = createMachine(
   {
     actions: {
       readPhoneBookFromLocalStorage: assign({
-        
         contacts: (context, event) => {
           const localStorageString = localStorage.getItem(LOCALSTORAGE_KEY_AUTH)
           if (localStorageString)
@@ -97,11 +93,11 @@ const phoneBookMachine = createMachine(
               const localStorageObject = JSON.parse(
                 localStorageString,
               ) as Contact[]
-              
+
               localStorageObject.sort(sortByLastName)
               return localStorageObject as Contact[]
             } catch (error: any) {
-              console.log(error) 
+              console.log(error)
             }
           return CONTACTS_WITH_AGES
         },
@@ -110,7 +106,7 @@ const phoneBookMachine = createMachine(
         contacts: (context, event) => {
           const currentPhoneBookEntries = context.contacts
           const newContact = event.contact
-          
+
           const { birthYear, birthMonth, birthDay } = newContact
           newContact.age = calculateAge({ birthYear, birthMonth, birthDay })
           currentPhoneBookEntries.push(newContact)
@@ -145,7 +141,7 @@ const phoneBookMachine = createMachine(
             JSON.stringify(context.contacts),
           )
         } catch (error: any) {
-          console.log(error) 
+          console.log(error)
         }
       },
       resetPhoneBookEntries: assign({

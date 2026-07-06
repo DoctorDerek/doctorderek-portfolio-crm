@@ -1,6 +1,5 @@
 "use client"
 
-
 import GlobalStateContext from "@/components/GlobalStateContext"
 import phoneBookMachine from "@/utils/phoneBookMachine"
 import { ThemeProvider } from "@wits/next-themes"

@@ -1,5 +1,3 @@
-
-
 export interface Typegen0 {
   "@@xstate/typegen": true
   internalEvents: {

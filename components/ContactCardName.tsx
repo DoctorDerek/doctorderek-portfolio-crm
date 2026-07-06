@@ -1,5 +1,4 @@
-import { DialogState } from "@/types"
-import { Contact } from "@/types"
+import { Contact, DialogState } from "@/types"
 import { Dispatch, SetStateAction } from "react"
 
 /** This component includes the `edit` button to UPDATE the contact. */
@@ -19,7 +18,7 @@ export default function ContactCardNameAndCity({
     <h3 className="flex flex-col items-start justify-center">
       <button
         className="group flex items-center justify-center text-left text-2xl font-semibold uppercase leading-7 tracking-widest"
-        
+
         onClick={() => setDialogState({ type: "UPDATE", contact })}
       >
         {firstName} {lastName}

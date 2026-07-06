@@ -36,7 +36,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Jessica Christian.png",
     firstName: "Jessica",
     lastName: "Christian",
-    birthYear: "2022", 
+    birthYear: "2022",
     birthMonth: "05",
     birthDay: "30",
     streetAddress: "1234 Main St",
@@ -51,7 +51,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Lia Bekyan.png",
     firstName: "Lia",
     lastName: "Bekyan",
-    birthYear: "2010", 
+    birthYear: "2010",
     birthMonth: "09",
     birthDay: "24",
     streetAddress: "1234 Happy Lane",
@@ -66,7 +66,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Remy Loz.png",
     firstName: "Remy",
     lastName: "Loz",
-    birthYear: "2000", 
+    birthYear: "2000",
     birthMonth: "07",
     birthDay: "04",
     streetAddress: "1234 Main St",
@@ -81,7 +81,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Ryan Hoffman.png",
     firstName: "Ryan",
     lastName: "Hoffman",
-    birthYear: "1990", 
+    birthYear: "1990",
     birthMonth: "04",
     birthDay: "06",
     streetAddress: "1234 Main St",
@@ -96,7 +96,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Tadas Petrokas.png",
     firstName: "Tadas",
     lastName: "Petrokas",
-    birthYear: "1956", 
+    birthYear: "1956",
     birthMonth: "08",
     birthDay: "07",
     streetAddress: "1234 Main St",
@@ -111,7 +111,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Yohan Marion.png",
     firstName: "Yohan",
     lastName: "Marion",
-    birthYear: "1890", 
+    birthYear: "1890",
     birthMonth: "11",
     birthDay: "24",
     streetAddress: "1234 Main St",
@@ -132,15 +132,13 @@ export const calculateAge = ({
   birthMonth?: string
   birthDay?: string
 }) => {
-  
   if (!(birthYear && birthMonth && birthDay)) return undefined
   const today = new Date()
   const birthDate = new Date(`${birthYear}-${birthMonth}-${birthDay}`)
   const age = today.getFullYear() - birthDate.getFullYear()
-  
+
   const month = today.getMonth() - birthDate.getMonth()
   if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
-    
     return age - 1
   }
   return age
@@ -153,18 +151,14 @@ const CONTACTS_WITH_AGES: Contact[] = CONTACTS.map((contact) => {
   return { ...contact, age }
 })
 
-
 export const sortByLastName = (a: Contact, b: Contact) => {
-  
-  
   const aName = a?.lastName || ""
   const bName = b?.lastName || ""
-  
+
   const aLastName = aName.split(" ").pop()?.toLocaleLowerCase() || ""
   const bLastName = bName.split(" ").pop()?.toLocaleLowerCase() || ""
   return aLastName.localeCompare(bLastName)
 }
-
 
 CONTACTS_WITH_AGES.sort(sortByLastName)
 

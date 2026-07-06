@@ -11,16 +11,13 @@ export default function transformBirthday({
   birthMonth?: string
   birthDay?: string
 }) {
-  
   if (!(birthYear && birthMonth && birthDay)) return ""
   try {
     const date = new Date(`${birthYear}-${birthMonth}-${birthDay}`)
-    
-    
+
     date.setUTCHours(12, 0, 0, 0)
     return new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(date)
   } catch (error) {
-    
     console.error(error)
     return `Invalid date: ${birthYear}-${birthMonth}-${birthDay}`
   }

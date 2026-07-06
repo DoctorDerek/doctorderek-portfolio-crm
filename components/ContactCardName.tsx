@@ -19,7 +19,7 @@ export default function ContactCardNameAndCity({
     <h3 className="flex flex-col items-start justify-center">
       <button
         className="group flex items-center justify-center text-left text-2xl font-semibold uppercase leading-7 tracking-widest"
-        // We have to reapply the UPPERCASE style here because it's overridden.
+        
         onClick={() => setDialogState({ type: "UPDATE", contact })}
       >
         {firstName} {lastName}

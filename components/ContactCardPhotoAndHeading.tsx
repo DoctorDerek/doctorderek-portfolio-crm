@@ -31,11 +31,11 @@ export default function ContactCardPhotoAndHeading({
     <div className="flex items-center justify-center space-x-4">
       <div className="group relative h-20 w-20 flex-shrink-0">
         {/** We don't want to shrink and distort the image. */}
-        {photo && ( // Only show the photo if there's a `photo` URL.
+        {photo && ( 
           <Image
             src={`/contacts/${photo}`}
             alt={`${firstName} ${lastName}`}
-            // Screen readers announce "Image of `${firstName} ${lastName}`"
+            
             fill
             className="object-fit rounded-full"
             sizes={IMAGE_SIZES}

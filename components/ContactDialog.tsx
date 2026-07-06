@@ -1,6 +1,6 @@
 "use client"
 
-// Specify this is a Client Component, not a Server Component.
+
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ContactDialogButtons from "@/components/ContactDialogButtons"
 import ContactDialogDescription from "@/components/ContactDialogDescription"
@@ -50,7 +50,7 @@ export default function ContactDialog({
   /** We have a helper to reset the dialog state and thus close the dialog. */
   const closeDialog = () => {
     setDialogState({ type: "CLOSED", contact: undefined })
-    reset() // Reset the form in the dialog, not just the dialog state.
+    reset() 
   }
 
   const { onDialogSubmit } = useOnDialogSubmit({
@@ -61,7 +61,7 @@ export default function ContactDialog({
 
   const [slideIndex, setSlideIndex] = useState(0)
   const [sliderRef, instanceRef] = useKeenSlider({
-    // Keep track of the slide index so we can validate the form.
+    
     slideChanged() {
       setSlideIndex(instanceRef?.current?.track?.details?.abs || 0)
     },
@@ -71,7 +71,7 @@ export default function ContactDialog({
     destroyed() {
       setSlideIndex(0)
     },
-    drag: false, // Disable drag controls for the slideshow.
+    drag: false, 
   })
 
   /**

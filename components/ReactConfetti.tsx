@@ -1,6 +1,6 @@
 "use client"
 
-// Specify this is a Client Component, not a Server Component.
+
 import { useEffect, useState } from "react"
 import Confetti from "react-confetti"
 
@@ -29,13 +29,13 @@ function useWindowSize() {
         height: window.innerHeight,
       })
     }
-    // Add the event listener
+    
     window.addEventListener("resize", handleResize)
-    // Call handler immediately so state gets updated with initial window size.
+    
     handleResize()
-    // Remove the event listener on cleanup
+    
     return () => window.removeEventListener("resize", handleResize)
-  }, []) // The empty array [] ensures that `useEffect` only runs one time.
+  }, []) 
   return windowSize
 }
 

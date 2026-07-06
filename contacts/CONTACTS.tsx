@@ -36,7 +36,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Jessica Christian.png",
     firstName: "Jessica",
     lastName: "Christian",
-    birthYear: "2022", // Baby
+    birthYear: "2022", 
     birthMonth: "05",
     birthDay: "30",
     streetAddress: "1234 Main St",
@@ -51,7 +51,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Lia Bekyan.png",
     firstName: "Lia",
     lastName: "Bekyan",
-    birthYear: "2010", // Child
+    birthYear: "2010", 
     birthMonth: "09",
     birthDay: "24",
     streetAddress: "1234 Happy Lane",
@@ -66,7 +66,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Remy Loz.png",
     firstName: "Remy",
     lastName: "Loz",
-    birthYear: "2000", // Young Adult
+    birthYear: "2000", 
     birthMonth: "07",
     birthDay: "04",
     streetAddress: "1234 Main St",
@@ -81,7 +81,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Ryan Hoffman.png",
     firstName: "Ryan",
     lastName: "Hoffman",
-    birthYear: "1990", // Middle Aged Adult
+    birthYear: "1990", 
     birthMonth: "04",
     birthDay: "06",
     streetAddress: "1234 Main St",
@@ -96,7 +96,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Tadas Petrokas.png",
     firstName: "Tadas",
     lastName: "Petrokas",
-    birthYear: "1956", // Senior
+    birthYear: "1956", 
     birthMonth: "08",
     birthDay: "07",
     streetAddress: "1234 Main St",
@@ -111,7 +111,7 @@ const CONTACTS: Contact[] = [
     photo: "Unsplash Yohan Marion.png",
     firstName: "Yohan",
     lastName: "Marion",
-    birthYear: "1890", // Senior
+    birthYear: "1890", 
     birthMonth: "11",
     birthDay: "24",
     streetAddress: "1234 Main St",
@@ -132,15 +132,15 @@ export const calculateAge = ({
   birthMonth?: string
   birthDay?: string
 }) => {
-  // We can't calculate age without a birthday.
+  
   if (!(birthYear && birthMonth && birthDay)) return undefined
   const today = new Date()
   const birthDate = new Date(`${birthYear}-${birthMonth}-${birthDay}`)
   const age = today.getFullYear() - birthDate.getFullYear()
-  // This may not be their age, if their birthday hasn't yet occurred this year.
+  
   const month = today.getMonth() - birthDate.getMonth()
   if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
-    // They haven't had their birthday yet this year, so their age is one less.
+    
     return age - 1
   }
   return age
@@ -153,19 +153,19 @@ const CONTACTS_WITH_AGES: Contact[] = CONTACTS.map((contact) => {
   return { ...contact, age }
 })
 
-// Let's pre-sort the contacts before we use them, so we'll have a default sort.
+
 export const sortByLastName = (a: Contact, b: Contact) => {
-  // We're going to assume that the last name is the last word in the name, but
-  // that may be incorrect, especially with many Asian or Hispanic names.
+  
+  
   const aName = a?.lastName || ""
   const bName = b?.lastName || ""
-  // We .pop() to get the last word in the name, and then we use .toLowerCase():
+  
   const aLastName = aName.split(" ").pop()?.toLocaleLowerCase() || ""
   const bLastName = bName.split(" ").pop()?.toLocaleLowerCase() || ""
   return aLastName.localeCompare(bLastName)
 }
 
-// We mutate the CONTACTS_WITH_AGES array to sort it by last name before export.
+
 CONTACTS_WITH_AGES.sort(sortByLastName)
 
 export default CONTACTS_WITH_AGES

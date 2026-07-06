@@ -1,6 +1,6 @@
 "use client"
 
-// Specify this is a Client Component, not a Server Component.
+
 import classNames from "@/utils/classNames"
 import { Switch } from "@headlessui/react"
 import { Dispatch, SetStateAction } from "react"

@@ -1,5 +1,4 @@
-import { DialogState } from "@/components/ContactDialog"
-import { Contact } from "@/contacts/CONTACTS"
+import { Contact, DialogState } from "@/types"
 import classNames from "@/utils/classNames"
 import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
 import { MutableRefObject, ReactNode } from "react"
@@ -9,7 +8,7 @@ import { FieldErrorsImpl, UseFormRegister } from "react-hook-form"
 function CheckMark() {
   return (
     <svg
-      aria-hidden="true" // Alternatively we could use a label like "Current"
+      aria-hidden="true"
       className="flex-shrink-0"
       fill="currentColor"
       viewBox="0 0 20 20"

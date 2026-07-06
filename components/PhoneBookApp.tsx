@@ -1,11 +1,11 @@
 "use client"
 
-// Specify this is a Client Component, not a Server Component.
 import ButtonCreate from "@/components/ButtonCreate"
 import ButtonReset from "@/components/ButtonReset"
-import ContactActionDialog, { DialogState } from "@/components/ContactDialog"
+import ContactActionDialog from "@/components/ContactDialog"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
+import { DialogState } from "@/types"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 import { useEffect, useState } from "react"
 
@@ -21,14 +21,12 @@ import { useEffect, useState } from "react"
  * This component also handles the layout of the main content area of the app.
  * */
 export default function PhoneBookApp() {
-  // Retrieve our global context from the XState finite state machine:
   const { phoneBookState, send } = usePhoneBookService()
 
   /** READ the XState machine if it's `idle` or FINISH if it's `running`. */
   useEffect(() => {
-    // When we first load or are idle, load the phone book from localStorage:
     if (phoneBookState.matches("idle")) send({ type: "READ" })
-    // When we're running, we need to write the phone book to localStorage:
+
     if (phoneBookState.matches("running")) send({ type: "FINISH" })
   }, [phoneBookState, send])
 
@@ -44,10 +42,7 @@ export default function PhoneBookApp() {
     type: "CLOSED",
   })
 
-  // Guard clause: Don't render the component until the state machine is ready.
   if (!phoneBookState.matches("ready")) return null
-  // This prevents the default contacts list from being rendered and then being
-  // replaced with the contacts list from localStorage, causing layout shift.
 
   return (
     <>

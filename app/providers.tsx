@@ -1,6 +1,5 @@
 "use client"
 
-// Specify this is a Client Component, not a Server Component.
 import GlobalStateContext from "@/components/GlobalStateContext"
 import phoneBookMachine from "@/utils/phoneBookMachine"
 import { ThemeProvider } from "@wits/next-themes"

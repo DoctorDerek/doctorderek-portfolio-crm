@@ -1,6 +1,5 @@
 "use client"
 
-// Specify this is a Client Component, not a Server Component.
 import { AGE_RANGES } from "@/contacts/AGE_RANGES"
 import classNames from "@/utils/classNames"
 import { Menu } from "@headlessui/react"
@@ -32,10 +31,8 @@ export default function SearchBar({
    */
   const hideDropdown = () => {
     setHidingDropdown(true)
-    // We store the dropdown timeout to clear it if the user hovers.
-    setDropdownTimeout(
-      setTimeout(() => setShowDropdown(false), 1000), // 1 second
-    )
+
+    setDropdownTimeout(setTimeout(() => setShowDropdown(false), 1000))
   }
 
   return (
@@ -49,7 +46,7 @@ export default function SearchBar({
             {/* We don't need to reference `open` without `<Menu.Button>`. */}
             <label
               className="relative flex w-full flex-col space-y-1.5"
-              id="filter" // Used for the anchor link "Filter" in the `<NavBar>`
+              id="filter"
             >
               <span className="text-xs font-semibold uppercase tracking-widest">
                 Age Ranges
@@ -58,22 +55,20 @@ export default function SearchBar({
                 type="text"
                 placeholder="TYPE TO SEARCH"
                 className="w-full bg-gray-200 p-4 tracking-widest placeholder:text-xs placeholder:font-medium placeholder:text-gray-500 dark:bg-gray-500 dark:placeholder:text-gray-300"
-                // We don't need all the overhead of "react-hook-form" here.
+
                 onChange={(event) => setFilterText(event?.target?.value)}
                 onFocus={() => {
-                  // We show the dropdown when the user focuses on the input.
                   setShowDropdown(true)
-                  // We make sure we're showing the dropdown and not hiding it.
+
                   setHidingDropdown(false)
                   if (dropdownTimeout) clearTimeout(dropdownTimeout)
                 }}
-                // We hide on blur not just "click outside" for keyboard users.
+
                 onBlur={hideDropdown}
-                // We include the value here so that the input is controlled.
+
                 value={filterText}
-                // The result is clicking a button will populate the input.
               />
-              {showDropdown && ( // We handle the menu state ourselves.
+              {showDropdown && (
                 <div
                   className={classNames(
                     "absolute top-full z-10 w-full transform-gpu transition-opacity duration-1000",
@@ -90,7 +85,7 @@ export default function SearchBar({
                           return (
                             <button
                               className={classNames(
-                                active // This is the  "on hover" style.
+                                active
                                   ? "bg-blue-500 text-white dark:bg-blue-400 dark:text-gray-100"
                                   : "bg-gray-200 text-gray-500 dark:bg-gray-500 dark:text-gray-200",
                                 "w-full p-4 text-left font-medium uppercase tracking-widest",

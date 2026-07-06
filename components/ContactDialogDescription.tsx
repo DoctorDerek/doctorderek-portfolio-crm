@@ -1,4 +1,4 @@
-import { DialogState } from "@/components/ContactDialog"
+import { DialogState } from "@/types"
 import { Dialog } from "@headlessui/react"
 
 export default function ContactDialogDescription({

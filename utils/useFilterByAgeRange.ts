@@ -1,4 +1,4 @@
-import { Contact } from "@/contacts/CONTACTS"
+import { Contact } from "@/types"
 
 /**
  * Return the `filterByAgeRange` function for use in the `<ContactList>`.

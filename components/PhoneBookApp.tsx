@@ -3,7 +3,8 @@
 // Specify this is a Client Component, not a Server Component.
 import ButtonCreate from "@/components/ButtonCreate"
 import ButtonReset from "@/components/ButtonReset"
-import ContactActionDialog, { DialogState } from "@/components/ContactDialog"
+import ContactActionDialog from "@/components/ContactDialog"
+import { DialogState } from "@/types"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
 import usePhoneBookService from "@/utils/usePhoneBookService"

@@ -1,5 +1,5 @@
-import { DialogState } from "@/components/ContactDialog"
-import { Contact } from "@/contacts/CONTACTS"
+import { DialogState } from "@/types"
+import { Contact } from "@/types"
 import classNames from "@/utils/classNames"
 import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
 import { MutableRefObject, ReactNode } from "react"

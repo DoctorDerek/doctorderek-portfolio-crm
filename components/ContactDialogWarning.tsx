@@ -1,4 +1,4 @@
-import { DialogState } from "@/components/ContactDialog"
+import { DialogState } from "@/types"
 
 export default function ContactDialogWarning({
   dialogState,

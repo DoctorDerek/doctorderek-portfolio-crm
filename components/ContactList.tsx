@@ -1,6 +1,6 @@
 import ContactCard from "@/components/ContactCard"
-import { DialogState } from "@/components/ContactDialog"
-import { Contact } from "@/contacts/CONTACTS"
+import { DialogState } from "@/types"
+import { Contact } from "@/types"
 import useFilterByAgeRange from "@/utils/useFilterByAgeRange"
 import { Dispatch, SetStateAction } from "react"
 

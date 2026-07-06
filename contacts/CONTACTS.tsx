@@ -169,3 +169,5 @@ export const sortByLastName = (a: Contact, b: Contact) => {
 CONTACTS_WITH_AGES.sort(sortByLastName)
 
 export default CONTACTS_WITH_AGES
+
+export { calculateAge, sortByLastName }

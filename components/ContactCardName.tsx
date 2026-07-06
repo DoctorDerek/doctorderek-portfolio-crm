@@ -1,5 +1,5 @@
-import { DialogState } from "@/components/ContactDialog"
-import { Contact } from "@/contacts/CONTACTS"
+import { DialogState } from "@/types"
+import { Contact } from "@/types"
 import { Dispatch, SetStateAction } from "react"
 
 /** This component includes the `edit` button to UPDATE the contact. */

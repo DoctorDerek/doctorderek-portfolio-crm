@@ -1,4 +1,5 @@
-import { DialogState } from "@/components/ContactDialog"
+import { calculateAge } from "@/utils/calculateAge"
+import { DialogState } from "@/types"
 import { calculateAge, Contact } from "@/contacts/CONTACTS"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 import { useMutation } from "react-query"

@@ -1,6 +1,9 @@
+import { sortByLastName } from "@/utils/sortByLastName"
+import { calculateAge } from "@/utils/calculateAge"
+import { Contact } from "@/types"
 import CONTACTS_WITH_AGES, {
   calculateAge,
-  Contact,
+  
   sortByLastName,
 } from "@/contacts/CONTACTS"
 import { assign, createMachine } from "xstate"

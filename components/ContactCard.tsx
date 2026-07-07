@@ -42,13 +42,13 @@ export default function ContactCard({
 }) {
   const { birthYear, birthMonth, birthDay, phoneNumber, email } = contact
   return (
-    <div className="flex w-full flex-col items-start justify-between space-y-6 border border-solid border-gray-200 p-6 uppercase shadow-lg filter dark:border-gray-800 xl:space-y-8 xl:p-8">
+    <div className="flex w-full flex-col items-start justify-between space-y-6 border border-solid border-gray-200 p-6 uppercase shadow-lg filter xl:space-y-8 xl:p-8 dark:border-gray-800">
       {/** The entire `<ContactCard>` component uses UPPERCASE text. */}
       <ContactCardPhotoAndHeading
         contact={contact}
         setDialogState={setDialogState}
       />
-      <div className="grid w-full grid-cols-1 space-y-6 sm:grid-cols-2 sm:gap-y-4 sm:space-y-0 xl:grid-cols-4 xl:gap-0">
+      <div className="grid w-full grid-cols-1 space-y-6 sm:grid-cols-2 sm:space-y-0 sm:gap-y-4 xl:grid-cols-4 xl:gap-0">
         <ContactCardLabelAndData
           label="Birthday"
           data={transformBirthday({ birthYear, birthMonth, birthDay })}

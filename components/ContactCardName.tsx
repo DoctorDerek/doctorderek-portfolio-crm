@@ -17,12 +17,12 @@ export default function ContactCardNameAndCity({
   return (
     <h3 className="flex flex-col items-start justify-center">
       <button
-        className="group flex items-center justify-center text-left text-2xl font-semibold uppercase leading-7 tracking-widest"
+        className="group flex items-center justify-center text-left text-2xl leading-7 font-semibold tracking-widest uppercase"
 
         onClick={() => setDialogState({ type: "UPDATE", contact })}
       >
         {firstName} {lastName}
-        <div className="invisible pl-1 text-sm lowercase tracking-normal text-gray-400 group-hover:visible dark:text-gray-300">
+        <div className="invisible pl-1 text-sm tracking-normal text-gray-400 lowercase group-hover:visible dark:text-gray-300">
           edit
         </div>
       </button>

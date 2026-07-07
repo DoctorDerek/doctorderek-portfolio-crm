@@ -28,7 +28,7 @@ export default function ThemeSwitch() {
     <CSSTransition
       aria-label="Toggle Dark Mode"
       type="button"
-      className="ml-1 mr-1 h-12 bg-transparent p-1 text-gray-900"
+      className="mr-1 ml-1 h-12 bg-transparent p-1 text-gray-900"
       onClick={() => {
         setTheme(resolvedTheme === "dark" ? "light" : "dark")
         setInProp(inProp ? false : true)

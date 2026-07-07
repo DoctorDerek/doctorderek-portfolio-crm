@@ -8,7 +8,7 @@ export default function ButtonCreate({
 }) {
   return (
     <button
-      className="shrink-0 whitespace-nowrap rounded-md bg-blue-400 px-6 py-2 text-white hover:bg-blue-500 hover:outline-solid hover:outline-1 hover:outline-blue-400"
+      className="shrink-0 rounded-md bg-blue-400 px-6 py-2 whitespace-nowrap text-white hover:bg-blue-500 hover:outline-1 hover:outline-blue-400 hover:outline-solid"
       onClick={() => setDialogState({ type: "CREATE" })}
     >
       + Add Contact

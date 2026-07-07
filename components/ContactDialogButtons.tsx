@@ -55,7 +55,7 @@ function ProgressIndicator({
 
 function ProgressIndicators({ slideIndex }: { slideIndex: number }) {
   return (
-    <ol className="mt-4 flex w-full items-center justify-between text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
+    <ol className="mt-4 flex w-full items-center justify-between text-center text-sm font-medium text-gray-500 sm:text-base dark:text-gray-400">
       <ProgressIndicator slideIndex={slideIndex} thisSlideIndex={0}>
         Email
       </ProgressIndicator>
@@ -89,7 +89,7 @@ function ContactDialogButton({
     <button
       type={type}
       className={classNames(
-        "rounded-md px-6 py-2 hover:outline-solid hover:outline-1",
+        "rounded-md px-6 py-2 hover:outline-1 hover:outline-solid",
         color,
       )}
       onClick={onClick}

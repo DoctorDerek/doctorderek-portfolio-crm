@@ -48,7 +48,7 @@ export default function SearchBar({
               className="relative flex w-full flex-col space-y-1.5"
               id="filter"
             >
-              <span className="text-xs font-semibold uppercase tracking-widest">
+              <span className="text-xs font-semibold tracking-widest uppercase">
                 Age Ranges
               </span>
               <input
@@ -88,7 +88,7 @@ export default function SearchBar({
                                 active
                                   ? "bg-blue-500 text-white dark:bg-blue-400 dark:text-gray-100"
                                   : "bg-gray-200 text-gray-500 dark:bg-gray-500 dark:text-gray-200",
-                                "w-full p-4 text-left font-medium uppercase tracking-widest",
+                                "w-full p-4 text-left font-medium tracking-widest uppercase",
                               )}
                               onClick={() => setFilterText(ageRangeString)}
                             >

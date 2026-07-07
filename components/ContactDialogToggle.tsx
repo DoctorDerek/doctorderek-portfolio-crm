@@ -15,12 +15,12 @@ export default function ContactDialogToggle({
   return (
     <Switch.Group
       as="div"
-      className="flex items-center justify-between pb-2 pt-4"
+      className="flex items-center justify-between pt-4 pb-2"
     >
       <span className="flex grow flex-col">
         <Switch.Label
           as="span"
-          className="text-sm font-medium leading-6 text-gray-500 dark:text-gray-300"
+          className="text-sm leading-6 font-medium text-gray-500 dark:text-gray-300"
           passive
         >
           Show address fields
@@ -32,7 +32,7 @@ export default function ContactDialogToggle({
         onChange={setAddressEnabled}
         className={classNames(
           addressEnabled ? "bg-indigo-600" : "bg-gray-200 dark:bg-gray-700",
-          "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+          "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 focus:outline-hidden",
         )}
       >
         <span className="sr-only">Use setting</span>

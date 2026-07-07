@@ -14,7 +14,7 @@ export default function ButtonReset({
     >
       <TrashIcon
         aria-label="Delete all phone book entries and reset"
-        className="h-6 w-6 rounded-md group-hover:fill-red-600 group-hover:outline-solid group-hover:outline-1 group-hover:outline-red-600"
+        className="h-6 w-6 rounded-md group-hover:fill-red-600 group-hover:outline-1 group-hover:outline-red-600 group-hover:outline-solid"
       />
       <div className="invisible pl-1 font-bold text-red-600 group-hover:visible">
         reset

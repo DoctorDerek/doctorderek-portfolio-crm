@@ -28,7 +28,7 @@ export default function ContactCardPhotoAndHeading({
   }
   return (
     <div className="flex items-center justify-center space-x-4">
-      <div className="group relative h-20 w-20 flex-shrink-0">
+      <div className="group relative h-20 w-20 shrink-0">
         {/** We don't want to shrink and distort the image. */}
         {photo && (
           <Image

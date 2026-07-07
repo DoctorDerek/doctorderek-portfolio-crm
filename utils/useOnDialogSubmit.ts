@@ -1,4 +1,4 @@
-import { calculateAge, Contact } from "@/contacts/CONTACTS"
+import { Contact } from "@/contacts/CONTACTS"
 import { DialogState } from "@/types"
 import { calculateAge } from "@/utils/calculateAge"
 import usePhoneBookService from "@/utils/usePhoneBookService"

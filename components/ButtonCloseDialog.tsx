@@ -17,7 +17,7 @@ export default function ButtonCloseDialog({
     <button
       onClick={closeDialog}
       className={classNames(
-        "group absolute right-2 top-2 rounded-lg hover:outline hover:outline-1 hover:outline-gray-600",
+        "group absolute right-2 top-2 rounded-lg hover:outline-solid hover:outline-1 hover:outline-gray-600",
         size,
       )}
     >

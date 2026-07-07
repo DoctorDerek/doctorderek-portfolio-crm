@@ -17,7 +17,7 @@ export default function ContactDialogToggle({
       as="div"
       className="flex items-center justify-between pb-2 pt-4"
     >
-      <span className="flex flex-grow flex-col">
+      <span className="flex grow flex-col">
         <Switch.Label
           as="span"
           className="text-sm font-medium leading-6 text-gray-500 dark:text-gray-300"
@@ -32,14 +32,14 @@ export default function ContactDialogToggle({
         onChange={setAddressEnabled}
         className={classNames(
           addressEnabled ? "bg-indigo-600" : "bg-gray-200 dark:bg-gray-700",
-          "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
+          "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2",
         )}
       >
         <span className="sr-only">Use setting</span>
         <span
           className={classNames(
             addressEnabled ? "translate-x-5" : "translate-x-0",
-            "pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-gray-100 shadow ring-0 transition duration-200 ease-in-out dark:bg-gray-800",
+            "pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-gray-100 shadow-sm ring-0 transition duration-200 ease-in-out dark:bg-gray-800",
           )}
         >
           <span

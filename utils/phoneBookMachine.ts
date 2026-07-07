@@ -1,7 +1,4 @@
-import CONTACTS_WITH_AGES, {
-  calculateAge,
-  sortByLastName,
-} from "@/contacts/CONTACTS"
+import CONTACTS_WITH_AGES from "@/contacts/CONTACTS"
 import { Contact } from "@/types"
 import { calculateAge } from "@/utils/calculateAge"
 import { getErrorMessage } from "@/utils/errors"

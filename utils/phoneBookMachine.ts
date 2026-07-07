@@ -4,6 +4,7 @@ import CONTACTS_WITH_AGES, {
 } from "@/contacts/CONTACTS"
 import { Contact } from "@/types"
 import { calculateAge } from "@/utils/calculateAge"
+import { getErrorMessage } from "@/utils/errors"
 import { sortByLastName } from "@/utils/sortByLastName"
 import { assign, createMachine } from "xstate"
 
@@ -96,8 +97,8 @@ const phoneBookMachine = createMachine(
 
               localStorageObject.sort(sortByLastName)
               return localStorageObject as Contact[]
-            } catch (error: any) {
-              console.log(error)
+            } catch (error) {
+              console.log(getErrorMessage(error))
             }
           return CONTACTS_WITH_AGES
         },
@@ -140,8 +141,8 @@ const phoneBookMachine = createMachine(
             LOCALSTORAGE_KEY_AUTH,
             JSON.stringify(context.contacts),
           )
-        } catch (error: any) {
-          console.log(error)
+        } catch (error) {
+          console.log(getErrorMessage(error))
         }
       },
       resetPhoneBookEntries: assign({

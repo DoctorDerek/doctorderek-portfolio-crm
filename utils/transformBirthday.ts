@@ -2,6 +2,8 @@
  * Takes a birthday string such as "1920-03-15" and returns "Month Day, Year".
  * e.g. "1920-03-15" => "March 15, 1920"
  * */
+import { getErrorMessage } from "@/utils/errors"
+
 export default function transformBirthday({
   birthYear,
   birthMonth,
@@ -18,7 +20,7 @@ export default function transformBirthday({
     date.setUTCHours(12, 0, 0, 0)
     return new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(date)
   } catch (error) {
-    console.error(error)
+    console.error(getErrorMessage(error))
     return `Invalid date: ${birthYear}-${birthMonth}-${birthDay}`
   }
 }

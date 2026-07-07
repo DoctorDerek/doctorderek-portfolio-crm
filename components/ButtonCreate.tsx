@@ -1,4 +1,4 @@
-import { DialogState } from "@/components/ContactDialog"
+import { DialogState } from "@/types"
 import { Dispatch, SetStateAction } from "react"
 
 export default function ButtonCreate({

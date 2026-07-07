@@ -1,4 +1,4 @@
-import { Contact } from "@/contacts/CONTACTS"
+import { Contact } from "@/types"
 import classNames from "@/utils/classNames"
 import { Combobox } from "@headlessui/react"
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid"

@@ -1,6 +1,5 @@
 "use client"
 
-// Specify this is a Client Component, not a Server Component.
 import { useTheme } from "@wits/next-themes"
 import { useEffect, useState } from "react"
 import { CSSTransition } from "react-transition-group"
@@ -20,18 +19,11 @@ export default function ThemeSwitch() {
       themes: The list of themes passed to ThemeProvider (with "system" appended, if enableSystem is true) */
   const { resolvedTheme, setTheme } = useTheme()
 
-  // Transition "in" prop from false to true after mounting to show
-  // dark toggle correctly when refreshing with dark mode enabled
   const [inProp, setInProp] = useState(false)
   useEffect(() => {
     if (resolvedTheme === "dark") setInProp(true)
   }, [resolvedTheme])
 
-  // Here's a note about Avoid Hydration Mismatch -- probably not necessary
-  // https://github.com/pacocoursey/next-themes#avoid-hydration-mismatch
-
-  // Source: https://codesandbox.io/s/dark-mode-toggle-si6k2 by bartkozal
-  // Used with permission
   return (
     <CSSTransition
       aria-label="Toggle Dark Mode"

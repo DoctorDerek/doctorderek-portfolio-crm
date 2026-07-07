@@ -1,5 +1,4 @@
-import { DialogState } from "@/components/ContactDialog"
-import { Contact } from "@/contacts/CONTACTS"
+import { Contact, DialogState } from "@/types"
 import { TrashIcon } from "@heroicons/react/24/solid"
 import { Dispatch, SetStateAction } from "react"
 

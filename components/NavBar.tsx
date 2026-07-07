@@ -48,7 +48,7 @@ function MobileNavigationMenu({
   return (
     <Dialog open={isDialogOpen} onClose={closeDialog} className="relative z-50">
       {/* We don't need a wrapper because the mobile menu is full-screen. */}
-      <Dialog.Panel className="fixed inset-0 bg-black py-4 text-5xl uppercase text-white">
+      <Dialog.Panel className="fixed inset-0 bg-black py-4 text-5xl text-white uppercase">
         <ContactDialogClose closeDialog={closeDialog} size="h-12 w-12" />
         <ReactConfetti />
         <div
@@ -71,7 +71,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="flex w-full items-center justify-between bg-black p-6 text-xs uppercase tracking-widest text-white">
+      <nav className="flex w-full items-center justify-between bg-black p-6 text-xs tracking-widest text-white uppercase">
         <div className="flex items-center space-x-12">
           <span className="text-base">NavBar</span>
           <div className="hidden items-center space-x-12 xl:flex">

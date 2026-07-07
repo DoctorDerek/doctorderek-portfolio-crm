@@ -72,7 +72,7 @@ export default function ContactDialogSecurityQuestions({
       <div className="relative mt-2">
         <Combobox.Input
           className={classNames(
-            "block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:px-2 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:ring-gray-700 dark:focus:ring-gray-500 dark:disabled:bg-gray-950 dark:disabled:text-gray-800 dark:disabled:ring-gray-950 sm:text-sm sm:leading-6",
+            "block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:px-2 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:ring-gray-700 dark:focus:ring-gray-500 dark:disabled:bg-gray-950 dark:disabled:text-gray-800 dark:disabled:ring-gray-950",
             errors?.securityQuestion
               ? "ring-2 ring-red-500 dark:ring-red-900"
               : "",
@@ -85,7 +85,7 @@ export default function ContactDialogSecurityQuestions({
             required: "Please select a security question.",
           })}
         />
-        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-hidden">
           <ChevronUpDownIcon
             className="h-5 w-5 text-gray-400"
             aria-hidden="true"
@@ -93,14 +93,14 @@ export default function ContactDialogSecurityQuestions({
         </Combobox.Button>
 
         {filteredSecurityQuestions.length > 0 && (
-          <Combobox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Combobox.Options className="ring-opacity-5 absolute z-10 mt-1 max-h-96 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black focus:outline-hidden sm:text-sm">
             {filteredSecurityQuestions.map((securityQuestion) => (
               <Combobox.Option
                 key={securityQuestion.id}
                 value={securityQuestion}
                 className={({ active }) =>
                   classNames(
-                    "relative cursor-default select-none py-2 pl-8 pr-4",
+                    "relative cursor-default py-2 pr-4 pl-8 select-none",
                     active ? "bg-indigo-600 text-white" : "text-gray-900",
                   )
                 }

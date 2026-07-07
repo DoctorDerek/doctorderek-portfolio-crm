@@ -9,7 +9,7 @@ function CheckMark() {
   return (
     <svg
       aria-hidden="true"
-      className="flex-shrink-0"
+      className="shrink-0"
       fill="currentColor"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
@@ -35,7 +35,7 @@ function ProgressIndicator({
   return (
     <li
       className={classNames(
-        "flex items-center rounded border border-solid pr-2",
+        "flex items-center rounded-sm border border-solid pr-2",
         slideIndex === thisSlideIndex
           ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
           : "border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-300",
@@ -55,7 +55,7 @@ function ProgressIndicator({
 
 function ProgressIndicators({ slideIndex }: { slideIndex: number }) {
   return (
-    <ol className="mt-4 flex w-full items-center justify-between text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
+    <ol className="mt-4 flex w-full items-center justify-between text-center text-sm font-medium text-gray-500 sm:text-base dark:text-gray-400">
       <ProgressIndicator slideIndex={slideIndex} thisSlideIndex={0}>
         Email
       </ProgressIndicator>
@@ -89,7 +89,7 @@ function ContactDialogButton({
     <button
       type={type}
       className={classNames(
-        "rounded-md px-6 py-2 hover:outline hover:outline-1",
+        "rounded-md px-6 py-2 hover:outline-1 hover:outline-solid",
         color,
       )}
       onClick={onClick}

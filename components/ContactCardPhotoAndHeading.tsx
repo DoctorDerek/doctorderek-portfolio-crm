@@ -28,7 +28,7 @@ export default function ContactCardPhotoAndHeading({
   }
   return (
     <div className="flex items-center justify-center space-x-4">
-      <div className="group relative h-20 w-20 flex-shrink-0">
+      <div className="group relative h-20 w-20 shrink-0">
         {/** We don't want to shrink and distort the image. */}
         {photo && (
           <Image
@@ -46,7 +46,7 @@ export default function ContactCardPhotoAndHeading({
             <UserIcon className="h-3/4 w-3/4 text-gray-100 dark:text-gray-400" />
           </div>
         )}
-        <div className="invisible absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform group-hover:visible">
+        <div className="invisible absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform group-hover:visible">
           <ButtonDelete contact={contact} setDialogState={setDialogState} />
         </div>
       </div>

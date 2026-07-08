@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@eslint/js": "^9.39.4",
     "@ianvs/prettier-plugin-sort-imports": "^4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^18",
@@ -40,18 +39,13 @@
     "eslint-config-flat-gitignore": "^2",
     "eslint-config-next": "^15",
     "eslint-config-prettier": "^9",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-only-warn": "^1",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "globals": "^15.15.0",
     "jiti": "^2.7.0",
     "postcss": "^8",
     "prettier": "^3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "typescript-eslint": "^8.63.0"
+    "typescript": "^5"
   },
   "packageManager": "pnpm@11.9.0+sha512.bd682d5d03fe525ef7c9fd6780c6884d1e756ac4c9c9fe00c538782824310dcf90e3ddc4f53835f06dfaebd5085e41855e0bcbb3b60de2ac5bbab89e5036f03b"
 }

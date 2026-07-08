@@ -47,7 +47,6 @@ export default function ThemeSwitch() {
       >
         <mask
           id="mask0"
-          // eslint-disable-next-line react/no-unknown-property
           mask-type="alpha"
           maskUnits="userSpaceOnUse"
           x="0"

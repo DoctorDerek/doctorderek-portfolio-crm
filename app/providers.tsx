@@ -2,10 +2,10 @@
 
 import GlobalStateContext from "@/components/GlobalStateContext"
 import phoneBookMachine from "@/utils/phoneBookMachine"
-import { ThemeProvider } from "@wits/next-themes"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ThemeProvider } from "next-themes"
 import { useInterpret } from "@xstate/react"
 import { ReactNode } from "react"
-import { QueryClient, QueryClientProvider } from "react-query"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
@@ -19,7 +19,7 @@ export default function Providers({ children }: { children: ReactNode }) {
   const phoneBookService = useInterpret(phoneBookMachine)
 
   return (
-    <QueryClientProvider client={queryClient} contextSharing={true}>
+    <QueryClientProvider client={queryClient}>
       {/* We load React Query here but don't actually use it in the app. */}
       <GlobalStateContext.Provider value={{ phoneBookService }}>
         {/* We can access React context in the app via Provider */}

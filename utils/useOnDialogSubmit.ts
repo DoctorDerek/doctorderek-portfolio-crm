@@ -2,7 +2,7 @@ import { Contact } from "@/contacts/CONTACTS"
 import { DialogState } from "@/types"
 import { calculateAge } from "@/utils/calculateAge"
 import usePhoneBookService from "@/utils/usePhoneBookService"
-import { useMutation } from "react-query"
+import { useMutation } from "@tanstack/react-query"
 import { toast } from "react-toastify"
 
 /**

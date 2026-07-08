@@ -38,7 +38,15 @@ export default function SearchBar({
   return (
     <>
       {/** Click outside helper function for closing the dropdown menu. */}
-      <div className="fixed inset-0 -z-10" onClick={hideDropdown} onKeyDown={(e) => { if (e.key === 'Enter') hideDropdown() }} role="button" tabIndex={0} />
+      <div
+        className="fixed inset-0 -z-10"
+        onClick={hideDropdown}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") hideDropdown()
+        }}
+        role="button"
+        tabIndex={0}
+      />
       <Menu>
         {/* We use `<Menu>` from Headless UI to handle the dropdown menu. */}
         {() => (

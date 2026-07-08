@@ -11,12 +11,7 @@ import { Contact } from "@/types"
 import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
 import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react.es"
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
 export type DialogState = {
@@ -187,7 +182,14 @@ export default function ContactDialog({
                 setValue={setValue}
               />
             </div>
-            <div onClick={() => validateSlide()} onKeyDown={(e) => { if (e.key === 'Enter') validateSlide() }} role="button" tabIndex={0}>
+            <div
+              onClick={() => validateSlide()}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") validateSlide()
+              }}
+              role="button"
+              tabIndex={0}
+            >
               {/* Bottom section; trigger a validation of the current slide. */}
               <ContactDialogButtons
                 dialogState={dialogState}

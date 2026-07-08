@@ -1,11 +1,11 @@
+import { dirname } from "path"
+import { fileURLToPath } from "url"
 import { FlatCompat } from "@eslint/eslintrc"
 import js from "@eslint/js"
 import type { Linter } from "eslint"
 import gitignore from "eslint-config-flat-gitignore"
 import globals from "globals"
-import { dirname } from "path"
 import tseslint from "typescript-eslint"
-import { fileURLToPath } from "url"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)

@@ -12,25 +12,25 @@ importers:
         specifier: ^2
         version: 2.2.10(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@heroicons/react':
-        specifier: ^2.0.0
+        specifier: ^2
         version: 2.2.0(react@19.2.7)
       '@hookform/resolvers':
-        specifier: ^3.0.0
+        specifier: ^3
         version: 3.10.0(react-hook-form@7.81.0(react@19.2.7))
       '@tanstack/react-query':
         specifier: ^5
         version: 5.101.2(react@19.2.7)
       '@types/react-transition-group':
-        specifier: ^4.0.0
+        specifier: ^4
         version: 4.4.12(@types/react@19.2.17)
       '@wits/next-themes':
-        specifier: ^0.2.0
+        specifier: ^0
         version: 0.2.16(next@15.5.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@xstate/react':
-        specifier: ^3.0.0
+        specifier: ^3
         version: 3.2.2(@types/react@19.2.17)(react@19.2.7)(xstate@4.38.3)
       keen-slider:
-        specifier: ^6.0.0
+        specifier: ^6
         version: 6.8.6
       next:
         specifier: ^15
@@ -39,7 +39,7 @@ importers:
         specifier: ^19
         version: 19.2.7
       react-confetti:
-        specifier: ^6.0.0
+        specifier: ^6
         version: 6.4.0(react@19.2.7)
       react-dom:
         specifier: ^19
@@ -51,17 +51,17 @@ importers:
         specifier: ^11
         version: 11.1.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-transition-group:
-        specifier: ^4.0.0
+        specifier: ^4
         version: 4.4.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       xstate:
-        specifier: ^4.0.0
+        specifier: ^4
         version: 4.38.3
       zod:
-        specifier: ^3.0.0
+        specifier: ^3
         version: 3.25.76
     devDependencies:
       '@eslint/eslintrc':
-        specifier: ^3.3.5
+        specifier: ^3
         version: 3.3.5
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4
@@ -70,7 +70,7 @@ importers:
         specifier: ^4
         version: 4.3.2
       '@types/node':
-        specifier: ^18.0.0
+        specifier: ^18
         version: 18.19.130
       '@types/react':
         specifier: ^19

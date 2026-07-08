@@ -1,12 +1,12 @@
 "use client"
 
-import GlobalStateContext from "@/components/GlobalStateContext"
-import phoneBookMachine from "@/utils/phoneBookMachine"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ThemeProvider } from "next-themes"
 import { useInterpret } from "@xstate/react"
+import { ThemeProvider } from "next-themes"
 import { ReactNode } from "react"
 import { ToastContainer } from "react-toastify"
+import GlobalStateContext from "@/components/GlobalStateContext"
+import phoneBookMachine from "@/utils/phoneBookMachine"
 import "react-toastify/dist/ReactToastify.css"
 
 const queryClient = new QueryClient()

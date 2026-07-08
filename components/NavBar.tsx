@@ -1,12 +1,12 @@
 "use client"
 
-import ContactDialogClose from "@/components/ButtonCloseDialog"
-import ReactConfetti from "@/components/ReactConfetti"
-import ThemeSwitch from "@/components/ThemeSwitch"
 import { Dialog } from "@headlessui/react"
 import { Bars3Icon, DevicePhoneMobileIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { useState } from "react"
+import ContactDialogClose from "@/components/ButtonCloseDialog"
+import ReactConfetti from "@/components/ReactConfetti"
+import ThemeSwitch from "@/components/ThemeSwitch"
 
 /** These are hardcoded to match the design document. */
 function NavBarLinks() {

@@ -1,8 +1,8 @@
-import { Contact, DialogState } from "@/types"
-import classNames from "@/utils/classNames"
 import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
 import { MutableRefObject, ReactNode } from "react"
 import { FieldErrorsImpl, UseFormRegister } from "react-hook-form"
+import { Contact, DialogState } from "@/types"
+import classNames from "@/utils/classNames"
 
 /** A checkmark from Heroicons.com */
 function CheckMark() {

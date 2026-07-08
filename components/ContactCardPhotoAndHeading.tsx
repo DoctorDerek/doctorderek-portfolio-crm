@@ -1,9 +1,9 @@
-import ButtonDelete from "@/components/ButtonDelete"
-import ContactCardName from "@/components/ContactCardName"
-import { Contact, DialogState } from "@/types"
 import { UserIcon } from "@heroicons/react/24/solid"
 import Image from "next/image"
 import { Dispatch, SetStateAction } from "react"
+import ButtonDelete from "@/components/ButtonDelete"
+import ContactCardName from "@/components/ContactCardName"
+import { Contact, DialogState } from "@/types"
 
 /**
  * We have to specify the `sizes` prop when using `next/image` with `fill`.

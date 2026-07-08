@@ -1,5 +1,6 @@
 "use client"
 
+import { Dialog } from "@headlessui/react"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ContactDialogButtons from "@/components/ContactDialogButtons"
 import ContactDialogDescription from "@/components/ContactDialogDescription"
@@ -8,7 +9,6 @@ import ContactDialogTitle from "@/components/ContactDialogTitle"
 import ContactDialogWarning from "@/components/ContactDialogWarning"
 import { Contact } from "@/types"
 import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
-import { Dialog } from "@headlessui/react"
 import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react.es"
 import {

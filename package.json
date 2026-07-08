@@ -15,7 +15,7 @@
     "@hookform/resolvers": "^3",
     "@tanstack/react-query": "^5",
     "@types/react-transition-group": "^4",
-    "@xstate/react": "^5.0.5",
+    "@xstate/react": "^5",
     "keen-slider": "^6",
     "next": "^15",
     "next-themes": "^0.4.6",
@@ -25,7 +25,7 @@
     "react-hook-form": "^7",
     "react-toastify": "^11",
     "react-transition-group": "^4",
-    "xstate": "^5.32.4",
+    "xstate": "^5",
     "zod": "^3"
   },
   "devDependencies": {
@@ -36,7 +36,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-flat-gitignore": "^2.3.0",
+    "eslint-config-flat-gitignore": "^2",
     "eslint-config-next": "^15",
     "eslint-config-prettier": "^9",
     "eslint-plugin-only-warn": "^1",

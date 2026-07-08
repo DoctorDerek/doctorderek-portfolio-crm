@@ -1,4 +1,4 @@
-import { assign, createMachine } from "xstate"
+import { assign, setup } from "xstate"
 import CONTACTS_WITH_AGES from "@/contacts/CONTACTS"
 import { Contact } from "@/types"
 import { calculateAge } from "@/utils/calculateAge"
@@ -7,146 +7,128 @@ import { sortByLastName } from "@/utils/sortByLastName"
 
 export const LOCALSTORAGE_KEY_AUTH = "phonebook-filter-by-age"
 
-const phoneBookMachine = createMachine(
-  {
-    predictableActionArguments: true,
-    id: "phoneBook",
+const phoneBookMachine = setup({
+  types: {} as {
+    context: { contacts: Contact[] }
+    events:
+      | { type: "CREATE"; contact: Contact }
+      | { type: "READ" }
+      | { type: "UPDATE"; contact: Contact }
+      | { type: "DELETE"; contact: Contact }
+      | { type: "FINISH" }
+      | { type: "RESET" }
+  },
+  actions: {
+    readPhoneBookFromLocalStorage: assign({
+      contacts: ({ context, event }) => {
+        const localStorageString = localStorage.getItem(LOCALSTORAGE_KEY_AUTH)
+        if (localStorageString)
+          try {
+            const localStorageObject = JSON.parse(
+              localStorageString,
+            ) as Contact[]
 
-    tsTypes: {} as import("./phoneBookMachine.typegen").Typegen0,
-    schema: {
-      context: {} as { contacts: Contact[] },
-
-      events: {} as
-        | { type: "CREATE"; contact: Contact }
-        | {
-            type: "READ"
+            localStorageObject.sort(sortByLastName)
+            return localStorageObject
+          } catch (error) {
+            console.log(getErrorMessage(error))
           }
-        | { type: "UPDATE"; contact: Contact }
-        | { type: "DELETE"; contact: Contact }
-        | {
-            type: "FINISH"
-          }
-        | {
-            type: "RESET"
-          },
+        return CONTACTS_WITH_AGES
+      },
+    }),
+    createContact: assign({
+      contacts: ({ context, event }) => {
+        if (event.type !== "CREATE") return context.contacts
+        const currentPhoneBookEntries = [...context.contacts]
+        const newContact = event.contact
+
+        const { birthYear, birthMonth, birthDay } = newContact
+        newContact.age = calculateAge({ birthYear, birthMonth, birthDay })
+        currentPhoneBookEntries.push(newContact)
+        return currentPhoneBookEntries
+      },
+    }),
+    updateContact: assign({
+      contacts: ({ context, event }) => {
+        if (event.type !== "UPDATE") return context.contacts
+        const currentPhoneBookEntries = [...context.contacts]
+        const updatedContact = event.contact
+        const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
+          ({ id }) => id !== updatedContact.id,
+        )
+        filteredPhoneBookEntries.push(updatedContact)
+        return filteredPhoneBookEntries
+      },
+    }),
+    deleteContact: assign({
+      contacts: ({ context, event }) => {
+        if (event.type !== "DELETE") return context.contacts
+        const currentPhoneBookEntries = [...context.contacts]
+        const deletedContact = event.contact
+        const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
+          ({ id }) => id !== deletedContact.id,
+        )
+        return filteredPhoneBookEntries
+      },
+    }),
+    writePhoneBookToLocalStorage: ({ context }) => {
+      try {
+        localStorage.setItem(
+          LOCALSTORAGE_KEY_AUTH,
+          JSON.stringify(context.contacts),
+        )
+      } catch (error) {
+        console.log(getErrorMessage(error))
+      }
     },
-
-    initial: "idle",
-
-    context: {
-      contacts: CONTACTS_WITH_AGES as Contact[],
-    },
-    states: {
-      idle: {
-        on: {
-          READ: {
-            target: "ready",
-
-            actions: ["readPhoneBookFromLocalStorage"],
-          },
+    resetPhoneBookEntries: assign({
+      contacts: () => CONTACTS_WITH_AGES,
+    }),
+  },
+}).createMachine({
+  id: "phoneBook",
+  initial: "idle",
+  context: {
+    contacts: CONTACTS_WITH_AGES as Contact[],
+  },
+  states: {
+    idle: {
+      on: {
+        READ: {
+          target: "ready",
+          actions: "readPhoneBookFromLocalStorage",
         },
       },
-      ready: {
-        on: {
-          CREATE: {
-            target: "running",
-
-            actions: ["createContact"],
-          },
-          UPDATE: {
-            target: "running",
-
-            actions: ["updateContact"],
-          },
-          DELETE: {
-            target: "running",
-
-            actions: ["deleteContact"],
-          },
-          RESET: {
-            target: "running",
-
-            actions: ["resetPhoneBookEntries"],
-          },
+    },
+    ready: {
+      on: {
+        CREATE: {
+          target: "running",
+          actions: "createContact",
+        },
+        UPDATE: {
+          target: "running",
+          actions: "updateContact",
+        },
+        DELETE: {
+          target: "running",
+          actions: "deleteContact",
+        },
+        RESET: {
+          target: "running",
+          actions: "resetPhoneBookEntries",
         },
       },
-      running: {
-        on: {
-          FINISH: {
-            target: "idle",
-
-            actions: ["writePhoneBookToLocalStorage"],
-          },
+    },
+    running: {
+      on: {
+        FINISH: {
+          target: "idle",
+          actions: "writePhoneBookToLocalStorage",
         },
       },
     },
   },
-  {
-    actions: {
-      readPhoneBookFromLocalStorage: assign({
-        contacts: (context, event) => {
-          const localStorageString = localStorage.getItem(LOCALSTORAGE_KEY_AUTH)
-          if (localStorageString)
-            try {
-              const localStorageObject = JSON.parse(
-                localStorageString,
-              ) as Contact[]
-
-              localStorageObject.sort(sortByLastName)
-              return localStorageObject as Contact[]
-            } catch (error) {
-              console.log(getErrorMessage(error))
-            }
-          return CONTACTS_WITH_AGES
-        },
-      }),
-      createContact: assign({
-        contacts: (context, event) => {
-          const currentPhoneBookEntries = context.contacts
-          const newContact = event.contact
-
-          const { birthYear, birthMonth, birthDay } = newContact
-          newContact.age = calculateAge({ birthYear, birthMonth, birthDay })
-          currentPhoneBookEntries.push(newContact)
-          return currentPhoneBookEntries
-        },
-      }),
-      updateContact: assign({
-        contacts: (context, event) => {
-          const currentPhoneBookEntries = context.contacts
-          const updatedContact = event.contact
-          const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
-            ({ id }) => id !== updatedContact.id,
-          )
-          filteredPhoneBookEntries.push(updatedContact)
-          return filteredPhoneBookEntries
-        },
-      }),
-      deleteContact: assign({
-        contacts: (context, event) => {
-          const currentPhoneBookEntries = context.contacts
-          const deletedContact = event.contact
-          const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
-            ({ id }) => id !== deletedContact.id,
-          )
-          return filteredPhoneBookEntries
-        },
-      }),
-      writePhoneBookToLocalStorage: (context, event) => {
-        try {
-          localStorage.setItem(
-            LOCALSTORAGE_KEY_AUTH,
-            JSON.stringify(context.contacts),
-          )
-        } catch (error) {
-          console.log(getErrorMessage(error))
-        }
-      },
-      resetPhoneBookEntries: assign({
-        contacts: (context, event) => CONTACTS_WITH_AGES,
-      }),
-    },
-  },
-)
+})
 
 export default phoneBookMachine

@@ -1,11 +1,9 @@
 import { Combobox } from "@headlessui/react"
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   FieldErrorsImpl,
-  UseFormGetValues,
   UseFormRegister,
-  UseFormSetError,
   UseFormSetValue,
 } from "react-hook-form"
 import { Contact } from "@/types"
@@ -41,7 +39,7 @@ export default function ContactDialogSecurityQuestions({
   errors: Partial<FieldErrorsImpl<Contact>>
   register: UseFormRegister<Contact>
 }) {
-  const [query, setQuery] = useState("")
+  const [query] = useState("")
   const [selectedSecurityQuestion, setSelectedSecurityQuestion] =
     useState<SecurityQuestion | null>(null)
 

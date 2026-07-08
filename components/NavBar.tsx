@@ -54,6 +54,9 @@ function MobileNavigationMenu({
         <div
           className="flex flex-col items-center space-y-12"
           onClick={() => closeDialog()}
+          onKeyDown={(e) => { if (e.key === 'Enter') closeDialog() }}
+          role="button"
+          tabIndex={0}
         >
           <PhoneBookHeading />
           <NavBarLinks />

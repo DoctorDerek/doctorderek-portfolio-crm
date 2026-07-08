@@ -20,7 +20,7 @@ const phoneBookMachine = setup({
   },
   actions: {
     readPhoneBookFromLocalStorage: assign({
-      contacts: ({ context, event }) => {
+      contacts: () => {
         const localStorageString = localStorage.getItem(LOCALSTORAGE_KEY_AUTH)
         if (localStorageString)
           try {

@@ -14,7 +14,6 @@ import { useKeenSlider } from "keen-slider/react.es"
 import {
   Dispatch,
   SetStateAction,
-  useContext,
   useEffect,
   useState,
 } from "react"
@@ -188,7 +187,7 @@ export default function ContactDialog({
                 setValue={setValue}
               />
             </div>
-            <div onClick={() => validateSlide()}>
+            <div onClick={() => validateSlide()} onKeyDown={(e) => { if (e.key === 'Enter') validateSlide() }} role="button" tabIndex={0}>
               {/* Bottom section; trigger a validation of the current slide. */}
               <ContactDialogButtons
                 dialogState={dialogState}

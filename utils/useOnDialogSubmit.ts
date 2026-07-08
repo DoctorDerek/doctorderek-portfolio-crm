@@ -62,7 +62,7 @@ export default function useOnDialogSubmit({
         email,
       } = data
 
-      const maxId = Math.max(...contacts?.map(({ id }) => id))
+      const maxId = contacts?.length ? Math.max(...contacts.map(({ id }) => id)) : 0
 
       /** This is the contact that's ready to send to the state machine. */
       const contact = {

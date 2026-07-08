@@ -1,7 +1,6 @@
 import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
 import { MutableRefObject, ReactNode } from "react"
-import { FieldErrorsImpl, UseFormRegister } from "react-hook-form"
-import { Contact, DialogState } from "@/types"
+import { DialogState } from "@/types"
 import classNames from "@/utils/classNames"
 
 /** A checkmark from Heroicons.com */
@@ -115,8 +114,8 @@ export default function ContactDialogButtons({
   dialogState: DialogState
   closeDialog: () => void
   instanceRef: MutableRefObject<KeenSliderInstance<
-    {},
-    {},
+    unknown,
+    unknown,
     KeenSliderHooks
   > | null>
   /**

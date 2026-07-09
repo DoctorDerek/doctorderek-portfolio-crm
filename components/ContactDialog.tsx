@@ -1,5 +1,6 @@
 "use client"
 
+import { Dialog } from "@headlessui/react"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ContactDialogButtons from "@/components/ContactDialogButtons"
 import ContactDialogDescription from "@/components/ContactDialogDescription"
@@ -8,16 +9,9 @@ import ContactDialogTitle from "@/components/ContactDialogTitle"
 import ContactDialogWarning from "@/components/ContactDialogWarning"
 import { Contact } from "@/types"
 import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
-import { Dialog } from "@headlessui/react"
 import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react.es"
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 
 export type DialogState = {
@@ -188,7 +182,14 @@ export default function ContactDialog({
                 setValue={setValue}
               />
             </div>
-            <div onClick={() => validateSlide()}>
+            <div
+              onClick={() => validateSlide()}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") validateSlide()
+              }}
+              role="button"
+              tabIndex={0}
+            >
               {/* Bottom section; trigger a validation of the current slide. */}
               <ContactDialogButtons
                 dialogState={dialogState}

@@ -1,17 +1,16 @@
-import ContactCard from "@/components/ContactCard"
-import ContactDialogSecurityQuestions from "@/components/ContactDialogSecurityQuestions"
-import ContactDialogToggle from "@/components/ContactDialogToggle"
-import { Contact, DialogState } from "@/types"
-import classNames from "@/utils/classNames"
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
 import {
   FieldErrorsImpl,
   UseFormGetValues,
   UseFormRegister,
-  UseFormSetError,
   UseFormSetValue,
 } from "react-hook-form"
+import ContactCard from "@/components/ContactCard"
+import ContactDialogSecurityQuestions from "@/components/ContactDialogSecurityQuestions"
+import ContactDialogToggle from "@/components/ContactDialogToggle"
+import { Contact, DialogState } from "@/types"
+import classNames from "@/utils/classNames"
 
 /**
  * The `<ContactDialogInput>` renders the input fields for `<ContactDialog>`.

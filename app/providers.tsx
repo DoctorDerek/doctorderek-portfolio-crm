@@ -1,12 +1,12 @@
 "use client"
 
-import GlobalStateContext from "@/components/GlobalStateContext"
-import phoneBookMachine from "@/utils/phoneBookMachine"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { useActorRef } from "@xstate/react"
 import { ThemeProvider } from "next-themes"
-import { useInterpret } from "@xstate/react"
 import { ReactNode } from "react"
 import { ToastContainer } from "react-toastify"
+import GlobalStateContext from "@/components/GlobalStateContext"
+import phoneBookMachine from "@/utils/phoneBookMachine"
 import "react-toastify/dist/ReactToastify.css"
 
 const queryClient = new QueryClient()
@@ -16,7 +16,7 @@ const queryClient = new QueryClient()
  * Reference: https://beta.nextjs.org/docs/rendering/server-and-client-components#using-context-in-client-components
  * */
 export default function Providers({ children }: { children: ReactNode }) {
-  const phoneBookService = useInterpret(phoneBookMachine)
+  const phoneBookService = useActorRef(phoneBookMachine)
 
   return (
     <QueryClientProvider client={queryClient}>

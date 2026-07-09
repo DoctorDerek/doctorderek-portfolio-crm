@@ -1,9 +1,9 @@
 "use client"
 
-import { AGE_RANGES } from "@/contacts/AGE_RANGES"
-import classNames from "@/utils/classNames"
 import { Menu } from "@headlessui/react"
 import { Dispatch, SetStateAction, useState } from "react"
+import { AGE_RANGES } from "@/contacts/AGE_RANGES"
+import classNames from "@/utils/classNames"
 
 /**
  * The `<SearchBar>` powers the "search by age range" feature, though the
@@ -38,10 +38,18 @@ export default function SearchBar({
   return (
     <>
       {/** Click outside helper function for closing the dropdown menu. */}
-      <div className="fixed inset-0 -z-10" onClick={hideDropdown} />
+      <div
+        className="fixed inset-0 -z-10"
+        onClick={hideDropdown}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") hideDropdown()
+        }}
+        role="button"
+        tabIndex={0}
+      />
       <Menu>
         {/* We use `<Menu>` from Headless UI to handle the dropdown menu. */}
-        {({ open }) => (
+        {() => (
           <>
             {/* We don't need to reference `open` without `<Menu.Button>`. */}
             <label

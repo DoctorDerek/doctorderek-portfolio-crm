@@ -1,12 +1,12 @@
 "use client"
 
-import ContactDialogClose from "@/components/ButtonCloseDialog"
-import ReactConfetti from "@/components/ReactConfetti"
-import ThemeSwitch from "@/components/ThemeSwitch"
 import { Dialog } from "@headlessui/react"
 import { Bars3Icon, DevicePhoneMobileIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { useState } from "react"
+import ContactDialogClose from "@/components/ButtonCloseDialog"
+import ReactConfetti from "@/components/ReactConfetti"
+import ThemeSwitch from "@/components/ThemeSwitch"
 
 /** These are hardcoded to match the design document. */
 function NavBarLinks() {
@@ -54,6 +54,11 @@ function MobileNavigationMenu({
         <div
           className="flex flex-col items-center space-y-12"
           onClick={() => closeDialog()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") closeDialog()
+          }}
+          role="button"
+          tabIndex={0}
         >
           <PhoneBookHeading />
           <NavBarLinks />

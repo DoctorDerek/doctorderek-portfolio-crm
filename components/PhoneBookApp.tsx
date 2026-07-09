@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import ButtonCreate from "@/components/ButtonCreate"
 import ButtonReset from "@/components/ButtonReset"
 import ContactActionDialog from "@/components/ContactDialog"
@@ -7,7 +8,6 @@ import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
 import { DialogState } from "@/types"
 import usePhoneBookService from "@/utils/usePhoneBookService"
-import { useEffect, useState } from "react"
 
 /**
  * The `<PhoneBookApp>` handles our global state using 3 state handlers:

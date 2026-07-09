@@ -67,8 +67,11 @@ importers:
         specifier: ^4
         version: 4.7.1(prettier@3.9.4)
       '@tailwindcss/postcss':
-        specifier: ^4.3.2
+        specifier: ^4
         version: 4.3.2
+      '@types/eslint-config-prettier':
+        specifier: ^6.11.3
+        version: 6.11.3
       '@types/node':
         specifier: ^18
         version: 18.19.130
@@ -106,7 +109,7 @@ importers:
         specifier: ^0.8.0
         version: 0.8.0(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.4))(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.9.4))(prettier@3.9.4)
       tailwindcss:
-        specifier: ^4.3.2
+        specifier: ^4
         version: 4.3.2
       typescript:
         specifier: ^6
@@ -754,6 +757,9 @@ packages:
 
   '@tybys/wasm-util@0.10.3':
     resolution: {integrity: sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg==}
+
+  '@types/eslint-config-prettier@6.11.3':
+    resolution: {integrity: sha512-3wXCiM8croUnhg9LdtZUJQwNcQYGWxxdOWDjPe1ykCqJFPVpzAKfs/2dgSoCtAvdPeaponcWPI7mPcGGp9dkKQ==}
 
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
@@ -2428,7 +2434,7 @@ snapshots:
 
   '@babel/generator@7.17.7':
     dependencies:
-      '@babel/types': 7.17.0
+      '@babel/types': 7.29.7
       jsesc: 2.5.2
       source-map: 0.5.7
     optional: true
@@ -2997,6 +3003,8 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@types/eslint-config-prettier@6.11.3': {}
 
   '@types/estree@1.0.9': {}
 

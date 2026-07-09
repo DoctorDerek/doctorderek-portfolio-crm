@@ -14,12 +14,12 @@ import onlyWarn from "eslint-plugin-only-warn"
 const eslintConfig: Linter.Config[] = [
   gitignore(),
   ...nextConfig,
-  prettierConfig,
+  prettierConfig as any,
   {
     plugins: {
-      "only-warn": onlyWarn,
+      "only-warn": onlyWarn as any,
     },
   },
-]
+] as Linter.Config[]
 
 export default eslintConfig

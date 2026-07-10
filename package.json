@@ -44,7 +44,7 @@
     "eslint": "^9",
     "eslint-config-flat-gitignore": "^2",
     "eslint-config-next": "^16",
-    "eslint-config-prettier": "^10.1.8",
+    "eslint-config-prettier": "^10",
     "eslint-plugin-only-warn": "^1",
     "jiti": "^2",
     "postcss": "^8",

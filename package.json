@@ -1,6 +1,7 @@
 {
   "name": "phonebook-app",
   "version": "1.8.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -28,6 +29,11 @@
     "xstate": "^5",
     "zod": "^3"
   },
+  "postcss": {
+    "plugins": {
+      "@tailwindcss/postcss": {}
+    }
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@ianvs/prettier-plugin-sort-imports": "^4",
@@ -38,7 +44,7 @@
     "eslint": "^9",
     "eslint-config-flat-gitignore": "^2",
     "eslint-config-next": "^16",
-    "eslint-config-prettier": "^9",
+    "eslint-config-prettier": "^10",
     "eslint-plugin-only-warn": "^1",
     "jiti": "^2",
     "postcss": "^8",

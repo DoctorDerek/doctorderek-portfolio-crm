@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import { CSSTransition } from "react-transition-group"
 
 /** This is our "dark mode" helper; clicking it switches to dark mode. */
@@ -19,10 +19,13 @@ export default function ThemeSwitch() {
       themes: The list of themes passed to ThemeProvider (with "system" appended, if enableSystem is true) */
   const { resolvedTheme, setTheme } = useTheme()
 
-  const [inProp, setInProp] = useState(false)
-  useEffect(() => {
-    if (resolvedTheme === "dark") setInProp(true)
-  }, [resolvedTheme])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+
+  const inProp = mounted && resolvedTheme === "dark"
 
   return (
     <CSSTransition
@@ -31,9 +34,8 @@ export default function ThemeSwitch() {
       className="mr-1 ml-1 h-12 bg-transparent p-1 text-gray-900"
       onClick={() => {
         setTheme(resolvedTheme === "dark" ? "light" : "dark")
-        setInProp(inProp ? false : true)
       }}
-      in={inProp}
+      in={!!inProp}
       classNames="switch"
       timeout={0}
     >

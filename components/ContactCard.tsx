@@ -27,12 +27,6 @@ function Address({ contact }: { contact: Contact }) {
   )
 }
 
-/**
- * The photo floats left of a heading with the contact's name above their city.
- * The contact's birthday, address, phone number, and email address follow.
- *
- * Design: https://www.figma.com/file/bgqegwF2VfeZ6qlJZ0FLVB/Exercise
- * */
 export default function ContactCard({
   contact,
   setDialogState,
@@ -43,7 +37,6 @@ export default function ContactCard({
   const { birthYear, birthMonth, birthDay, phoneNumber, email } = contact
   return (
     <div className="flex w-full flex-col items-start justify-between space-y-6 border border-solid border-gray-200 p-6 uppercase shadow-lg filter xl:space-y-8 xl:p-8 dark:border-gray-800">
-      {/** The entire `<ContactCard>` component uses UPPERCASE text. */}
       <ContactCardPhotoAndHeading
         contact={contact}
         setDialogState={setDialogState}

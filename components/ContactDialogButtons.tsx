@@ -125,11 +125,16 @@ export default function ContactDialogButtons({
   slideIndex: number
 }) {
   const maxIndex = 3
-  const getBackOnClick = () => {
-    if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
-      return () => closeDialog()
-    if (slideIndex === 0) return () => closeDialog()
-    return () => instanceRef?.current?.prev()
+  const handleBack = () => {
+    if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") {
+      closeDialog()
+      return
+    }
+    if (slideIndex === 0) {
+      closeDialog()
+      return
+    }
+    instanceRef.current?.prev()
   }
   const getBackLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
@@ -143,11 +148,10 @@ export default function ContactDialogButtons({
     if (slideIndex === maxIndex) return "submit"
     return "button"
   }
-  const getNextOnClick = () => {
-    if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
-      return undefined
-    if (slideIndex === maxIndex) return undefined
-    return () => instanceRef?.current?.next()
+  const handleNext = () => {
+    if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") return
+    if (slideIndex === maxIndex) return
+    instanceRef.current?.next()
   }
   const getNextLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
@@ -163,14 +167,20 @@ export default function ContactDialogButtons({
           type="button"
           label={getBackLabel()}
           color="bg-gray-800 text-white hover:bg-gray-700 hover:outline-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:hover:outline-gray-700"
-          onClick={getBackOnClick()}
+          onClick={handleBack}
         />
         {/* Show "Next" on slides except the last; show "Submit" on last. */}
         <ContactDialogButton
           type={getNextButtonType()}
           label={getNextLabel()}
           color="bg-blue-400 text-white hover:bg-blue-500 hover:outline-blue-400"
-          onClick={getNextOnClick()}
+          onClick={
+            dialogState.type !== "CREATE" && dialogState.type !== "UPDATE"
+              ? undefined
+              : slideIndex === maxIndex
+                ? undefined
+                : handleNext
+          }
         />
       </div>
       {(dialogState.type === "CREATE" || dialogState.type === "UPDATE") && (

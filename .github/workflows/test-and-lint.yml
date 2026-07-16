@@ -44,8 +44,10 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Post PR Comment
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        continue-on-error: true
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
+          retries: 3
           script: |
             const output = process.env.LINT_OUTPUT;
             let body = '';

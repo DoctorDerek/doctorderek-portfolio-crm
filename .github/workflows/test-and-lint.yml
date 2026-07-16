@@ -20,13 +20,13 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
+        uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d
 
       - name: Setup Node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version-file: ".node-version"
           cache: "pnpm"
@@ -37,16 +37,14 @@ jobs:
       - name: Run Lint and Capture Output
         id: lint
         run: |
-          # Run lint and capture output, ignoring the exit code
           OUTPUT=$(pnpm lint || true)
 
-          # Write to multiline GitHub environment variable
           echo "LINT_OUTPUT<<EOF" >> $GITHUB_ENV
           echo "$OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Post PR Comment
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           script: |
             const output = process.env.LINT_OUTPUT;
@@ -87,7 +85,7 @@ jobs:
         run: pnpm vitest run --coverage --passWithNoTests
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45 # v5
+        uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: vitest

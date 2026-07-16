@@ -132,7 +132,6 @@ export const calculateAge = ({
   return age
 }
 
-/** We flesh out the mock data by calculating the age for each contact. */
 const CONTACTS_WITH_AGES: Contact[] = CONTACTS.map((contact) => {
   const { birthYear, birthMonth, birthDay } = contact
   const age = calculateAge({ birthYear, birthMonth, birthDay })

@@ -1,6 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
 /node_modules
 /.pnp
 .pnp.*
@@ -9,36 +6,29 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-# testing
+
 /coverage
 /test-results/
 /playwright-report/
 /blob-report/
 
-# next.js
 /.next/
 /out/
 
-# production
 /build
 
-# misc
 .DS_Store
 *.pem
 
-# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# local env files
 .env*.local
 
-# vercel
 .vercel
 
-# Other Next.js
 node_modules
 target
 dist
@@ -51,13 +41,10 @@ logs
 yarn-error.log
 npm-debug.log
 
-# Next.js env types
 next-env.d.ts
 
-# typescript
 *.tsbuildinfo
 
-# Yarn https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 .yarn/*
 !.yarn/cache
 !.yarn/patches
@@ -67,11 +54,9 @@ next-env.d.ts
 !.yarn/versions
 !.yarn/install-state.gz
 
-# Repomix output & temporary intermediary files
 repomix-output.*
 repomix-temp.*
 
-# IP sovereignty & private files
 constitution.txt
 gdd.txt
 reference/

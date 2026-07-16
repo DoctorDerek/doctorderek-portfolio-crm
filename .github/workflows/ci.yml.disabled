@@ -25,13 +25,11 @@ jobs:
       - name: Use Node.js LTS (v18)
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x # Node 18 LTS
+          node-version: 18.x
 
       - name: Install dependencies
         run: |
           yarn --frozen-lockfile
-
-      # We don't want immutable-cache, just a frozen `yarn.lock` file
 
       - name: Run tests
         run: |

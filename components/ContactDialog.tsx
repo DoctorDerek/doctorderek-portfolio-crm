@@ -19,7 +19,6 @@ export type DialogState = {
   contact?: Contact
 }
 
-/** We show a dialog to confirm user intent before performing any action. */
 export default function ContactDialog({
   dialogState,
   setDialogState,
@@ -29,7 +28,6 @@ export default function ContactDialog({
   setDialogState: Dispatch<SetStateAction<DialogState>>
   contacts: Contact[]
 }) {
-  /** We set up our form handlers for React Hook Form, including reset. */
   const {
     register,
     handleSubmit,
@@ -40,7 +38,6 @@ export default function ContactDialog({
     setValue,
   } = useForm<Contact>({ mode: "onTouched" })
 
-  /** We have a helper to reset the dialog state and thus close the dialog. */
   const closeDialog = () => {
     setDialogState({ type: "CLOSED", contact: undefined })
     reset()
@@ -66,10 +63,6 @@ export default function ContactDialog({
     drag: false,
   })
 
-  /**
-   * We don't want to validate the entire form every time the slide changes.
-   * These fields correspond to the slides in `<ContactDialogInputs>`.
-   */
   async function validateSlide() {
     if (slideIndex === 0) {
       await trigger("email")
@@ -94,11 +87,6 @@ export default function ContactDialog({
   }
 
   useEffect(() => {
-    /**
-     * Stop the user from advancing the slide if there are form errors.
-     *
-     * We use guard clauses to exit early so the user can always go back.
-     */
     async function showSlideWithError() {
       if (slideIndex === 0) return
       if (errors?.email || errors?.password) {
@@ -154,26 +142,21 @@ export default function ContactDialog({
       onClose={closeDialog}
       className="relative z-50"
     >
-      {/* The backdrop (a fixed sibling to the panel container). */}
       <div
         className="fixed inset-0 bg-black/30 dark:bg-black/70"
         aria-hidden="true"
       />
 
-      {/* A full-screen container that will center the dialog. */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        {/* The actual dialog panel, centered inside the box. */}
         <form onSubmit={handleSubmit(onDialogSubmit)}>
           <Dialog.Panel className="relative mx-auto flex min-h-[75vh] max-w-lg flex-col justify-between space-y-4 rounded-lg bg-gray-100 p-6 text-lg dark:bg-gray-800">
             <div>
-              {/* Top section */}
               <ContactDialogClose closeDialog={closeDialog} />
               <ContactDialogTitle dialogState={dialogState} />
               <ContactDialogDescription dialogState={dialogState} />
               <ContactDialogWarning dialogState={dialogState} />
             </div>
             <div ref={sliderRef} className="keen-slider">
-              {/* Middle section */}
               <ContactDialogInputs
                 dialogState={dialogState}
                 register={register}
@@ -190,7 +173,6 @@ export default function ContactDialog({
               role="button"
               tabIndex={0}
             >
-              {/* Bottom section; trigger a validation of the current slide. */}
               <ContactDialogButtons
                 dialogState={dialogState}
                 closeDialog={closeDialog}

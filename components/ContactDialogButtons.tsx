@@ -3,7 +3,6 @@ import { MutableRefObject, ReactNode } from "react"
 import { DialogState } from "@/types"
 import classNames from "@/utils/classNames"
 
-/** A checkmark from Heroicons.com */
 function CheckMark() {
   return (
     <svg
@@ -98,13 +97,6 @@ function ContactDialogButton({
   )
 }
 
-/**
- * For "CREATE" and "UPDATE" sections, the buttons handle slide navigation for
- * the multi-step form, so that "Submit" is only on the last slide.
- *
- * For "DELETE" and "RESET" dialogs, it's a single slide, so we only need the
- * "Cancel" and "Submit" buttons.
- * */
 export default function ContactDialogButtons({
   dialogState,
   closeDialog,
@@ -118,10 +110,6 @@ export default function ContactDialogButtons({
     unknown,
     KeenSliderHooks
   > | null>
-  /**
-   * The `slideIndex` from the `onChanged` handler of the `useKeenSlider` hook.
-   * We know in advance that the maxIndex is 3, since we've hardcoded 4 slides.
-   * */
   slideIndex: number
 }) {
   const maxIndex = 3
@@ -162,14 +150,12 @@ export default function ContactDialogButtons({
   return (
     <>
       <div className="flex w-full items-center justify-between space-x-2">
-        {/* Show "Cancel" on the 1st slide; otherwise show a "Back" button. */}
         <ContactDialogButton
           type="button"
           label={getBackLabel()}
           color="bg-gray-800 text-white hover:bg-gray-700 hover:outline-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:hover:outline-gray-700"
           onClick={handleBack}
         />
-        {/* Show "Next" on slides except the last; show "Submit" on last. */}
         <ContactDialogButton
           type={getNextButtonType()}
           label={getNextLabel()}

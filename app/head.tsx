@@ -1,4 +1,3 @@
-/** The <head> shared between all pages: title, utf-8, viewport, and favicon. */
 export default async function Head() {
   return (
     <>

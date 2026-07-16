@@ -8,7 +8,6 @@ import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ReactConfetti from "@/components/ReactConfetti"
 import ThemeSwitch from "@/components/ThemeSwitch"
 
-/** These are hardcoded to match the design document. */
 function NavBarLinks() {
   return (
     <>
@@ -47,7 +46,6 @@ function MobileNavigationMenu({
 }) {
   return (
     <Dialog open={isDialogOpen} onClose={closeDialog} className="relative z-50">
-      {/* We don't need a wrapper because the mobile menu is full-screen. */}
       <Dialog.Panel className="fixed inset-0 bg-black py-4 text-5xl text-white uppercase">
         <ContactDialogClose closeDialog={closeDialog} size="h-12 w-12" />
         <ReactConfetti />
@@ -68,7 +66,6 @@ function MobileNavigationMenu({
   )
 }
 
-/** The `<NavBar>` is a Client Component because it uses the useState hook. */
 export default function NavBar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const closeDialog = () => setIsDialogOpen(false)

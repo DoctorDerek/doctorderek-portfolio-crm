@@ -1,6 +1,3 @@
-/**
- * We allow the email address to wrap on certain screen sizes, mainly tablet.
- * */
 export default function ContactCardEmail({ email }: { email: string }) {
   const splitEmail = email.split("@")
 

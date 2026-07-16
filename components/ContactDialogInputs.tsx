@@ -12,18 +12,6 @@ import ContactDialogToggle from "@/components/ContactDialogToggle"
 import { Contact, DialogState } from "@/types"
 import classNames from "@/utils/classNames"
 
-/**
- * The `<ContactDialogInput>` renders the input fields for `<ContactDialog>`.
- *
- * All fields are required
- *
- * We have some simple validation rules for the email and password fields.
- *
- * Note that we don't try to validate a phone number, because formats for
- * telephone numbers vary so much around the world. For example, many
- * validations for telephone numbers will reject any country code, such as
- * +1 for United States, even though valid US phone numbers start with +1.
- * */
 function ContactDialogInput({
   label,
   fieldName,
@@ -40,13 +28,9 @@ function ContactDialogInput({
   register: UseFormRegister<Contact>
   errors: Partial<FieldErrorsImpl<Contact>>
   disabled?: boolean
-  /** The address fields are only enabled when the user toggles them on. */
   addressEnabled: boolean
   placeholder?: string
 }) {
-  /**
-   * Note that we don't want to use the "date" input for birthday, because it
-   * is extremely difficult to use on Android for selecting your birthday. */
   const getInputType = () => {
     if (fieldName === "password") return "password"
     if (fieldName === "email") return "email"
@@ -54,7 +38,6 @@ function ContactDialogInput({
     return "text"
   }
 
-  /** For the UPDATE dialog, check for undefined and then coerce to a string. */
   const placeholderWithPreviousValue =
     String(dialogState.contact?.[fieldName] || "") || placeholder
   return (
@@ -148,7 +131,6 @@ function ErrorMessage({
   return <div className="mt-2 text-red-500">{getErrorMessage()}</div>
 }
 
-/** This is the "interior" of the form, where the user inputs data. */
 export default function ContactDialogInputs({
   dialogState,
   register,

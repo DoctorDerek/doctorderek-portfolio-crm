@@ -13,10 +13,6 @@ export default function ContactList({
   setDialogState: Dispatch<SetStateAction<DialogState>>
 }) {
   const { filterByAgeRange } = useFilterByAgeRange({ filterText })
-  /**
-   * We allow the user to filter by age range. Note that the empty string ""
-   * will always return true for the filter function. That is the initial state.
-   */
   const filteredPhoneBookEntries = contacts?.filter(filterByAgeRange)
 
   return (

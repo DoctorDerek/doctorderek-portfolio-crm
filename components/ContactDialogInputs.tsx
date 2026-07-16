@@ -1,13 +1,10 @@
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { useState } from "react"
 import {
   FieldErrorsImpl,
   UseFormGetValues,
   UseFormRegister,
-  UseFormSetValue,
 } from "react-hook-form"
 import ContactCard from "@/components/ContactCard"
-import ContactDialogSecurityQuestions from "@/components/ContactDialogSecurityQuestions"
 import ContactDialogToggle from "@/components/ContactDialogToggle"
 import { Contact, DialogState } from "@/types"
 import classNames from "@/utils/classNames"
@@ -32,7 +29,6 @@ function ContactDialogInput({
   placeholder?: string
 }) {
   const getInputType = () => {
-    if (fieldName === "password") return "password"
     if (fieldName === "email") return "email"
     if (fieldName === "phoneNumber") return "tel"
     return "text"
@@ -65,26 +61,13 @@ function ContactDialogInput({
                 "Please enter a valid email address."
               )
             }
-            if (fieldName === "password") {
-              if (typeof value === "string" && value?.length < 8)
-                return "Please enter a password of at least 8 characters."
-
-              if (typeof value === "string" && !/\d/.test(value))
-                return "Please enter a password with at least one number."
-
-              if (typeof value === "string" && !/[!@#$%^&*]/.test(value))
-                return "Please enter a password with at least one symbol."
-              return true
-            }
             if (
               fieldName === "firstName" ||
               fieldName === "lastName" ||
               fieldName === "phoneNumber" ||
               fieldName === "birthMonth" ||
               fieldName === "birthDay" ||
-              fieldName === "birthYear" ||
-              fieldName === "securityQuestion" ||
-              fieldName === "securityQuestionAnswer"
+              fieldName === "birthYear"
             )
               return Boolean(value) || "All fields are required."
             if (
@@ -112,7 +95,6 @@ function ErrorMessage({
   const getErrorMessage = () => {
     return (
       errors?.email?.message ||
-      errors?.password?.message ||
       errors?.firstName?.message ||
       errors?.lastName?.message ||
       errors?.birthMonth?.message ||
@@ -123,8 +105,6 @@ function ErrorMessage({
       errors?.city?.message ||
       errors?.state?.message ||
       errors?.zipCode?.message ||
-      errors?.securityQuestion?.message ||
-      errors?.securityQuestionAnswer?.message ||
       "All fields are required."
     )
   }
@@ -136,13 +116,11 @@ export default function ContactDialogInputs({
   register,
   errors,
   getValues,
-  setValue,
 }: {
   dialogState: DialogState
   register: UseFormRegister<Contact>
   errors: Partial<FieldErrorsImpl<Contact>>
   getValues: UseFormGetValues<Contact>
-  setValue: UseFormSetValue<Contact>
 }) {
   const [addressEnabled, setAddressEnabled] = useState(false)
 
@@ -162,51 +140,9 @@ export default function ContactDialogInputs({
           errors={errors}
           addressEnabled={addressEnabled}
         />
-        <ContactDialogInput
-          label="Password"
-          fieldName="password"
-          dialogState={dialogState}
-          register={register}
-          errors={errors}
-          addressEnabled={addressEnabled}
-        />
-        <div className="mt-4 flex items-center justify-between text-sm">
-          <div className="flex items-center">
-            {(getValues("password")?.length || 0) >= 8 && (
-              <CheckIcon className="ml-2 h-5 w-5 text-green-500" />
-            )}
-            {(getValues("password")?.length || 0) < 8 && (
-              <XMarkIcon className="ml-2 h-5 w-5 text-red-500" />
-            )}
-            <span className="ml-2">At least 8 characters</span>
-          </div>
-          <div className="flex items-center">
-            {/\d/.test(String(getValues("password"))) && (
-              <CheckIcon className="ml-2 h-5 w-5 text-green-500" />
-            )}
-            {!/\d/.test(String(getValues("password"))) && (
-              <XMarkIcon className="ml-2 h-5 w-5 text-red-500" />
-            )}
-            <span className="ml-2">At least 1 number</span>
-          </div>
-          <div className="flex items-center">
-            {/[!@#$%^&*]/.test(String(getValues("password"))) && (
-              <CheckIcon className="ml-2 h-5 w-5 text-green-500" />
-            )}
-            {!/[!@#$%^&*]/.test(String(getValues("password"))) && (
-              <XMarkIcon className="ml-2 h-5 w-5 text-red-500" />
-            )}
-            <span className="ml-2">At least 1 symbol</span>
-          </div>
-        </div>
-        <div className="pt-4 text-base italic">
-          Note: The password is only to demonstrate password validation. Do not
-          use a real password.
-        </div>
-        {dialogState.type === "CREATE" &&
-          (errors?.email?.message || errors?.password?.message) && (
-            <ErrorMessage errors={errors} />
-          )}
+        {dialogState.type === "CREATE" && errors?.email?.message && (
+          <ErrorMessage errors={errors} />
+        )}
       </div>
       <div className="keen-slider__slide">
         <ContactDialogInput
@@ -312,39 +248,9 @@ export default function ContactDialogInputs({
             errors?.state?.message ||
             errors?.zipCode?.message) && <ErrorMessage errors={errors} />}
       </div>
-      <div className="keen-slider__slide space-y-8">
-        <ContactDialogSecurityQuestions
-          setValue={setValue}
-          errors={errors}
-          register={register}
-        />
-        <ContactDialogInput
-          label="Security Question Answer"
-          fieldName="securityQuestionAnswer"
-          dialogState={dialogState}
-          register={register}
-          errors={errors}
-          addressEnabled={addressEnabled}
-        />
-        <div className="pt-4 text-base italic">
-          Note: The security question is only for demonstration purposes. Do not
-          use a real security question.
-        </div>
-        {dialogState.type === "CREATE" &&
-          (errors?.securityQuestion?.message ||
-            errors?.securityQuestionAnswer?.message) && (
-            <ErrorMessage errors={errors} />
-          )}
-      </div>
       <div className="keen-slider__slide space-y-4 text-sm">
         <div className="text-base font-bold italic">Review and Submit</div>
         <ContactCard contact={getValues()} setDialogState={() => {}} />
-        <div className="pb-4 text-base font-bold italic">Security Question</div>
-        <span className="italic">{getValues("securityQuestion")}</span>
-        <span className="font-bold">
-          {" "}
-          {getValues("securityQuestionAnswer")}
-        </span>
       </div>
     </>
   )

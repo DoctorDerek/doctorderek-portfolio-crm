@@ -61,9 +61,6 @@ function ProgressIndicators({ slideIndex }: { slideIndex: number }) {
         Info
       </ProgressIndicator>
       <ProgressIndicator slideIndex={slideIndex} thisSlideIndex={2}>
-        Security
-      </ProgressIndicator>
-      <ProgressIndicator slideIndex={slideIndex} thisSlideIndex={3}>
         Review
       </ProgressIndicator>
     </ol>
@@ -112,7 +109,7 @@ export default function ContactDialogButtons({
   > | null>
   slideIndex: number
 }) {
-  const maxIndex = 3
+  const maxIndex = 2
   const handleBack = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") {
       closeDialog()

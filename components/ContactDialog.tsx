@@ -35,7 +35,6 @@ export default function ContactDialog({
     reset,
     trigger,
     getValues,
-    setValue,
   } = useForm<Contact>({ mode: "onTouched" })
 
   const closeDialog = () => {
@@ -66,7 +65,6 @@ export default function ContactDialog({
   async function validateSlide() {
     if (slideIndex === 0) {
       await trigger("email")
-      await trigger("password")
     }
     if (slideIndex === 1) {
       await trigger("firstName")
@@ -80,16 +78,12 @@ export default function ContactDialog({
       await trigger("zipCode")
       await trigger("phoneNumber")
     }
-    if (slideIndex === 2) {
-      await trigger("securityQuestion")
-      await trigger("securityQuestionAnswer")
-    }
   }
 
   useEffect(() => {
     async function showSlideWithError() {
       if (slideIndex === 0) return
-      if (errors?.email || errors?.password) {
+      if (errors?.email) {
         setSlideIndex(0)
         instanceRef?.current?.moveToIdx(0, true)
       }
@@ -109,11 +103,6 @@ export default function ContactDialog({
         setSlideIndex(1)
         instanceRef?.current?.moveToIdx(1, true)
       }
-      if (slideIndex === 2) return
-      if (errors?.securityQuestion || errors?.securityQuestionAnswer) {
-        setSlideIndex(2)
-        instanceRef?.current?.moveToIdx(2, true)
-      }
     }
     showSlideWithError()
   }, [
@@ -124,10 +113,7 @@ export default function ContactDialog({
     errors?.email,
     errors?.firstName,
     errors?.lastName,
-    errors?.password,
     errors?.phoneNumber,
-    errors?.securityQuestion,
-    errors?.securityQuestionAnswer,
     errors?.state,
     errors?.streetAddress,
     errors?.zipCode,
@@ -162,7 +148,6 @@ export default function ContactDialog({
                 register={register}
                 errors={errors}
                 getValues={getValues}
-                setValue={setValue}
               />
             </div>
             <div

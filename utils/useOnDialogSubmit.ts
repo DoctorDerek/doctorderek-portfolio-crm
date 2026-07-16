@@ -5,13 +5,6 @@ import { DialogState } from "@/types"
 import { calculateAge } from "@/utils/calculateAge"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 
-/**
- * This is our master form handler that handles all the action types.
- *
- * The `data` are the updated (or new) fields from the form.
- * The `dialogState.type` is the action that we want to take.
- * The `dialogState.contact` is the active (old) contact.
- */
 export default function useOnDialogSubmit({
   dialogState,
   contacts,
@@ -23,10 +16,6 @@ export default function useOnDialogSubmit({
 }) {
   const { send } = usePhoneBookService()
 
-  /**
-   * Grab the mutation for https://httpstat.us/200 to demonstrate an API call.
-   *
-   * We include header "Accept: application/json" as part of the request. */
   const mutation = useMutation({
     mutationFn: async (contact: Contact) => {
       toast("Sending the contact to https://httpstat.us/200.")
@@ -66,7 +55,6 @@ export default function useOnDialogSubmit({
         ? Math.max(...contacts.map(({ id }) => id))
         : 0
 
-      /** This is the contact that's ready to send to the state machine. */
       const contact = {
         id: maxId + 1,
         firstName,
@@ -88,7 +76,6 @@ export default function useOnDialogSubmit({
     }
 
     if (dialogState.type === "UPDATE") {
-      /** We unpack the existing contact from the `dialogState`. */
       const oldContact = dialogState?.contact
 
       const firstName = data.firstName || oldContact?.firstName || ""
@@ -103,7 +90,6 @@ export default function useOnDialogSubmit({
       const zipCode = data.zipCode || oldContact?.zipCode || ""
       const phoneNumber = data.phoneNumber || oldContact?.phoneNumber || ""
       const email = data.email || oldContact?.email || ""
-      /** The id should come from the existing entry, but we fall back to -1. */
       const id = oldContact?.id || -1
 
       const photo = oldContact?.photo || ""
@@ -112,7 +98,6 @@ export default function useOnDialogSubmit({
         calculateAge({ birthYear, birthMonth, birthDay }) ||
         -1
 
-      /** This is the contact that's ready to send to the state machine. */
       const contact = {
         id,
         firstName,

@@ -1,20 +1,11 @@
-/** All fields are optional for a Contact, except for the name and unique ID. */
 export type Contact = {
-  /** Uniqueness of the ID is enforced by the XState finite state machine. */
   id: number
-  /** We separate first and last names, and both are required. */
   firstName: string
   lastName: string
-  /**
-   * Birthdays are initialized using the syntax `new Date("1990-01-01")`.
-   * We separate year, month & day to make it easier for the user to enter.
-   * */
   birthYear?: string
   birthMonth?: string
   birthDay?: string
-  /** The contact's age is calculated from their birthday automatically. */
   age?: number
-  /** The contact's photo, a filename in the `@/public/contacts/` directory. */
   photo?: string
   streetAddress?: string
   city?: string
@@ -27,9 +18,6 @@ export type Contact = {
   securityQuestionAnswer?: string
 }
 
-/**
- * Our mock data is used to initialize the XState finite state machine and
- * contains all fields for each contact, except age, which will be calculated. */
 const CONTACTS: Contact[] = [
   {
     id: 1,

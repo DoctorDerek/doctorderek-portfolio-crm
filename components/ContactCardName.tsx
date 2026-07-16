@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react"
 import { Contact, DialogState } from "@/types"
 
-/** This component includes the `edit` button to UPDATE the contact. */
 export default function ContactCardNameAndCity({
   contact,
   setDialogState,

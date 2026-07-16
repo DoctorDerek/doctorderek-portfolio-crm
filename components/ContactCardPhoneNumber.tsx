@@ -1,6 +1,5 @@
 import { PhoneIcon } from "@heroicons/react/24/solid"
 
-/** We return the `phoneNumber` as a clickable `tel:` link. */
 export default function ContactCardPhoneNumber({
   phoneNumber,
 }: {

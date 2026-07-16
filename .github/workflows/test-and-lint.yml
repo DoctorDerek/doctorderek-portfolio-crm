@@ -37,10 +37,8 @@ jobs:
       - name: Run Lint and Capture Output
         id: lint
         run: |
-          # Run lint and capture output, ignoring the exit code
           OUTPUT=$(pnpm lint || true)
 
-          # Write to multiline GitHub environment variable
           echo "LINT_OUTPUT<<EOF" >> $GITHUB_ENV
           echo "$OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

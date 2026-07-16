@@ -1,7 +1,5 @@
 import { ReactNode } from "react"
 
-/**
- * We have a consistent layout for the contact's name, birthday, and address. */
 export default function ContactCardLabelAndData({
   label,
   data,

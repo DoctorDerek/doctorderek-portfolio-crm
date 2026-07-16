@@ -4,19 +4,7 @@ import { useTheme } from "next-themes"
 import { useSyncExternalStore } from "react"
 import { CSSTransition } from "react-transition-group"
 
-/** This is our "dark mode" helper; clicking it switches to dark mode. */
 export default function ThemeSwitch() {
-  /*  useTheme takes no parameters, but returns:
-      theme: Active theme name
-
-      setTheme(name): Function to update the theme
-
-      forcedTheme: Forced page theme or falsy. If forcedTheme is set, you should disable any theme switching UI
-
-      resolvedTheme: If enableSystem is true and the active theme is "system", this returns whether the system preference resolved to "dark" or "light". Otherwise, identical to theme
-
-      systemTheme: If enableSystem is true, represents the System theme preference ("dark" or "light"), regardless what the active theme is
-      themes: The list of themes passed to ThemeProvider (with "system" appended, if enableSystem is true) */
   const { resolvedTheme, setTheme } = useTheme()
 
   const mounted = useSyncExternalStore(

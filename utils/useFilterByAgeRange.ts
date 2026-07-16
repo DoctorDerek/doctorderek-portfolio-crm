@@ -1,8 +1,5 @@
 import { Contact } from "@/types"
 
-/**
- * Return the `filterByAgeRange` function for use in the `<ContactList>`.
- */
 export default function useFilterByAgeRange({
   filterText,
 }: {

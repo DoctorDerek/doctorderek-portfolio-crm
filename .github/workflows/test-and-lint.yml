@@ -20,13 +20,13 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d
+        uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3
 
       - name: Setup Node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".node-version"
           cache: "pnpm"
@@ -44,7 +44,7 @@ jobs:
           echo "EOF" >> $GITHUB_ENV
 
       - name: Post PR Comment
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
         with:
           script: |
             const output = process.env.LINT_OUTPUT;
@@ -85,7 +85,7 @@ jobs:
         run: pnpm vitest run --coverage --passWithNoTests
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45
+        uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45 # v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: vitest

@@ -1,5 +1,3 @@
-import { useMutation } from "@tanstack/react-query"
-import { toast } from "react-toastify"
 import { Contact } from "@/contacts/CONTACTS"
 import { DialogState } from "@/types"
 import { calculateAge } from "@/utils/calculateAge"
@@ -15,25 +13,6 @@ export default function useOnDialogSubmit({
   closeDialog: () => void
 }) {
   const { send } = usePhoneBookService()
-
-  const mutation = useMutation({
-    mutationFn: async (contact: Contact) => {
-      toast("Sending the contact to https://httpstat.us/200.")
-      const response = await fetch("https://httpstat.us/200", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-
-          "X-HttpStatus-Response-Contact": JSON.stringify(contact),
-        },
-
-        body: JSON.stringify(contact),
-      })
-
-      toast(JSON.stringify(await response.json()))
-    },
-  })
 
   const onDialogSubmit = (data: Contact) => {
     if (dialogState.type === "CREATE") {
@@ -71,8 +50,6 @@ export default function useOnDialogSubmit({
       }
 
       send({ type: "CREATE", contact })
-
-      mutation.mutate(contact)
     }
 
     if (dialogState.type === "UPDATE") {
@@ -116,8 +93,6 @@ export default function useOnDialogSubmit({
       }
 
       send({ type: "UPDATE", contact })
-
-      mutation.mutate(contact)
     }
 
     if (dialogState.type === "DELETE" && dialogState?.contact)

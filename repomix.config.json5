@@ -5,7 +5,6 @@
   output: {
     filePath: "repomix-output.txt",
     style: "plain",
-    // Supposedly this makes it "parsable" and more tokens:
     parsableStyle: true,
     compress: false,
     headerText: "Custom header information for the packed file.",
@@ -15,11 +14,10 @@
     removeComments: false,
     removeEmptyLines: false,
     topFilesLength: 5,
-    tokenCountTree: false, // or true, or a number like 10 for minimum token threshold
+    tokenCountTree: false,
     showLineNumbers: false,
     truncateBase64: false,
     copyToClipboard: false,
-    // Include full directory structure for reference (but not full file list):
     includeFullDirectoryStructure: true,
     includeEmptyDirectories: true,
     git: {

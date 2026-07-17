@@ -46,15 +46,15 @@ export default function ContactCardPhotoAndHeading({
         </div>
         <ContactCardName contact={contact} setDialogState={setDialogState} />
       </div>
-      <div className="flex items-center gap-1 self-end sm:self-start">
-        {onToggleFavorite && (
+      {onToggleFavorite && (
+        <div className="flex items-center gap-1 self-end sm:self-start">
           <ButtonFavorite
             contact={contact}
             onToggleFavorite={onToggleFavorite}
           />
-        )}
-        <ButtonDelete contact={contact} setDialogState={setDialogState} />
-      </div>
+          <ButtonDelete contact={contact} setDialogState={setDialogState} />
+        </div>
+      )}
     </div>
   )
 }

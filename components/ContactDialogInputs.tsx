@@ -6,7 +6,8 @@ import {
 } from "react-hook-form"
 import ContactCard from "@/components/ContactCard"
 import ContactDialogToggle from "@/components/ContactDialogToggle"
-import { Contact, DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
 
 function ContactDialogInput({

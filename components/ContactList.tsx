@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react"
 import ContactCard from "@/components/ContactCard"
-import { Contact, DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import useFilterByAgeRange from "@/utils/useFilterByAgeRange"
 
 export default function ContactList({

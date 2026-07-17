@@ -1,4 +1,5 @@
-export type AgeRange = { label: string; rangeBottom: number; rangeTop: number }
+import { AgeRange } from "@/types/AgeRange"
+
 export const AGE_RANGES: AgeRange[] = [
   { label: "Babies", rangeBottom: 0, rangeTop: 2 },
   { label: "Children", rangeBottom: 3, rangeTop: 16 },

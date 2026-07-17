@@ -1,6 +1,7 @@
 import { TrashIcon } from "@heroicons/react/24/solid"
 import { Dispatch, SetStateAction } from "react"
-import { Contact, DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 
 export default function ButtonDelete({
   contact,

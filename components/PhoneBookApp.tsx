@@ -6,7 +6,7 @@ import ButtonReset from "@/components/ButtonReset"
 import ContactActionDialog from "@/components/ContactDialog"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
-import { DialogState } from "@/types"
+import { DialogState } from "@/types/DialogState"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 
 export default function PhoneBookApp() {

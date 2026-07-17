@@ -1,4 +1,4 @@
-import { Contact } from "@/types"
+import { Contact } from "@/types/Contact"
 
 export default function useFilterByAgeRange({
   filterText,

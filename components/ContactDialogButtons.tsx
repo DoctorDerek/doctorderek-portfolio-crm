@@ -1,6 +1,6 @@
 import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
 import { MutableRefObject, ReactNode } from "react"
-import { DialogState } from "@/types"
+import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
 
 function CheckMark() {

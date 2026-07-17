@@ -3,7 +3,8 @@ import ContactCardEmail from "@/components/ContactCardEmail"
 import ContactCardLabelAndData from "@/components/ContactCardLabelAndData"
 import ContactCardPhoneNumber from "@/components/ContactCardPhoneNumber"
 import ContactCardPhotoAndHeading from "@/components/ContactCardPhotoAndHeading"
-import { Contact, DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import transformBirthday from "@/utils/transformBirthday"
 
 function Address({ contact }: { contact: Contact }) {

@@ -1,6 +1,6 @@
 import { assign, setup } from "xstate"
 import CONTACTS_WITH_AGES from "@/contacts/CONTACTS"
-import { Contact } from "@/types"
+import { Contact } from "@/types/Contact"
 import { calculateAge } from "@/utils/calculateAge"
 import { getErrorMessage } from "@/utils/errors"
 import { sortByLastName } from "@/utils/sortByLastName"

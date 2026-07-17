@@ -3,7 +3,8 @@ import Image from "next/image"
 import { Dispatch, SetStateAction } from "react"
 import ButtonDelete from "@/components/ButtonDelete"
 import ContactCardName from "@/components/ContactCardName"
-import { Contact, DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 
 export const IMAGE_SIZES =
   "(max-width: 640px) 5rem, (max-width: 1280px) 5rem, 5rem"

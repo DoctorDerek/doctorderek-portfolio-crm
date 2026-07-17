@@ -1,6 +1,6 @@
 import { toast } from "react-toastify"
-import { Contact } from "@/contacts/CONTACTS"
-import { DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import { calculateAge } from "@/utils/calculateAge"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 

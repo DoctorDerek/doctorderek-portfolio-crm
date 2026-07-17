@@ -17,7 +17,6 @@
     "@headlessui/react": "^2",
     "@heroicons/react": "^2",
     "@hookform/resolvers": "^3",
-    "@tanstack/react-query": "^5",
     "@types/react-transition-group": "^4",
     "@xstate/react": "^5",
     "keen-slider": "^6",

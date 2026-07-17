@@ -44,7 +44,7 @@ export default function PhoneBookApp() {
       />
 
       <div className="flex flex-col items-center justify-center space-y-6">
-        <div className="grid w-full grid-cols-1 space-y-6 xl:grid-cols-2 xl:space-y-0">
+        <div className="flex w-full flex-col gap-4">
           <SearchBar
             contactFilters={contactFilters}
             onSearchQueryChange={(searchQuery) =>
@@ -59,11 +59,17 @@ export default function PhoneBookApp() {
                 selectedAgeRangeLabel,
               }))
             }
+            onShowFavoritesOnlyChange={(showFavoritesOnly) =>
+              setContactFilters((currentContactFilters) => ({
+                ...currentContactFilters,
+                showFavoritesOnly,
+              }))
+            }
             onClearFilters={() =>
               setContactFilters(DEFAULT_CONTACT_FILTERS)
             }
           />
-          <div className="flex w-full items-center justify-between space-x-1 xl:justify-end">
+          <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
             <ButtonReset setDialogState={setDialogState} />
             <ButtonCreate setDialogState={setDialogState} />
           </div>

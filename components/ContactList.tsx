@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react"
 import ContactCard from "@/components/ContactCard"
+import ContactListEmptyState from "@/components/ContactListEmptyState"
 import ContactResultsSummary from "@/components/ContactResultsSummary"
 import { Contact } from "@/types/Contact"
 import { ContactFilters } from "@/types/ContactFilters"
@@ -27,6 +28,9 @@ export default function ContactList({
         totalContactCount={contacts.length}
       />
       <div className="space-y-6">
+        {filteredPhoneBookEntries.length === 0 && (
+          <ContactListEmptyState hasContacts={contacts.length > 0} />
+        )}
         {filteredPhoneBookEntries.map((contact) => {
           const { id, firstName, lastName, phoneNumber, photo } = contact
 

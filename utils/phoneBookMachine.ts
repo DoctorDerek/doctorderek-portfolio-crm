@@ -15,6 +15,7 @@ const phoneBookMachine = setup({
       | { type: "READ" }
       | { type: "UPDATE"; contact: Contact }
       | { type: "DELETE"; contact: Contact }
+      | { type: "TOGGLE_FAVORITE"; contactId: number }
       | { type: "FINISH" }
       | { type: "RESET" }
   },
@@ -71,6 +72,17 @@ const phoneBookMachine = setup({
         return filteredPhoneBookEntries
       },
     }),
+    toggleContactFavorite: assign({
+      contacts: ({ context, event }) => {
+        if (event.type !== "TOGGLE_FAVORITE") return context.contacts
+
+        return context.contacts.map((contact) =>
+          contact.id === event.contactId
+            ? { ...contact, isFavorite: !contact.isFavorite }
+            : contact,
+        )
+      },
+    }),
     writePhoneBookToLocalStorage: ({ context }) => {
       try {
         localStorage.setItem(
@@ -113,6 +125,10 @@ const phoneBookMachine = setup({
         DELETE: {
           target: "running",
           actions: "deleteContact",
+        },
+        TOGGLE_FAVORITE: {
+          target: "running",
+          actions: "toggleContactFavorite",
         },
         RESET: {
           target: "running",

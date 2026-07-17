@@ -28,11 +28,11 @@ function NavBarLinks() {
   )
 }
 
-function PhoneBookHeading() {
+function PortfolioCRMHeading() {
   return (
     <div className="group flex items-center justify-center space-x-2">
       <DevicePhoneMobileIcon className="h-10 w-10 group-hover:animate-spin" />
-      <span className="text-2xl font-semibold">Phone Book App</span>
+      <span className="text-2xl font-semibold">Portfolio CRM</span>
     </div>
   )
 }
@@ -58,7 +58,7 @@ function MobileNavigationMenu({
           role="button"
           tabIndex={0}
         >
-          <PhoneBookHeading />
+          <PortfolioCRMHeading />
           <NavBarLinks />
         </div>
       </Dialog.Panel>
@@ -82,7 +82,7 @@ export default function NavBar() {
         </div>
         <ThemeSwitch />
         <div className="hidden xl:flex">
-          <PhoneBookHeading />
+          <PortfolioCRMHeading />
         </div>
         <div className="block xl:hidden">
           <Bars3Icon

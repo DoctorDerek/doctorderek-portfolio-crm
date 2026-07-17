@@ -72,6 +72,7 @@ export default function useOnDialogSubmit({
       const id = oldContact?.id || -1
 
       const photo = oldContact?.photo || ""
+      const isFavorite = oldContact?.isFavorite
       const age =
         oldContact?.age ||
         calculateAge({ birthYear, birthMonth, birthDay }) ||
@@ -87,6 +88,7 @@ export default function useOnDialogSubmit({
         birthDay,
         age,
         photo,
+        isFavorite,
         streetAddress,
         city,
         state,

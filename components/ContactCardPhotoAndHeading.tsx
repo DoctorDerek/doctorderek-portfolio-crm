@@ -25,34 +25,36 @@ export default function ContactCardPhotoAndHeading({
     photo: "",
   }
   return (
-    <div className="flex items-center justify-center space-x-4">
-      <div className="group relative h-20 w-20 shrink-0">
-        {photo && (
-          <Image
-            src={`/contacts/${photo}`}
-            alt={`${firstName} ${lastName}`}
+    <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex min-w-0 items-center gap-4">
+        <div className="relative h-20 w-20 shrink-0">
+          {photo && (
+            <Image
+              src={`/contacts/${photo}`}
+              alt={`${firstName} ${lastName}`}
 
-            fill
-            className="object-fit rounded-full"
-            sizes={IMAGE_SIZES}
+              fill
+              className="object-fit rounded-full"
+              sizes={IMAGE_SIZES}
+            />
+          )}
+          {!photo && (
+            <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-300 dark:bg-gray-200">
+              <UserIcon className="h-3/4 w-3/4 text-gray-100 dark:text-gray-400" />
+            </div>
+          )}
+        </div>
+        <ContactCardName contact={contact} setDialogState={setDialogState} />
+      </div>
+      <div className="flex items-center gap-1 self-end sm:self-start">
+        {onToggleFavorite && (
+          <ButtonFavorite
+            contact={contact}
+            onToggleFavorite={onToggleFavorite}
           />
         )}
-        {!photo && (
-          <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-300 dark:bg-gray-200">
-            <UserIcon className="h-3/4 w-3/4 text-gray-100 dark:text-gray-400" />
-          </div>
-        )}
-        <div className="invisible absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform group-hover:visible">
-          <ButtonDelete contact={contact} setDialogState={setDialogState} />
-        </div>
+        <ButtonDelete contact={contact} setDialogState={setDialogState} />
       </div>
-      <ContactCardName contact={contact} setDialogState={setDialogState} />
-      {onToggleFavorite && (
-        <ButtonFavorite
-          contact={contact}
-          onToggleFavorite={onToggleFavorite}
-        />
-      )}
     </div>
   )
 }

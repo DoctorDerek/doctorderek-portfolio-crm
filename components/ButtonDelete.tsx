@@ -17,18 +17,13 @@ export default function ButtonDelete({
   }
   return (
     <button
-      className="group relative flex items-center justify-center"
+      type="button"
+      aria-label={`Delete ${firstName} ${lastName} ${phoneNumber}`}
+      title={`Delete ${firstName} ${lastName}`}
+      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-red-600 transition-colors hover:bg-red-100 hover:text-red-700 dark:text-red-300 dark:hover:bg-red-950 dark:hover:text-red-200"
       onClick={() => setDialogState({ type: "DELETE", contact })}
     >
-      <div className="invisible absolute top-14 pr-1 text-sm font-bold text-red-600 group-hover:visible">
-        delete
-      </div>
-      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-red-500">
-        <TrashIcon
-          className="h-4 w-4 fill-white"
-          aria-label={`Delete ${firstName} ${lastName} ${phoneNumber}`}
-        />
-      </div>
+      <TrashIcon className="h-5 w-5" aria-hidden="true" />
     </button>
   )
 }

@@ -1,20 +1,20 @@
 import { Dispatch, SetStateAction } from "react"
 import ContactCard from "@/components/ContactCard"
 import { Contact } from "@/types/Contact"
+import { ContactFilters } from "@/types/ContactFilters"
 import { DialogState } from "@/types/DialogState"
-import useFilterByAgeRange from "@/utils/useFilterByAgeRange"
+import filterContacts from "@/utils/filterContacts"
 
 export default function ContactList({
   contacts,
-  filterText,
+  contactFilters,
   setDialogState,
 }: {
   contacts: Contact[]
-  filterText: string
+  contactFilters: ContactFilters
   setDialogState: Dispatch<SetStateAction<DialogState>>
 }) {
-  const { filterByAgeRange } = useFilterByAgeRange({ filterText })
-  const filteredPhoneBookEntries = contacts?.filter(filterByAgeRange)
+  const filteredPhoneBookEntries = filterContacts(contacts, contactFilters)
 
   return (
     <div className="relative w-full space-y-6">

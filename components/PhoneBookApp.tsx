@@ -6,6 +6,10 @@ import ButtonReset from "@/components/ButtonReset"
 import ContactActionDialog from "@/components/ContactDialog"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
+import {
+  ContactFilters,
+  DEFAULT_CONTACT_FILTERS,
+} from "@/types/ContactFilters"
 import { DialogState } from "@/types/DialogState"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 
@@ -21,7 +25,9 @@ export default function PhoneBookApp() {
   const { context } = phoneBookState || {}
   const { contacts } = context || {}
 
-  const [filterText, setFilterText] = useState("")
+  const [contactFilters, setContactFilters] = useState<ContactFilters>(
+    DEFAULT_CONTACT_FILTERS,
+  )
 
   const [dialogState, setDialogState] = useState<DialogState>({
     type: "CLOSED",
@@ -39,7 +45,24 @@ export default function PhoneBookApp() {
 
       <div className="flex flex-col items-center justify-center space-y-6">
         <div className="grid w-full grid-cols-1 space-y-6 xl:grid-cols-2 xl:space-y-0">
-          <SearchBar filterText={filterText} setFilterText={setFilterText} />
+          <SearchBar
+            contactFilters={contactFilters}
+            onSearchQueryChange={(searchQuery) =>
+              setContactFilters((currentContactFilters) => ({
+                ...currentContactFilters,
+                searchQuery,
+              }))
+            }
+            onSelectedAgeRangeLabelChange={(selectedAgeRangeLabel) =>
+              setContactFilters((currentContactFilters) => ({
+                ...currentContactFilters,
+                selectedAgeRangeLabel,
+              }))
+            }
+            onClearFilters={() =>
+              setContactFilters(DEFAULT_CONTACT_FILTERS)
+            }
+          />
           <div className="flex w-full items-center justify-between space-x-1 xl:justify-end">
             <ButtonReset setDialogState={setDialogState} />
             <ButtonCreate setDialogState={setDialogState} />
@@ -47,7 +70,7 @@ export default function PhoneBookApp() {
         </div>
         <ContactList
           contacts={contacts}
-          filterText={filterText}
+          contactFilters={contactFilters}
           setDialogState={setDialogState}
         />
       </div>

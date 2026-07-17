@@ -1,102 +1,68 @@
 "use client"
 
-import { Menu } from "@headlessui/react"
-import { Dispatch, SetStateAction, useState } from "react"
 import { AGE_RANGES } from "@/contacts/AGE_RANGES"
-import classNames from "@/utils/classNames"
+import { ContactFilters } from "@/types/ContactFilters"
 
 export default function SearchBar({
-  filterText,
-  setFilterText,
+  contactFilters,
+  onSearchQueryChange,
+  onSelectedAgeRangeLabelChange,
+  onClearFilters,
 }: {
-  filterText: string
-  setFilterText: Dispatch<SetStateAction<string>>
+  contactFilters: ContactFilters
+  onSearchQueryChange: (searchQuery: string) => void
+  onSelectedAgeRangeLabelChange: (selectedAgeRangeLabel: string) => void
+  onClearFilters: () => void
 }) {
-  const [showDropdown, setShowDropdown] = useState(false)
-
-  const [hidingDropdown, setHidingDropdown] = useState(false)
-
-  const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout>()
-
-  const hideDropdown = () => {
-    setHidingDropdown(true)
-
-    setDropdownTimeout(setTimeout(() => setShowDropdown(false), 1000))
-  }
+  const hasActiveFilters = Boolean(
+    contactFilters.searchQuery || contactFilters.selectedAgeRangeLabel,
+  )
 
   return (
-    <>
-      <div
-        className="fixed inset-0 -z-10"
-        onClick={hideDropdown}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") hideDropdown()
-        }}
-        role="button"
-        tabIndex={0}
-      />
-      <Menu>
-        {() => (
-          <>
-            <label
-              className="relative flex w-full flex-col space-y-1.5"
-              id="filter"
-            >
-              <span className="text-xs font-semibold tracking-widest uppercase">
-                Age Ranges
-              </span>
-              <input
-                type="text"
-                placeholder="TYPE TO SEARCH"
-                className="w-full bg-gray-200 p-4 tracking-widest placeholder:text-xs placeholder:font-medium placeholder:text-gray-500 dark:bg-gray-500 dark:placeholder:text-gray-300"
-
-                onChange={(event) => setFilterText(event?.target?.value)}
-                onFocus={() => {
-                  setShowDropdown(true)
-
-                  setHidingDropdown(false)
-                  if (dropdownTimeout) clearTimeout(dropdownTimeout)
-                }}
-
-                onBlur={hideDropdown}
-
-                value={filterText}
-              />
-              {showDropdown && (
-                <div
-                  className={classNames(
-                    "absolute top-full z-10 w-full transform-gpu transition-opacity duration-1000",
-                    hidingDropdown ? "opacity-0" : "opacity-100",
-                  )}
-                >
-                  <Menu.Items static>
-                    {AGE_RANGES.map((ageRange) => (
-                      <Menu.Item key={ageRange.label}>
-                        {({ active }) => {
-                          const ageRangeString = `${ageRange.rangeBottom}-${ageRange.rangeTop}`
-                          return (
-                            <button
-                              className={classNames(
-                                active
-                                  ? "bg-blue-500 text-white dark:bg-blue-400 dark:text-gray-100"
-                                  : "bg-gray-200 text-gray-500 dark:bg-gray-500 dark:text-gray-200",
-                                "w-full p-4 text-left font-medium tracking-widest uppercase",
-                              )}
-                              onClick={() => setFilterText(ageRangeString)}
-                            >
-                              {ageRange.label} ({ageRangeString})
-                            </button>
-                          )
-                        }}
-                      </Menu.Item>
-                    ))}
-                  </Menu.Items>
-                </div>
-              )}
-            </label>
-          </>
-        )}
-      </Menu>
-    </>
+    <fieldset className="grid w-full grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(12rem,0.45fr)_auto]">
+      <legend className="sr-only">Find contacts</legend>
+      <label className="flex flex-col gap-1.5" htmlFor="contact-search">
+        <span className="text-xs font-semibold tracking-widest uppercase">
+          Search contacts
+        </span>
+        <input
+          id="contact-search"
+          type="search"
+          autoComplete="off"
+          placeholder="Name, email, phone, or location"
+          className="min-h-12 w-full rounded-md bg-gray-200 px-4 tracking-wide placeholder:text-sm placeholder:text-gray-500 dark:bg-gray-700 dark:placeholder:text-gray-300"
+          onChange={(event) => onSearchQueryChange(event.target.value)}
+          value={contactFilters.searchQuery}
+        />
+      </label>
+      <label className="flex flex-col gap-1.5" htmlFor="age-range-filter">
+        <span className="text-xs font-semibold tracking-widest uppercase">
+          Age range
+        </span>
+        <select
+          id="age-range-filter"
+          className="min-h-12 w-full rounded-md bg-gray-200 px-4 font-medium tracking-wide dark:bg-gray-700"
+          onChange={(event) =>
+            onSelectedAgeRangeLabelChange(event.target.value)
+          }
+          value={contactFilters.selectedAgeRangeLabel}
+        >
+          <option value="">All ages</option>
+          {AGE_RANGES.map(({ label, rangeBottom, rangeTop }) => (
+            <option key={label} value={label}>
+              {label} ({rangeBottom}–{rangeTop})
+            </option>
+          ))}
+        </select>
+      </label>
+      <button
+        type="button"
+        className="min-h-12 self-end rounded-md bg-gray-800 px-4 font-semibold tracking-wide text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-gray-600 dark:hover:bg-gray-500"
+        disabled={!hasActiveFilters}
+        onClick={onClearFilters}
+      >
+        Clear
+      </button>
+    </fieldset>
   )
 }

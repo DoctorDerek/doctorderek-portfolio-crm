@@ -42,31 +42,6 @@ body {
  * https://codesandbox.io/s/dark-mode-toggle-si6k2?file=/src/DarkModeToggle.js
  */
 
-.switch {
-  cursor: pointer;
-  width: 180px;
-  height: 74px;
-  margin: 80px;
-}
-
-.switch-enter .button {
-  transform: translateX(0);
-}
-
-.switch-enter-done .button {
-  transform: translateX(100px);
-  transition: transform 0.5s;
-}
-
-.switch-exit .button {
-  transform: translateX(100px);
-}
-
-.switch-exit-done .button {
-  transform: translateX(0);
-  transition: transform 0.5s;
-}
-
 .switch-enter .cloud1 {
   transform: translateX(0);
 }

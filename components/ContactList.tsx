@@ -16,7 +16,7 @@ export default function ContactList({
   contacts: Contact[]
   contactFilters: ContactFilters
   setDialogState: Dispatch<SetStateAction<DialogState>>
-  onToggleFavorite: (contactId: number) => void
+  onToggleFavorite: (contact: Contact) => void
 }) {
   const filteredPhoneBookEntries = filterContacts(contacts, contactFilters)
 

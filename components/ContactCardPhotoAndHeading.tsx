@@ -17,7 +17,7 @@ export default function ContactCardPhotoAndHeading({
 }: {
   contact: Contact
   setDialogState: Dispatch<SetStateAction<DialogState>>
-  onToggleFavorite?: (contactId: number) => void
+  onToggleFavorite?: (contact: Contact) => void
 }) {
   const { firstName, lastName, photo } = contact || {
     firstName: "",

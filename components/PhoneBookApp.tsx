@@ -1,11 +1,13 @@
 "use client"
 
+import { toast } from "react-toastify"
 import { useEffect, useState } from "react"
 import ButtonCreate from "@/components/ButtonCreate"
 import ButtonReset from "@/components/ButtonReset"
 import ContactActionDialog from "@/components/ContactDialog"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
+import { Contact } from "@/types/Contact"
 import {
   ContactFilters,
   DEFAULT_CONTACT_FILTERS,
@@ -34,6 +36,14 @@ export default function PhoneBookApp() {
   })
 
   if (!phoneBookState.matches("ready")) return null
+
+  const toggleFavorite = (contact: Contact) => {
+    send({ type: "TOGGLE_FAVORITE", contactId: contact.id })
+    const favoriteAction = contact.isFavorite ? "removed from" : "added to"
+    toast.success(
+      `${contact.firstName} ${contact.lastName} ${favoriteAction} favorites.`,
+    )
+  }
 
   return (
     <>
@@ -78,9 +88,7 @@ export default function PhoneBookApp() {
           contacts={contacts}
           contactFilters={contactFilters}
           setDialogState={setDialogState}
-          onToggleFavorite={(contactId) =>
-            send({ type: "TOGGLE_FAVORITE", contactId })
-          }
+          onToggleFavorite={toggleFavorite}
         />
       </div>
     </>

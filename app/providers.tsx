@@ -3,6 +3,7 @@
 import { useActorRef } from "@xstate/react"
 import { ThemeProvider } from "next-themes"
 import { ReactNode } from "react"
+import { ToastContainer } from "react-toastify"
 import GlobalStateContext from "@/components/GlobalStateContext"
 import phoneBookMachine from "@/utils/phoneBookMachine"
 
@@ -13,6 +14,12 @@ export default function Providers({ children }: { children: ReactNode }) {
     <GlobalStateContext.Provider value={{ phoneBookService }}>
       <ThemeProvider attribute="class" defaultTheme="system">
         {children}
+        <ToastContainer
+          aria-label="Contact notifications"
+          limit={3}
+          position="bottom-right"
+          theme="colored"
+        />
       </ThemeProvider>
     </GlobalStateContext.Provider>
   )

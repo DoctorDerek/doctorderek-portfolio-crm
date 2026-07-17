@@ -1,3 +1,4 @@
+import { toast } from "react-toastify"
 import { Contact } from "@/contacts/CONTACTS"
 import { DialogState } from "@/types"
 import { calculateAge } from "@/utils/calculateAge"
@@ -50,6 +51,7 @@ export default function useOnDialogSubmit({
       }
 
       send({ type: "CREATE", contact })
+      toast.success("Contact created.")
     }
 
     if (dialogState.type === "UPDATE") {
@@ -93,12 +95,18 @@ export default function useOnDialogSubmit({
       }
 
       send({ type: "UPDATE", contact })
+      toast.success("Contact updated.")
     }
 
-    if (dialogState.type === "DELETE" && dialogState?.contact)
+    if (dialogState.type === "DELETE" && dialogState?.contact) {
       send({ type: "DELETE", contact: dialogState?.contact })
+      toast.success("Contact deleted.")
+    }
 
-    if (dialogState.type === "RESET") send({ type: "RESET" })
+    if (dialogState.type === "RESET") {
+      send({ type: "RESET" })
+      toast.success("Contacts reset.")
+    }
 
     closeDialog()
   }

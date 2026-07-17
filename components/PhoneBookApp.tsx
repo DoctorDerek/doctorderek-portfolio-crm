@@ -72,6 +72,9 @@ export default function PhoneBookApp() {
           contacts={contacts}
           contactFilters={contactFilters}
           setDialogState={setDialogState}
+          onToggleFavorite={(contactId) =>
+            send({ type: "TOGGLE_FAVORITE", contactId })
+          }
         />
       </div>
     </>

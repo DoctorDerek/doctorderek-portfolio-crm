@@ -2,6 +2,7 @@ import { UserIcon } from "@heroicons/react/24/solid"
 import Image from "next/image"
 import { Dispatch, SetStateAction } from "react"
 import ButtonDelete from "@/components/ButtonDelete"
+import ButtonFavorite from "@/components/ButtonFavorite"
 import ContactCardName from "@/components/ContactCardName"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
@@ -12,9 +13,11 @@ export const IMAGE_SIZES =
 export default function ContactCardPhotoAndHeading({
   contact,
   setDialogState,
+  onToggleFavorite,
 }: {
   contact: Contact
   setDialogState: Dispatch<SetStateAction<DialogState>>
+  onToggleFavorite?: (contactId: number) => void
 }) {
   const { firstName, lastName, photo } = contact || {
     firstName: "",
@@ -44,6 +47,12 @@ export default function ContactCardPhotoAndHeading({
         </div>
       </div>
       <ContactCardName contact={contact} setDialogState={setDialogState} />
+      {onToggleFavorite && (
+        <ButtonFavorite
+          contact={contact}
+          onToggleFavorite={onToggleFavorite}
+        />
+      )}
     </div>
   )
 }

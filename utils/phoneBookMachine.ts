@@ -1,40 +1,48 @@
 import { assign, setup } from "xstate"
 import CONTACTS_WITH_AGES from "@/contacts/CONTACTS"
 import { Contact } from "@/types/Contact"
+import { PersistenceFailure } from "@/types/PersistenceFailure"
 import { calculateAge } from "@/utils/calculateAge"
 import { getErrorMessage } from "@/utils/errors"
 import { sortByLastName } from "@/utils/sortByLastName"
+import parseStoredContacts from "@/utils/storedContactsSchema"
 
 export const LOCALSTORAGE_KEY_AUTH = "phonebook-filter-by-age"
 
 const phoneBookMachine = setup({
   types: {} as {
-    context: { contacts: Contact[] }
+    context: {
+      contacts: Contact[]
+      persistenceFailure: PersistenceFailure | null
+    }
     events:
       | { type: "CREATE"; contact: Contact }
       | { type: "READ" }
       | { type: "UPDATE"; contact: Contact }
       | { type: "DELETE"; contact: Contact }
       | { type: "TOGGLE_FAVORITE"; contactId: number }
+      | { type: "CLEAR_PERSISTENCE_FAILURE" }
       | { type: "RESET" }
   },
   actions: {
-    readPhoneBookFromLocalStorage: assign({
-      contacts: () => {
-        const localStorageString = localStorage.getItem(LOCALSTORAGE_KEY_AUTH)
-        if (localStorageString)
-          try {
-            const localStorageObject = JSON.parse(
-              localStorageString,
-            ) as Contact[]
+    readPhoneBookFromLocalStorage: assign(() => {
+      const storedContacts = localStorage.getItem(LOCALSTORAGE_KEY_AUTH)
+      if (!storedContacts)
+        return { contacts: CONTACTS_WITH_AGES, persistenceFailure: null }
 
-            localStorageObject.sort(sortByLastName)
-            return localStorageObject
-          } catch (error) {
-            console.log(getErrorMessage(error))
-          }
-        return CONTACTS_WITH_AGES
-      },
+      try {
+        const contacts = parseStoredContacts(storedContacts)
+        contacts.sort(sortByLastName)
+        return { contacts, persistenceFailure: null }
+      } catch (error) {
+        return {
+          contacts: CONTACTS_WITH_AGES,
+          persistenceFailure: {
+            operation: "read",
+            message: getErrorMessage(error),
+          } as const,
+        }
+      }
     }),
     createContact: assign({
       contacts: ({ context, event }) => {
@@ -82,16 +90,25 @@ const phoneBookMachine = setup({
         )
       },
     }),
-    writePhoneBookToLocalStorage: ({ context }) => {
+    writePhoneBookToLocalStorage: assign(({ context }) => {
       try {
         localStorage.setItem(
           LOCALSTORAGE_KEY_AUTH,
           JSON.stringify(context.contacts),
         )
+        return { persistenceFailure: null }
       } catch (error) {
-        console.log(getErrorMessage(error))
+        return {
+          persistenceFailure: {
+            operation: "write",
+            message: getErrorMessage(error),
+          } as const,
+        }
       }
-    },
+    }),
+    clearPersistenceFailure: assign({
+      persistenceFailure: () => null,
+    }),
     resetPhoneBookEntries: assign({
       contacts: () => CONTACTS_WITH_AGES,
     }),
@@ -101,6 +118,7 @@ const phoneBookMachine = setup({
   initial: "idle",
   context: {
     contacts: CONTACTS_WITH_AGES as Contact[],
+    persistenceFailure: null,
   },
   states: {
     idle: {
@@ -127,6 +145,9 @@ const phoneBookMachine = setup({
         },
         RESET: {
           actions: ["resetPhoneBookEntries", "writePhoneBookToLocalStorage"],
+        },
+        CLEAR_PERSISTENCE_FAILURE: {
+          actions: "clearPersistenceFailure",
         },
       },
     },

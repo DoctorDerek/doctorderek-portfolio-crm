@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from "motion/react"
 import { Dispatch, SetStateAction } from "react"
 import ContactCard from "@/components/ContactCard"
 import ContactListEmptyState from "@/components/ContactListEmptyState"
@@ -30,19 +31,37 @@ export default function ContactList({
         totalContactCount={contacts.length}
       />
       <div className="space-y-6">
-        {filteredPhoneBookEntries.length === 0 && (
-          <ContactListEmptyState hasContacts={contacts.length > 0} />
-        )}
+        <AnimatePresence initial={false} mode="popLayout">
+          {filteredPhoneBookEntries.length === 0 && (
+            <motion.div
+              key="contact-list-empty-state"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ContactListEmptyState hasContacts={contacts.length > 0} />
+            </motion.div>
+          )}
         {filteredPhoneBookEntries.map((contact) => {
           return (
-            <ContactCard
+            <motion.div
               key={contact.id}
-              contact={contact}
-              setDialogState={setDialogState}
-              onToggleFavorite={onToggleFavorite}
-            />
+              layout="position"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ContactCard
+                contact={contact}
+                setDialogState={setDialogState}
+                onToggleFavorite={onToggleFavorite}
+              />
+            </motion.div>
           )
         })}
+        </AnimatePresence>
       </div>
     </section>
   )

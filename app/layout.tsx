@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="bg-gray-100 text-gray-950 antialiased dark:bg-gray-800 dark:text-gray-100">
         <Providers>
           <NavBar />
-          <main className="mx-auto flex min-h-screen w-[95vw] cursor-crosshair flex-col p-8">
+          <main className="mx-auto flex min-h-screen w-[95vw] flex-col p-8">
             {children}
           </main>
         </Providers>

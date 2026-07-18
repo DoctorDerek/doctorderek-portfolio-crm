@@ -23,7 +23,18 @@ export default function PhoneBookApp() {
   }, [phoneBookState, send])
 
   const { context } = phoneBookState || {}
-  const { contacts } = context || {}
+  const { contacts, persistenceFailure } = context || {}
+
+  useEffect(() => {
+    if (!persistenceFailure) return
+
+    toast.error(
+      persistenceFailure.operation === "read"
+        ? "Saved contacts couldn’t be loaded. Demo contacts restored."
+        : "Changes are available now but couldn’t be saved for your next visit.",
+    )
+    send({ type: "CLEAR_PERSISTENCE_FAILURE" })
+  }, [persistenceFailure, send])
 
   const [contactFilters, setContactFilters] = useState<ContactFilters>(
     DEFAULT_CONTACT_FILTERS,

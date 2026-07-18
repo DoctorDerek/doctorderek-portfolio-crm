@@ -34,12 +34,9 @@ export default function ContactList({
           <ContactListEmptyState hasContacts={contacts.length > 0} />
         )}
         {filteredPhoneBookEntries.map((contact) => {
-          const { id, firstName, lastName, phoneNumber, photo } = contact
-
-          const key = `${id}${firstName}${lastName}${phoneNumber}${photo}`
           return (
             <ContactCard
-              key={key}
+              key={contact.id}
               contact={contact}
               setDialogState={setDialogState}
               onToggleFavorite={onToggleFavorite}

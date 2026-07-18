@@ -20,8 +20,6 @@ export default function PhoneBookApp() {
 
   useEffect(() => {
     if (phoneBookState.matches("idle")) send({ type: "READ" })
-
-    if (phoneBookState.matches("running")) send({ type: "FINISH" })
   }, [phoneBookState, send])
 
   const { context } = phoneBookState || {}

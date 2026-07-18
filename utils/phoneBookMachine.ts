@@ -16,7 +16,6 @@ const phoneBookMachine = setup({
       | { type: "UPDATE"; contact: Contact }
       | { type: "DELETE"; contact: Contact }
       | { type: "TOGGLE_FAVORITE"; contactId: number }
-      | { type: "FINISH" }
       | { type: "RESET" }
   },
   actions: {
@@ -115,32 +114,19 @@ const phoneBookMachine = setup({
     ready: {
       on: {
         CREATE: {
-          target: "running",
-          actions: "createContact",
+          actions: ["createContact", "writePhoneBookToLocalStorage"],
         },
         UPDATE: {
-          target: "running",
-          actions: "updateContact",
+          actions: ["updateContact", "writePhoneBookToLocalStorage"],
         },
         DELETE: {
-          target: "running",
-          actions: "deleteContact",
+          actions: ["deleteContact", "writePhoneBookToLocalStorage"],
         },
         TOGGLE_FAVORITE: {
-          target: "running",
-          actions: "toggleContactFavorite",
+          actions: ["toggleContactFavorite", "writePhoneBookToLocalStorage"],
         },
         RESET: {
-          target: "running",
-          actions: "resetPhoneBookEntries",
-        },
-      },
-    },
-    running: {
-      on: {
-        FINISH: {
-          target: "idle",
-          actions: "writePhoneBookToLocalStorage",
+          actions: ["resetPhoneBookEntries", "writePhoneBookToLocalStorage"],
         },
       },
     },

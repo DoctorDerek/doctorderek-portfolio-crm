@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes"
 import { ReactNode } from "react"
 import { ToastContainer } from "react-toastify"
 import GlobalStateContext from "@/components/GlobalStateContext"
+import MotionPreferenceProvider from "@/components/MotionPreferenceContext"
 import phoneBookMachine from "@/utils/phoneBookMachine"
 
 export default function Providers({ children }: { children: ReactNode }) {
@@ -13,13 +14,15 @@ export default function Providers({ children }: { children: ReactNode }) {
   return (
     <GlobalStateContext.Provider value={{ phoneBookService }}>
       <ThemeProvider attribute="class" defaultTheme="system">
-        {children}
-        <ToastContainer
-          aria-label="Contact notifications"
-          limit={3}
-          position="bottom-right"
-          theme="colored"
-        />
+        <MotionPreferenceProvider>
+          {children}
+          <ToastContainer
+            aria-label="Contact notifications"
+            limit={3}
+            position="bottom-right"
+            theme="colored"
+          />
+        </MotionPreferenceProvider>
       </ThemeProvider>
     </GlobalStateContext.Provider>
   )

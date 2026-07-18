@@ -5,6 +5,7 @@ import { Bars3Icon, DevicePhoneMobileIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { useState } from "react"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
+import ButtonMotionPreference from "@/components/ButtonMotionPreference"
 import ReactConfetti from "@/components/ReactConfetti"
 import ThemeSwitch from "@/components/ThemeSwitch"
 
@@ -80,7 +81,10 @@ export default function NavBar() {
             <NavBarLinks />
           </div>
         </div>
-        <ThemeSwitch />
+        <div className="flex items-center gap-2">
+          <ButtonMotionPreference />
+          <ThemeSwitch />
+        </div>
         <div className="hidden xl:flex">
           <PortfolioCRMHeading />
         </div>

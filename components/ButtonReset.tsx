@@ -9,16 +9,16 @@ export default function ButtonReset({
 }) {
   return (
     <button
+      type="button"
+      aria-label="Delete all contacts and restore the demonstration contacts"
       onClick={() => setDialogState({ type: "RESET" })}
-      className="group flex items-center justify-center"
+      className="group flex min-h-10 items-center justify-center gap-2 rounded-md px-3 font-semibold text-red-600 transition-colors hover:bg-red-100 hover:text-red-700 dark:text-red-300 dark:hover:bg-red-950 dark:hover:text-red-200"
     >
       <TrashIcon
-        aria-label="Delete all phone book entries and reset"
-        className="h-6 w-6 rounded-md group-hover:fill-red-600 group-hover:outline-1 group-hover:outline-red-600 group-hover:outline-solid"
+        aria-hidden="true"
+        className="h-5 w-5"
       />
-      <div className="invisible pl-1 font-bold text-red-600 group-hover:visible">
-        reset
-      </div>
+      Reset contacts
     </button>
   )
 }

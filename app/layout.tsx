@@ -1,10 +1,23 @@
 import Providers from "@/app/providers"
 import NavBar from "@/components/NavBar"
 import "@/styles/globals.css"
+import { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import { ReactNode } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  title: "Portfolio CRM by @DoctorDerek",
+  description:
+    "A local-first portfolio CRM with accessible contact workflows, composed filtering, favorites, and animated theming.",
+  icons: "/favicon.ico",
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+}
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

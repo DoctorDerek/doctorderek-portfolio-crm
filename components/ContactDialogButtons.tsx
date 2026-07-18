@@ -99,6 +99,7 @@ export default function ContactDialogButtons({
   closeDialog,
   instanceRef,
   slideIndex,
+  validateSlide,
 }: {
   dialogState: DialogState
   closeDialog: () => void
@@ -108,6 +109,7 @@ export default function ContactDialogButtons({
     KeenSliderHooks
   > | null>
   slideIndex: number
+  validateSlide: () => Promise<boolean>
 }) {
   const maxIndex = 2
   const handleBack = () => {
@@ -133,9 +135,11 @@ export default function ContactDialogButtons({
     if (slideIndex === maxIndex) return "submit"
     return "button"
   }
-  const handleNext = () => {
+  const handleNext = async () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") return
     if (slideIndex === maxIndex) return
+    const isCurrentSlideValid = await validateSlide()
+    if (!isCurrentSlideValid) return
     instanceRef.current?.next()
   }
   const getNextLabel = () => {
@@ -162,7 +166,7 @@ export default function ContactDialogButtons({
               ? undefined
               : slideIndex === maxIndex
                 ? undefined
-                : handleNext
+                : () => void handleNext()
           }
         />
       </div>

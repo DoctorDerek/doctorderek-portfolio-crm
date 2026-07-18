@@ -62,22 +62,22 @@ export default function ContactDialog({
     drag: false,
   })
 
-  async function validateSlide() {
-    if (slideIndex === 0) {
-      await trigger("email")
-    }
-    if (slideIndex === 1) {
-      await trigger("firstName")
-      await trigger("lastName")
-      await trigger("birthYear")
-      await trigger("birthMonth")
-      await trigger("birthDay")
-      await trigger("streetAddress")
-      await trigger("city")
-      await trigger("state")
-      await trigger("zipCode")
-      await trigger("phoneNumber")
-    }
+  function validateSlide() {
+    if (slideIndex === 0) return trigger("email")
+    if (slideIndex === 1)
+      return trigger([
+        "firstName",
+        "lastName",
+        "birthYear",
+        "birthMonth",
+        "birthDay",
+        "streetAddress",
+        "city",
+        "state",
+        "zipCode",
+        "phoneNumber",
+      ])
+    return Promise.resolve(true)
   }
 
   useEffect(() => {
@@ -150,21 +150,13 @@ export default function ContactDialog({
                 getValues={getValues}
               />
             </div>
-            <div
-              onClick={() => validateSlide()}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") validateSlide()
-              }}
-              role="button"
-              tabIndex={0}
-            >
-              <ContactDialogButtons
-                dialogState={dialogState}
-                closeDialog={closeDialog}
-                instanceRef={instanceRef}
-                slideIndex={slideIndex}
-              />
-            </div>
+            <ContactDialogButtons
+              dialogState={dialogState}
+              closeDialog={closeDialog}
+              instanceRef={instanceRef}
+              slideIndex={slideIndex}
+              validateSlide={validateSlide}
+            />
           </Dialog.Panel>
         </form>
       </div>

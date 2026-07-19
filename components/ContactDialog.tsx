@@ -62,6 +62,11 @@ export default function ContactDialog({
     drag: false,
   })
 
+  const showSlide = (nextSlideIndex: number) => {
+    setSlideIndex(nextSlideIndex)
+    instanceRef.current?.moveToIdx(nextSlideIndex, true)
+  }
+
   function validateSlide() {
     if (slideIndex === 0) return trigger("email")
     if (slideIndex === 1)
@@ -153,8 +158,8 @@ export default function ContactDialog({
             <ContactDialogButtons
               dialogState={dialogState}
               closeDialog={closeDialog}
-              instanceRef={instanceRef}
               slideIndex={slideIndex}
+              showSlide={showSlide}
               validateSlide={validateSlide}
             />
           </Dialog.Panel>

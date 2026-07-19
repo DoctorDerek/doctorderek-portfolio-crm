@@ -1,5 +1,4 @@
-import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
-import { MutableRefObject, ReactNode } from "react"
+import { ReactNode } from "react"
 import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
 
@@ -97,18 +96,14 @@ function ContactDialogButton({
 export default function ContactDialogButtons({
   dialogState,
   closeDialog,
-  instanceRef,
   slideIndex,
+  showSlide,
   validateSlide,
 }: {
   dialogState: DialogState
   closeDialog: () => void
-  instanceRef: MutableRefObject<KeenSliderInstance<
-    unknown,
-    unknown,
-    KeenSliderHooks
-  > | null>
   slideIndex: number
+  showSlide: (nextSlideIndex: number) => void
   validateSlide: () => Promise<boolean>
 }) {
   const maxIndex = 2
@@ -121,7 +116,7 @@ export default function ContactDialogButtons({
       closeDialog()
       return
     }
-    instanceRef.current?.prev()
+    showSlide(slideIndex - 1)
   }
   const getBackLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
@@ -140,7 +135,7 @@ export default function ContactDialogButtons({
     if (slideIndex === maxIndex) return
     const isCurrentSlideValid = await validateSlide()
     if (!isCurrentSlideValid) return
-    instanceRef.current?.next()
+    showSlide(slideIndex + 1)
   }
   const getNextLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")

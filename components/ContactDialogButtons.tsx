@@ -31,6 +31,7 @@ function ProgressIndicator({
 }) {
   return (
     <li
+      aria-current={slideIndex === thisSlideIndex ? "step" : undefined}
       className={classNames(
         "flex items-center rounded-sm border border-solid pr-2",
         slideIndex === thisSlideIndex
@@ -39,7 +40,7 @@ function ProgressIndicator({
       )}
     >
       <span className="flex h-6 w-6 items-center justify-end font-bold sm:h-8 sm:w-8">
-        {slideIndex >= thisSlideIndex ? (
+        {slideIndex > thisSlideIndex ? (
           <CheckMark />
         ) : (
           <span className="mr-2.5">{thisSlideIndex + 1}</span>

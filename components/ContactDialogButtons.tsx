@@ -68,12 +68,10 @@ function ProgressIndicators({ slideIndex }: { slideIndex: number }) {
 }
 
 function ContactDialogButton({
-  type,
   label,
   onClick,
   color,
 }: {
-  type: "button" | "submit"
   label: string
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   color:
@@ -82,7 +80,7 @@ function ContactDialogButton({
 }) {
   return (
     <button
-      type={type}
+      type="button"
       className={classNames(
         "rounded-md px-6 py-2 hover:outline-1 hover:outline-solid",
         color,
@@ -99,12 +97,14 @@ export default function ContactDialogButtons({
   closeDialog,
   slideIndex,
   showSlide,
+  submitDialog,
   validateSlide,
 }: {
   dialogState: DialogState
   closeDialog: () => void
   slideIndex: number
   showSlide: (nextSlideIndex: number) => void
+  submitDialog: () => void
   validateSlide: () => Promise<boolean>
 }) {
   const maxIndex = 2
@@ -125,12 +125,6 @@ export default function ContactDialogButtons({
     if (slideIndex === 0) return "Cancel"
     return "Back"
   }
-  const getNextButtonType = () => {
-    if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
-      return "submit"
-    if (slideIndex === maxIndex) return "submit"
-    return "button"
-  }
   const handleNext = async () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") return
     if (slideIndex === maxIndex) return
@@ -148,20 +142,20 @@ export default function ContactDialogButtons({
     <>
       <div className="flex w-full items-center justify-between space-x-2">
         <ContactDialogButton
-          type="button"
           label={getBackLabel()}
           color="bg-gray-800 text-white hover:bg-gray-700 hover:outline-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:hover:outline-gray-700"
           onClick={handleBack}
         />
         <ContactDialogButton
-          type={getNextButtonType()}
           label={getNextLabel()}
           color="bg-blue-400 text-white hover:bg-blue-500 hover:outline-blue-400"
           onClick={
-            dialogState.type !== "CREATE" && dialogState.type !== "UPDATE"
-              ? undefined
-              : slideIndex === maxIndex
-                ? undefined
+            (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") ||
+            slideIndex === maxIndex
+              ? (event) => {
+                  event.preventDefault()
+                  submitDialog()
+                }
                 : (event) => {
                     event.preventDefault()
                     void handleNext()

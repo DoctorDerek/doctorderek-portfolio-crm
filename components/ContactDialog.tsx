@@ -47,6 +47,7 @@ export default function ContactDialog({
     contacts,
     closeDialog,
   })
+  const submitDialog = handleSubmit(onDialogSubmit)
 
   const [slideIndex, setSlideIndex] = useState(0)
   const [sliderRef, instanceRef] = useKeenSlider({
@@ -139,7 +140,7 @@ export default function ContactDialog({
       />
 
       <div className="fixed inset-0 flex items-center justify-center p-4">
-        <form onSubmit={handleSubmit(onDialogSubmit)}>
+        <form onSubmit={submitDialog}>
           <Dialog.Panel className="relative mx-auto flex min-h-[75vh] max-w-lg flex-col justify-between space-y-4 rounded-lg bg-gray-100 p-6 text-lg dark:bg-gray-800">
             <div>
               <ContactDialogClose closeDialog={closeDialog} />
@@ -160,6 +161,7 @@ export default function ContactDialog({
               closeDialog={closeDialog}
               slideIndex={slideIndex}
               showSlide={showSlide}
+              submitDialog={() => void submitDialog()}
               validateSlide={validateSlide}
             />
           </Dialog.Panel>

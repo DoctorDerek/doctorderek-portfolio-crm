@@ -51,9 +51,6 @@ export default function ContactDialog({
 
   const [slideIndex, setSlideIndex] = useState(0)
   const [sliderRef, instanceRef] = useKeenSlider({
-    slideChanged() {
-      setSlideIndex(instanceRef?.current?.track?.details?.abs || 0)
-    },
     created() {
       setSlideIndex(0)
     },

@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { MouseEvent, ReactNode } from "react"
 import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
 
@@ -74,7 +74,7 @@ function ContactDialogButton({
 }: {
   type: "button" | "submit"
   label: string
-  onClick?: () => void
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   color:
     | "bg-blue-400 text-white hover:bg-blue-500 hover:outline-blue-400"
     | "bg-gray-800 text-white hover:bg-gray-700 hover:outline-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:hover:outline-gray-700"
@@ -161,7 +161,10 @@ export default function ContactDialogButtons({
               ? undefined
               : slideIndex === maxIndex
                 ? undefined
-                : () => void handleNext()
+                : (event) => {
+                    event.preventDefault()
+                    void handleNext()
+                  }
           }
         />
       </div>

@@ -57,6 +57,7 @@ Open [http://localhost:3000](http://localhost:3000) after the development server
 pnpm format
 pnpm lint
 pnpm test --run
+pnpm test:e2e
 pnpm build
 pnpm audit --prod
 ```

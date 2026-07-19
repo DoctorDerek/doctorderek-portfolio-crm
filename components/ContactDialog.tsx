@@ -148,6 +148,7 @@ export default function ContactDialog({
             <div ref={sliderRef} className="keen-slider">
               <ContactDialogInputs
                 dialogState={dialogState}
+                slideIndex={slideIndex}
                 register={register}
                 errors={errors}
                 getValues={getValues}

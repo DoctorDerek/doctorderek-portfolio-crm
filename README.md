@@ -10,10 +10,11 @@ A local-first portfolio CRM with accessible CRUD workflows, age filtering, anima
 ## Product experience
 
 - Create, update, delete, and reset contacts through focused modal workflows.
-- Filter the contact list by age range with consistent last-name sorting.
+- Compose free-text search, age ranges, and favorites-only filtering with consistent last-name sorting.
+- Mark favorite contacts and retain that preference across edits and reloads.
 - Persist contact changes across reloads without an account or remote database.
-- Switch between animated light and dark themes from a native, keyboard-operable control.
-- Receive accessible toast confirmation after every successful local mutation.
+- Switch themes and opt in or out of motion independently through keyboard-operable controls.
+- Receive accessible toast feedback after successful mutations or browser-storage failures.
 - Use the same responsive interface across phone, tablet, and desktop layouts.
 
 ## Architecture
@@ -23,10 +24,10 @@ A local-first portfolio CRM with accessible CRUD workflows, age filtering, anima
 | Application | Next.js 16 App Router and React 19                           |
 | Language    | TypeScript 6 in strict mode                                  |
 | State       | XState 5 and `@xstate/react`                                 |
-| Interface   | Tailwind CSS 4, Headless UI 2, and Heroicons 2               |
+| Interface   | Tailwind CSS 4, Headless UI 2, Motion 12, and Heroicons 2    |
 | Forms       | React Hook Form 7 and Zod 3                                  |
 | Feedback    | React Toastify 11                                            |
-| Quality     | ESLint 9, Prettier 3, Vitest 4, Testing Library, and Codecov |
+| Quality     | ESLint 9, Prettier 3, Vitest 4, Playwright, and Codecov      |
 | Delivery    | GitHub Actions and Vercel                                    |
 
 The XState machine owns contact lifecycle transitions and browser persistence. React components remain focused on rendering and interaction, while static data, validation, filtering, and transformation logic stay in their domain modules.

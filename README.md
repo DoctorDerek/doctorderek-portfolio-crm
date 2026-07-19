@@ -5,7 +5,7 @@
 
 A local-first portfolio CRM with accessible CRUD workflows, age filtering, animated theming, and deterministic React state.
 
-[Explore the live demo](https://doctorderek-portfolio-crm.vercel.app/) · [View open issues](https://github.com/DoctorDerek/doctorderek-portfolio-crm/issues)
+[Explore the live demo](https://portfolio-crm.doctorderek.com/) · [View open issues](https://github.com/DoctorDerek/doctorderek-portfolio-crm/issues)
 
 ## Product experience
 

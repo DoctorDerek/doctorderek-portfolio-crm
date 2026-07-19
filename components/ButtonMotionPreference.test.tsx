@@ -29,9 +29,9 @@ describe("motion preference", () => {
     expect(
       screen.getByRole("button", { name: "Turn animations on" }),
     ).toHaveAttribute("aria-pressed", "false")
-    expect(
-      localStorage.getItem("portfolio-crm-animations-enabled"),
-    ).toBe("false")
+    expect(localStorage.getItem("portfolio-crm-animations-enabled")).toBe(
+      "false",
+    )
   })
 
   it("restores the persisted motion preference", () => {

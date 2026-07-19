@@ -156,10 +156,10 @@ export default function ContactDialogButtons({
                   event.preventDefault()
                   submitDialog()
                 }
-                : (event) => {
-                    event.preventDefault()
-                    void handleNext()
-                  }
+              : (event) => {
+                  event.preventDefault()
+                  void handleNext()
+                }
           }
         />
       </div>

@@ -21,10 +21,15 @@ describe("contact discovery", () => {
     renderPhoneBookApp()
     await screen.findByText("Jessica Christian")
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search contacts" }), {
-      target: { value: "San Francisco" },
-    })
-    expect(screen.getByRole("status")).toHaveTextContent("Showing 5 of 6 contacts")
+    fireEvent.change(
+      screen.getByRole("searchbox", { name: "Search contacts" }),
+      {
+        target: { value: "San Francisco" },
+      },
+    )
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Showing 5 of 6 contacts",
+    )
 
     fireEvent.change(screen.getByRole("combobox", { name: "Age range" }), {
       target: { value: "Seniors" },
@@ -48,9 +53,7 @@ describe("contact discovery", () => {
         name: "Add Jessica Christian to favorites",
       }),
     )
-    fireEvent.click(
-      screen.getByRole("button", { name: "Favorites only" }),
-    )
+    fireEvent.click(screen.getByRole("button", { name: "Favorites only" }))
 
     await waitFor(() => {
       expect(screen.getByRole("status")).toHaveTextContent(
@@ -79,9 +82,12 @@ describe("contact discovery", () => {
     renderPhoneBookApp()
     await screen.findByText("Jessica Christian")
 
-    fireEvent.change(screen.getByRole("searchbox", { name: "Search contacts" }), {
-      target: { value: "No such contact" },
-    })
+    fireEvent.change(
+      screen.getByRole("searchbox", { name: "Search contacts" }),
+      {
+        target: { value: "No such contact" },
+      },
+    )
 
     expect(
       await screen.findByRole("heading", { name: "No matching contacts" }),

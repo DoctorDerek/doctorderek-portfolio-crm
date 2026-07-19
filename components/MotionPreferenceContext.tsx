@@ -26,10 +26,7 @@ function subscribeToMotionPreference(onPreferenceChange: () => void) {
   }
 
   window.addEventListener("storage", handleStorageChange)
-  window.addEventListener(
-    MOTION_PREFERENCE_CHANGE_EVENT,
-    onPreferenceChange,
-  )
+  window.addEventListener(MOTION_PREFERENCE_CHANGE_EVENT, onPreferenceChange)
 
   return () => {
     window.removeEventListener("storage", handleStorageChange)

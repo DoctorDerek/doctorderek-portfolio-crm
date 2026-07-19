@@ -1,5 +1,5 @@
-import { createActor } from "xstate"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { createActor } from "xstate"
 import phoneBookMachine, {
   LOCALSTORAGE_KEY_AUTH,
 } from "@/utils/phoneBookMachine"
@@ -26,9 +26,9 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.send({ type: "READ" })
 
     expect(
-      phoneBookActor.getSnapshot().context.contacts.map(({ lastName }) =>
-        lastName,
-      ),
+      phoneBookActor
+        .getSnapshot()
+        .context.contacts.map(({ lastName }) => lastName),
     ).toEqual(["Hopper", "Lovelace"])
     expect(phoneBookActor.getSnapshot().context.persistenceFailure).toBeNull()
     phoneBookActor.stop()
@@ -68,9 +68,11 @@ describe("phoneBookMachine persistence", () => {
     const phoneBookActor = createActor(phoneBookMachine).start()
     phoneBookActor.send({ type: "READ" })
     const contactId = phoneBookActor.getSnapshot().context.contacts[0].id
-    const setItemMock = vi.spyOn(localStorage, "setItem").mockImplementation(() => {
-      throw new Error("Storage unavailable")
-    })
+    const setItemMock = vi
+      .spyOn(localStorage, "setItem")
+      .mockImplementation(() => {
+        throw new Error("Storage unavailable")
+      })
 
     phoneBookActor.send({ type: "TOGGLE_FAVORITE", contactId })
 

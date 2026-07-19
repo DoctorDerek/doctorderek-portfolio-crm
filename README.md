@@ -19,16 +19,16 @@ A local-first portfolio CRM with accessible CRUD workflows, age filtering, anima
 
 ## Architecture
 
-| Concern     | Implementation                                               |
-| ----------- | ------------------------------------------------------------ |
-| Application | Next.js 16 App Router and React 19                           |
-| Language    | TypeScript 6 in strict mode                                  |
-| State       | XState 5 and `@xstate/react`                                 |
-| Interface   | Tailwind CSS 4, Headless UI 2, Motion 12, and Heroicons 2    |
-| Forms       | React Hook Form 7 and Zod 3                                  |
-| Feedback    | React Toastify 11                                            |
-| Quality     | ESLint 9, Prettier 3, Vitest 4, Playwright, and Codecov      |
-| Delivery    | GitHub Actions and Vercel                                    |
+| Concern     | Implementation                                            |
+| ----------- | --------------------------------------------------------- |
+| Application | Next.js 16 App Router and React 19                        |
+| Language    | TypeScript 6 in strict mode                               |
+| State       | XState 5 and `@xstate/react`                              |
+| Interface   | Tailwind CSS 4, Headless UI 2, Motion 12, and Heroicons 2 |
+| Forms       | React Hook Form 7 and Zod 3                               |
+| Feedback    | React Toastify 11                                         |
+| Quality     | ESLint 9, Prettier 3, Vitest 4, Playwright, and Codecov   |
+| Delivery    | GitHub Actions and Vercel                                 |
 
 The XState machine owns contact lifecycle transitions and browser persistence. React components remain focused on rendering and interaction, while static data, validation, filtering, and transformation logic stay in their domain modules.
 

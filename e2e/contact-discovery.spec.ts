@@ -13,7 +13,9 @@ test("composes search age ranges and clear behavior", async ({ page }) => {
     .fill("San Francisco")
   await expect(page.getByRole("status")).toHaveText("Showing 5 of 6 contacts")
 
-  await page.getByRole("combobox", { name: "Age range" }).selectOption("Seniors")
+  await page
+    .getByRole("combobox", { name: "Age range" })
+    .selectOption("Seniors")
   await expect(page.getByRole("status")).toHaveText("Showing 2 of 6 contacts")
   await expect(page.getByText("Tadas Petrokas")).toBeVisible()
   await expect(page.getByText("Yohan Marion")).toBeVisible()
@@ -39,7 +41,9 @@ test("persists favorite contacts and filters to them", async ({ page }) => {
 
   await page.getByRole("button", { name: "Favorites only" }).click()
   await expect(page.getByRole("status")).toHaveText("Showing 1 of 6 contacts")
-  await expect(page.getByText("Jessica Christian", { exact: true })).toBeVisible()
+  await expect(
+    page.getByText("Jessica Christian", { exact: true }),
+  ).toBeVisible()
   await expect(page.getByText("Lia Bekyan")).toBeHidden()
 
   await page.reload()

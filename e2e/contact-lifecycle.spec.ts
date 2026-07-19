@@ -30,7 +30,9 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
   await page.getByRole("button", { name: "Submit", exact: true }).click()
 
   await expect(page.getByText("Contact created.")).toBeVisible()
-  await expect(page.getByText("Mapachito Austin", { exact: true })).toBeVisible()
+  await expect(
+    page.getByText("Mapachito Austin", { exact: true }),
+  ).toBeVisible()
   await expect(page.getByRole("status")).toHaveText("Showing 7 of 7 contacts")
 
   await page.getByRole("button", { name: "Edit Mapachito Austin" }).click()
@@ -43,11 +45,11 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
 
   expect(pageErrors).toEqual([])
   await expect(page.getByText("Contact updated.")).toBeVisible()
-  await expect(page.getByText("Mapachote Austin", { exact: true })).toBeVisible()
+  await expect(
+    page.getByText("Mapachote Austin", { exact: true }),
+  ).toBeVisible()
 
-  await page
-    .getByRole("button", { name: /Delete Mapachote Austin/ })
-    .click()
+  await page.getByRole("button", { name: /Delete Mapachote Austin/ }).click()
   await expect(
     page.getByText("Delete Phone Book Entry", { exact: true }),
   ).toBeVisible()

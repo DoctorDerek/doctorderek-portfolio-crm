@@ -1,17 +1,14 @@
 "use client"
 
-import { toast } from "react-toastify"
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import ButtonCreate from "@/components/ButtonCreate"
 import ButtonReset from "@/components/ButtonReset"
 import ContactActionDialog from "@/components/ContactDialog"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
 import { Contact } from "@/types/Contact"
-import {
-  ContactFilters,
-  DEFAULT_CONTACT_FILTERS,
-} from "@/types/ContactFilters"
+import { ContactFilters, DEFAULT_CONTACT_FILTERS } from "@/types/ContactFilters"
 import { DialogState } from "@/types/DialogState"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 
@@ -84,9 +81,7 @@ export default function PhoneBookApp() {
                 showFavoritesOnly,
               }))
             }
-            onClearFilters={() =>
-              setContactFilters(DEFAULT_CONTACT_FILTERS)
-            }
+            onClearFilters={() => setContactFilters(DEFAULT_CONTACT_FILTERS)}
           />
           <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
             <ButtonReset setDialogState={setDialogState} />

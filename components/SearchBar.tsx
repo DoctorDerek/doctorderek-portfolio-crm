@@ -18,8 +18,8 @@ export default function SearchBar({
 }) {
   const hasActiveFilters = Boolean(
     contactFilters.searchQuery ||
-      contactFilters.selectedAgeRangeLabel ||
-      contactFilters.showFavoritesOnly,
+    contactFilters.selectedAgeRangeLabel ||
+    contactFilters.showFavoritesOnly,
   )
 
   return (

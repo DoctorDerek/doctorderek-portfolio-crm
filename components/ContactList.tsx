@@ -22,10 +22,7 @@ export default function ContactList({
   const filteredPhoneBookEntries = filterContacts(contacts, contactFilters)
 
   return (
-    <section
-      className="relative w-full space-y-4"
-      aria-label="Contact results"
-    >
+    <section className="relative w-full space-y-4" aria-label="Contact results">
       <ContactResultsSummary
         filteredContactCount={filteredPhoneBookEntries.length}
         totalContactCount={contacts.length}
@@ -43,24 +40,24 @@ export default function ContactList({
               <ContactListEmptyState hasContacts={contacts.length > 0} />
             </motion.div>
           )}
-        {filteredPhoneBookEntries.map((contact) => {
-          return (
-            <motion.div
-              key={contact.id}
-              layout="position"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ContactCard
-                contact={contact}
-                setDialogState={setDialogState}
-                onToggleFavorite={onToggleFavorite}
-              />
-            </motion.div>
-          )
-        })}
+          {filteredPhoneBookEntries.map((contact) => {
+            return (
+              <motion.div
+                key={contact.id}
+                layout="position"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ContactCard
+                  contact={contact}
+                  setDialogState={setDialogState}
+                  onToggleFavorite={onToggleFavorite}
+                />
+              </motion.div>
+            )
+          })}
         </AnimatePresence>
       </div>
     </section>

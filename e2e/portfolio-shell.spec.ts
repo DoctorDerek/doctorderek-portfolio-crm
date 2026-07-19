@@ -6,9 +6,13 @@ test.beforeEach(async ({ page }) => {
   await page.reload()
 })
 
-test("loads the public Portfolio CRM with seeded contacts", async ({ page }) => {
+test("loads the public Portfolio CRM with seeded contacts", async ({
+  page,
+}) => {
   await expect(page).toHaveTitle("Portfolio CRM by @DoctorDerek")
-  await expect(page.getByText("Portfolio CRM", { exact: true }).first()).toBeVisible()
+  await expect(
+    page.getByText("Portfolio CRM", { exact: true }).first(),
+  ).toBeVisible()
   await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
   await expect(page.getByText("Jessica Christian")).toBeVisible()
 })

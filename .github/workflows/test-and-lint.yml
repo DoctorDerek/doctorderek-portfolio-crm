@@ -244,12 +244,3 @@ jobs:
           fi
 
           exit "$FAILED"
-
-  e2e:
-    name: Playwright E2E Tests
-    needs: lint
-    if: always()
-    permissions:
-      pull-requests: write
-      contents: read
-    uses: ./.github/workflows/playwright.yml

@@ -19,6 +19,49 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      - name: Initialize PR Quality Comments
+        continue-on-error: true
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
+        with:
+          retries: 3
+          script: |
+            const qualityComments = [
+              {
+                header: '### 🧹 ESLint',
+                body: '### 🧹 ESLint\n\n**Quality check 1 of 3**\n\n⏳ Waiting for ESLint.',
+              },
+              {
+                header: '### 🧪 Vitest',
+                body: '### 🧪 Vitest\n\n**Quality check 2 of 3**\n\n⏳ Waiting for Vitest.',
+              },
+              {
+                header: '### 🎭 Playwright',
+                body: '### 🎭 Playwright\n\n**Quality check 3 of 3**\n\n⏳ Waiting for a successful preview deployment.',
+              },
+            ];
+
+            const { data: comments } = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100,
+            });
+
+            for (const qualityComment of qualityComments) {
+              const existingComment = comments.find(
+                comment => comment.user.type === 'Bot' && comment.body?.includes(qualityComment.header),
+              );
+
+              if (!existingComment) {
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: qualityComment.body,
+                });
+              }
+            }
+
       - name: Checkout Repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
@@ -36,58 +79,168 @@ jobs:
 
       - name: Run Lint and Capture Output
         id: lint
+        if: always()
         run: |
-          OUTPUT=$(pnpm lint || true)
+          set +e
+          pnpm lint 2>&1 | tee "$RUNNER_TEMP/lint-output.txt"
+          LINT_EXIT_CODE=${PIPESTATUS[0]}
+          set -e
 
-          echo "LINT_OUTPUT<<EOF" >> $GITHUB_ENV
-          echo "$OUTPUT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          if [ "$LINT_EXIT_CODE" -eq 0 ] || grep -Eq '[0-9]+ problems? \([0-9]+ errors?, [0-9]+ warnings?\)' "$RUNNER_TEMP/lint-output.txt"; then
+            LINT_RUNNER_STATUS=complete
+          else
+            LINT_RUNNER_STATUS=failed
+          fi
 
-      - name: Post PR Comment
+          echo "LINT_EXIT_CODE=$LINT_EXIT_CODE" >> "$GITHUB_ENV"
+          echo "LINT_RUNNER_STATUS=$LINT_RUNNER_STATUS" >> "$GITHUB_ENV"
+          echo "LINT_OUTPUT_FILE=$RUNNER_TEMP/lint-output.txt" >> "$GITHUB_ENV"
+
+      - name: Post Lint PR Comment
+        if: always()
         continue-on-error: true
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
           retries: 3
           script: |
-            const output = process.env.LINT_OUTPUT;
-            let body = '';
+            const fs = require('fs');
+            const outputPath = process.env.LINT_OUTPUT_FILE;
+            const output = outputPath && fs.existsSync(outputPath)
+              ? fs.readFileSync(outputPath, 'utf8').trim()
+              : '';
+            const exitCode = Number.parseInt(process.env.LINT_EXIT_CODE ?? '', 10);
+            const runnerStatus = process.env.LINT_RUNNER_STATUS;
             const header = '### 🧹 ESLint';
+            const qualityPosition = '**Quality check 1 of 3**';
+            const hasFindings = /\d+ problems? \(\d+ errors?, \d+ warnings?\)/.test(output);
+            const displayedOutput = output.length > 58000
+              ? `…\n${output.slice(-58000)}`
+              : output;
+            let body;
 
-            if (!output || (output.includes('Done in') && output.trim().split('\n').length <= 3)) {
-              body = `${header} Report\n\n✅ **Zero warnings.**`;
+            if (!Number.isInteger(exitCode) || runnerStatus !== 'complete') {
+              body = `${header}\n\n${qualityPosition}\n\n❌ **ESLint could not run.**${displayedOutput ? `\n\n\`\`\`text\n${displayedOutput}\n\`\`\`` : ''}`;
+            } else if (exitCode === 0 && !hasFindings) {
+              body = `${header}\n\n${qualityPosition}\n\n✅ **Zero warnings.**`;
             } else {
-              body = `${header} Warnings Report\n\n\`\`\`text\n${output}\n\`\`\``;
+              body = `${header}\n\n${qualityPosition}\n\n⚠️ **ESLint completed with advisory findings.**\n\n\`\`\`text\n${displayedOutput}\n\`\`\``;
             }
 
             const { data: comments } = await github.rest.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
+              per_page: 100,
             });
 
-            const botComment = comments.find(c => c.user.type === 'Bot' && c.body.includes(header));
+            const botComment = comments.find(
+              comment => comment.user.type === 'Bot' && comment.body?.includes(header),
+            );
 
             if (botComment) {
               await github.rest.issues.updateComment({
                 comment_id: botComment.id,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: body
+                body,
               });
             } else {
               await github.rest.issues.createComment({
                 issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body: body
+                body,
               });
             }
 
-      - name: Run Vitest (Coverage)
-        run: pnpm vitest run --coverage --passWithNoTests
+      - name: Run Vitest and Capture Summary
+        id: vitest
+        if: always()
+        run: |
+          set +e
+          pnpm vitest run --coverage --passWithNoTests 2>&1 | tee "$RUNNER_TEMP/vitest-output.txt"
+          VITEST_EXIT_CODE=${PIPESTATUS[0]}
+          set -e
+
+          echo "VITEST_EXIT_CODE=$VITEST_EXIT_CODE" >> "$GITHUB_ENV"
+          echo "VITEST_OUTPUT_FILE=$RUNNER_TEMP/vitest-output.txt" >> "$GITHUB_ENV"
+
+      - name: Post Vitest PR Comment
+        if: always()
+        continue-on-error: true
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
+        with:
+          retries: 3
+          script: |
+            const fs = require('fs');
+            const outputPath = process.env.VITEST_OUTPUT_FILE;
+            const output = outputPath && fs.existsSync(outputPath)
+              ? fs.readFileSync(outputPath, 'utf8')
+              : '';
+            const cleanOutput = output.replace(/\u001b\[[0-9;]*m/g, '');
+            const exitCode = Number.parseInt(process.env.VITEST_EXIT_CODE ?? '', 10);
+            const header = '### 🧪 Vitest';
+            const qualityPosition = '**Quality check 2 of 3**';
+            const summaryLines = cleanOutput
+              .split(/\r?\n/)
+              .filter(line => /Test Files|Tests|Duration|No test files found/.test(line))
+              .slice(-8);
+            const fallbackLines = cleanOutput
+              .split(/\r?\n/)
+              .filter(Boolean)
+              .slice(-12);
+            const summary = (summaryLines.length > 0 ? summaryLines : fallbackLines).join('\n');
+            const status = Number.isInteger(exitCode) && exitCode === 0
+              ? '✅ **Vitest completed successfully.**'
+              : '❌ **Vitest tests failed or the runner could not complete.**';
+            const body = `${header}\n\n${qualityPosition}\n\n${status}${summary ? `\n\n\`\`\`text\n${summary}\n\`\`\`` : ''}`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100,
+            });
+
+            const botComment = comments.find(
+              comment => comment.user.type === 'Bot' && comment.body?.includes(header),
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                comment_id: botComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
+              });
+            }
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45 # v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: vitest
+
+      - name: Enforce Test and Tooling Results
+        if: always()
+        run: |
+          FAILED=0
+
+          if ! [[ "$LINT_EXIT_CODE" =~ ^[0-9]+$ ]] || [ "$LINT_RUNNER_STATUS" != "complete" ]; then
+            echo "ESLint could not run."
+            FAILED=1
+          fi
+
+          if ! [[ "$VITEST_EXIT_CODE" =~ ^[0-9]+$ ]] || [ "$VITEST_EXIT_CODE" -ne 0 ]; then
+            echo "Vitest tests failed or the runner could not complete."
+            FAILED=1
+          fi
+
+          exit "$FAILED"

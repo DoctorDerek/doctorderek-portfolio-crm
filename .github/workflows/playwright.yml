@@ -1,7 +1,8 @@
 name: Playwright E2E Pipeline
 
 on:
-  deployment_status:
+  pull_request:
+    branches: [main]
 
 permissions:
   pull-requests: write
@@ -10,7 +11,6 @@ permissions:
 jobs:
   e2e:
     name: Playwright E2E Tests
-    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Preview'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -55,9 +55,6 @@ jobs:
 
           echo "PLAYWRIGHT_EXIT_CODE=$PLAYWRIGHT_EXIT_CODE" >> "$GITHUB_ENV"
           echo "PLAYWRIGHT_OUTPUT_FILE=$RUNNER_TEMP/playwright-output.txt" >> "$GITHUB_ENV"
-        env:
-          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}
-
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -74,8 +71,6 @@ jobs:
           retries: 3
           script: |
             const fs = require('fs');
-            const deploymentSha = context.payload.deployment.sha;
-            const deploymentRef = context.payload.deployment.ref;
             const outputPath = process.env.PLAYWRIGHT_OUTPUT_FILE;
             const output = outputPath && fs.existsSync(outputPath)
               ? fs.readFileSync(outputPath, 'utf8')
@@ -96,38 +91,10 @@ jobs:
             const status = Number.isInteger(exitCode) && exitCode === 0
               ? '✅ **Playwright completed successfully.**'
               : '❌ **Playwright tests failed or the runner could not complete.**';
-            const previewUrl = context.payload.deployment_status.target_url;
-            const previewLink = previewUrl ? `\n\n[Open preview deployment](${previewUrl})` : '';
-            const body = `${header}\n\n${qualityPosition}\n\n${status}${summary ? `\n\n\`\`\`text\n${summary}\n\`\`\`` : ''}${previewLink}`;
-
-            const { data: associatedPullRequests } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: deploymentSha,
-            });
-            let pullRequests = associatedPullRequests;
-
-            if (pullRequests.length === 0 && deploymentRef) {
-              const { data: matchingPullRequests } = await github.rest.pulls.list({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                head: `${context.repo.owner}:${deploymentRef}`,
-                state: 'open',
-              });
-              pullRequests = matchingPullRequests;
-            }
-
-            const pullRequest = pullRequests.find(
-              candidate => candidate.state === 'open' && candidate.head.sha === deploymentSha,
-            ) ?? pullRequests.find(candidate => candidate.state === 'open') ?? pullRequests[0];
-
-            if (!pullRequest) {
-              core.warning(`No pull request is associated with deployment ${deploymentSha}.`);
-              return;
-            }
+            const body = `${header}\n\n${qualityPosition}\n\n${status}${summary ? `\n\n\`\`\`text\n${summary}\n\`\`\`` : ''}`;
 
             const { data: comments } = await github.rest.issues.listComments({
-              issue_number: pullRequest.number,
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               per_page: 100,
@@ -145,7 +112,7 @@ jobs:
               });
             } else {
               await github.rest.issues.createComment({
-                issue_number: pullRequest.number,
+                issue_number: context.issue.number,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body,

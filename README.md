@@ -2,6 +2,7 @@
 
 [![Lint and test](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/test-and-lint.yml)
 [![Codecov](https://codecov.io/gh/DoctorDerek/doctorderek-portfolio-crm/graph/badge.svg)](https://app.codecov.io/gh/DoctorDerek/doctorderek-portfolio-crm)
+[![Production](https://img.shields.io/website?url=https%3A%2F%2Fportfolio-crm.doctorderek.com%2F&up_message=live&down_message=offline&label=production&logo=vercel&logoColor=white)](https://portfolio-crm.doctorderek.com/)
 
 A local-first portfolio CRM with accessible CRUD workflows, age filtering, animated theming, and deterministic React state.
 

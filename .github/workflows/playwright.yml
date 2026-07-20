@@ -44,9 +44,12 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.PLAYWRIGHT_VERSION }}
 
+      - name: Install Playwright Browser Dependencies
+        run: pnpm exec playwright install-deps
+
       - name: Install Playwright Browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps
+        run: pnpm exec playwright install
 
       - name: Run Playwright Tests and Capture Summary
         id: playwright

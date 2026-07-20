@@ -8,7 +8,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: "html",
+  reporter: process.env.CI
+    ? [["line"], ["html", { open: "never" }]]
+    : "html",
   use: {
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || LOCAL_PLAYWRIGHT_BASE_URL,
     trace: "on-first-retry",

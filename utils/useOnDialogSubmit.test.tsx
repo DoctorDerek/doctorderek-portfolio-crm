@@ -2,7 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react"
 import { toast } from "react-toastify"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import Providers from "@/app/providers"
-import { Contact, DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
 
 const { send } = vi.hoisted(() => ({

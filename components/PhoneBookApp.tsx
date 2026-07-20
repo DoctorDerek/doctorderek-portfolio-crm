@@ -1,12 +1,15 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import ButtonCreate from "@/components/ButtonCreate"
 import ButtonReset from "@/components/ButtonReset"
 import ContactActionDialog from "@/components/ContactDialog"
 import ContactList from "@/components/ContactList"
 import SearchBar from "@/components/SearchBar"
-import { DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { ContactFilters, DEFAULT_CONTACT_FILTERS } from "@/types/ContactFilters"
+import { DialogState } from "@/types/DialogState"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 
 export default function PhoneBookApp() {
@@ -14,20 +17,39 @@ export default function PhoneBookApp() {
 
   useEffect(() => {
     if (phoneBookState.matches("idle")) send({ type: "READ" })
-
-    if (phoneBookState.matches("running")) send({ type: "FINISH" })
   }, [phoneBookState, send])
 
   const { context } = phoneBookState || {}
-  const { contacts } = context || {}
+  const { contacts, persistenceFailure } = context || {}
 
-  const [filterText, setFilterText] = useState("")
+  useEffect(() => {
+    if (!persistenceFailure) return
+
+    toast.error(
+      persistenceFailure.operation === "read"
+        ? "Saved contacts couldn’t be loaded. Demo contacts restored."
+        : "Changes are available now but couldn’t be saved for your next visit.",
+    )
+    send({ type: "CLEAR_PERSISTENCE_FAILURE" })
+  }, [persistenceFailure, send])
+
+  const [contactFilters, setContactFilters] = useState<ContactFilters>(
+    DEFAULT_CONTACT_FILTERS,
+  )
 
   const [dialogState, setDialogState] = useState<DialogState>({
     type: "CLOSED",
   })
 
   if (!phoneBookState.matches("ready")) return null
+
+  const toggleFavorite = (contact: Contact) => {
+    send({ type: "TOGGLE_FAVORITE", contactId: contact.id })
+    const favoriteAction = contact.isFavorite ? "removed from" : "added to"
+    toast.success(
+      `${contact.firstName} ${contact.lastName} ${favoriteAction} favorites.`,
+    )
+  }
 
   return (
     <>
@@ -38,17 +60,39 @@ export default function PhoneBookApp() {
       />
 
       <div className="flex flex-col items-center justify-center space-y-6">
-        <div className="grid w-full grid-cols-1 space-y-6 xl:grid-cols-2 xl:space-y-0">
-          <SearchBar filterText={filterText} setFilterText={setFilterText} />
-          <div className="flex w-full items-center justify-between space-x-1 xl:justify-end">
+        <div className="flex w-full flex-col gap-4">
+          <SearchBar
+            contactFilters={contactFilters}
+            onSearchQueryChange={(searchQuery) =>
+              setContactFilters((currentContactFilters) => ({
+                ...currentContactFilters,
+                searchQuery,
+              }))
+            }
+            onSelectedAgeRangeLabelChange={(selectedAgeRangeLabel) =>
+              setContactFilters((currentContactFilters) => ({
+                ...currentContactFilters,
+                selectedAgeRangeLabel,
+              }))
+            }
+            onShowFavoritesOnlyChange={(showFavoritesOnly) =>
+              setContactFilters((currentContactFilters) => ({
+                ...currentContactFilters,
+                showFavoritesOnly,
+              }))
+            }
+            onClearFilters={() => setContactFilters(DEFAULT_CONTACT_FILTERS)}
+          />
+          <div className="flex w-full items-center justify-between gap-2 sm:justify-end">
             <ButtonReset setDialogState={setDialogState} />
             <ButtonCreate setDialogState={setDialogState} />
           </div>
         </div>
         <ContactList
           contacts={contacts}
-          filterText={filterText}
+          contactFilters={contactFilters}
           setDialogState={setDialogState}
+          onToggleFavorite={toggleFavorite}
         />
       </div>
     </>

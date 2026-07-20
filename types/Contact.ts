@@ -13,15 +13,5 @@ export type Contact = {
   zipCode?: string
   phoneNumber?: string
   email?: string
-}
-
-export type AgeRange = {
-  label: string
-  rangeBottom: number
-  rangeTop: number
-}
-
-export type DialogState = {
-  type: "CLOSED" | "CREATE" | "UPDATE" | "DELETE" | "RESET"
-  contact?: Contact
+  isFavorite?: boolean
 }

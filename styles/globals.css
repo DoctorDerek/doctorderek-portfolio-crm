@@ -30,10 +30,9 @@ body {
   font-family: Inter, Arial, Helvetica, sans-serif;
 }
 
-:focus {
-  outline: none !important;
-  box-shadow: 0 0 0 0.0625rem #facc15 !important;
-  border-color: transparent !important;
+:focus-visible {
+  outline: 0.125rem solid #facc15;
+  outline-offset: 0.1875rem;
 }
 
 /*

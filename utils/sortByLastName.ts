@@ -1,4 +1,4 @@
-import { Contact } from "@/types"
+import { Contact } from "@/types/Contact"
 
 export const sortByLastName = (a: Contact, b: Contact) => {
   const aName = a?.lastName || ""

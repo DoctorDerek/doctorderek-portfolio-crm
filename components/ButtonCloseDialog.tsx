@@ -10,6 +10,8 @@ export default function ButtonCloseDialog({
 }) {
   return (
     <button
+      type="button"
+      aria-label="Close dialog"
       onClick={closeDialog}
       className={classNames(
         "group absolute top-2 right-2 rounded-lg hover:outline-1 hover:outline-gray-600 hover:outline-solid",
@@ -17,7 +19,7 @@ export default function ButtonCloseDialog({
       )}
     >
       <XMarkIcon
-        aria-label="Close dialog"
+        aria-hidden="true"
         className="fill-gray-500 group-hover:fill-gray-600 dark:fill-gray-200 dark:group-hover:fill-gray-100"
       />
     </button>

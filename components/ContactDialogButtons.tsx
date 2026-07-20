@@ -1,6 +1,5 @@
-import { KeenSliderHooks, KeenSliderInstance } from "keen-slider/react.es"
-import { MutableRefObject, ReactNode } from "react"
-import { DialogState } from "@/types"
+import { MouseEvent, ReactNode } from "react"
+import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
 
 function CheckMark() {
@@ -32,6 +31,7 @@ function ProgressIndicator({
 }) {
   return (
     <li
+      aria-current={slideIndex === thisSlideIndex ? "step" : undefined}
       className={classNames(
         "flex items-center rounded-sm border border-solid pr-2",
         slideIndex === thisSlideIndex
@@ -40,7 +40,7 @@ function ProgressIndicator({
       )}
     >
       <span className="flex h-6 w-6 items-center justify-end font-bold sm:h-8 sm:w-8">
-        {slideIndex >= thisSlideIndex ? (
+        {slideIndex > thisSlideIndex ? (
           <CheckMark />
         ) : (
           <span className="mr-2.5">{thisSlideIndex + 1}</span>
@@ -68,21 +68,19 @@ function ProgressIndicators({ slideIndex }: { slideIndex: number }) {
 }
 
 function ContactDialogButton({
-  type,
   label,
   onClick,
   color,
 }: {
-  type: "button" | "submit"
   label: string
-  onClick?: () => void
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   color:
     | "bg-blue-400 text-white hover:bg-blue-500 hover:outline-blue-400"
     | "bg-gray-800 text-white hover:bg-gray-700 hover:outline-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:hover:outline-gray-700"
 }) {
   return (
     <button
-      type={type}
+      type="button"
       className={classNames(
         "rounded-md px-6 py-2 hover:outline-1 hover:outline-solid",
         color,
@@ -97,17 +95,17 @@ function ContactDialogButton({
 export default function ContactDialogButtons({
   dialogState,
   closeDialog,
-  instanceRef,
   slideIndex,
+  showSlide,
+  submitDialog,
+  validateSlide,
 }: {
   dialogState: DialogState
   closeDialog: () => void
-  instanceRef: MutableRefObject<KeenSliderInstance<
-    unknown,
-    unknown,
-    KeenSliderHooks
-  > | null>
   slideIndex: number
+  showSlide: (nextSlideIndex: number) => void
+  submitDialog: () => void
+  validateSlide: () => Promise<boolean>
 }) {
   const maxIndex = 2
   const handleBack = () => {
@@ -119,7 +117,7 @@ export default function ContactDialogButtons({
       closeDialog()
       return
     }
-    instanceRef.current?.prev()
+    showSlide(slideIndex - 1)
   }
   const getBackLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
@@ -127,16 +125,12 @@ export default function ContactDialogButtons({
     if (slideIndex === 0) return "Cancel"
     return "Back"
   }
-  const getNextButtonType = () => {
-    if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
-      return "submit"
-    if (slideIndex === maxIndex) return "submit"
-    return "button"
-  }
-  const handleNext = () => {
+  const handleNext = async () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") return
     if (slideIndex === maxIndex) return
-    instanceRef.current?.next()
+    const isCurrentSlideValid = await validateSlide()
+    if (!isCurrentSlideValid) return
+    showSlide(slideIndex + 1)
   }
   const getNextLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
@@ -148,21 +142,24 @@ export default function ContactDialogButtons({
     <>
       <div className="flex w-full items-center justify-between space-x-2">
         <ContactDialogButton
-          type="button"
           label={getBackLabel()}
           color="bg-gray-800 text-white hover:bg-gray-700 hover:outline-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:hover:outline-gray-700"
           onClick={handleBack}
         />
         <ContactDialogButton
-          type={getNextButtonType()}
           label={getNextLabel()}
           color="bg-blue-400 text-white hover:bg-blue-500 hover:outline-blue-400"
           onClick={
-            dialogState.type !== "CREATE" && dialogState.type !== "UPDATE"
-              ? undefined
-              : slideIndex === maxIndex
-                ? undefined
-                : handleNext
+            (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") ||
+            slideIndex === maxIndex
+              ? (event) => {
+                  event.preventDefault()
+                  submitDialog()
+                }
+              : (event) => {
+                  event.preventDefault()
+                  void handleNext()
+                }
           }
         />
       </div>

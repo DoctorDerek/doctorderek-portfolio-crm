@@ -3,7 +3,8 @@ import ContactCardEmail from "@/components/ContactCardEmail"
 import ContactCardLabelAndData from "@/components/ContactCardLabelAndData"
 import ContactCardPhoneNumber from "@/components/ContactCardPhoneNumber"
 import ContactCardPhotoAndHeading from "@/components/ContactCardPhotoAndHeading"
-import { Contact, DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import transformBirthday from "@/utils/transformBirthday"
 
 function Address({ contact }: { contact: Contact }) {
@@ -30,9 +31,11 @@ function Address({ contact }: { contact: Contact }) {
 export default function ContactCard({
   contact,
   setDialogState,
+  onToggleFavorite,
 }: {
   contact: Contact
   setDialogState: Dispatch<SetStateAction<DialogState>>
+  onToggleFavorite?: (contact: Contact) => void
 }) {
   const { birthYear, birthMonth, birthDay, phoneNumber, email } = contact
   return (
@@ -40,6 +43,7 @@ export default function ContactCard({
       <ContactCardPhotoAndHeading
         contact={contact}
         setDialogState={setDialogState}
+        onToggleFavorite={onToggleFavorite}
       />
       <div className="grid w-full grid-cols-1 space-y-6 sm:grid-cols-2 sm:space-y-0 sm:gap-y-4 xl:grid-cols-4 xl:gap-0">
         <ContactCardLabelAndData

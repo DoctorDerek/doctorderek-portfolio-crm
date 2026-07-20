@@ -1,19 +1,4 @@
-export type Contact = {
-  id: number
-  firstName: string
-  lastName: string
-  birthYear?: string
-  birthMonth?: string
-  birthDay?: string
-  age?: number
-  photo?: string
-  streetAddress?: string
-  city?: string
-  state?: string
-  zipCode?: string
-  phoneNumber?: string
-  email?: string
-}
+import { Contact } from "@/types/Contact"
 
 const CONTACTS: Contact[] = [
   {

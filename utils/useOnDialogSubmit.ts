@@ -1,6 +1,6 @@
 import { toast } from "react-toastify"
-import { Contact } from "@/contacts/CONTACTS"
-import { DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import { calculateAge } from "@/utils/calculateAge"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 
@@ -72,6 +72,7 @@ export default function useOnDialogSubmit({
       const id = oldContact?.id || -1
 
       const photo = oldContact?.photo || ""
+      const isFavorite = oldContact?.isFavorite
       const age =
         oldContact?.age ||
         calculateAge({ birthYear, birthMonth, birthDay }) ||
@@ -87,6 +88,7 @@ export default function useOnDialogSubmit({
         birthDay,
         age,
         photo,
+        isFavorite,
         streetAddress,
         city,
         state,

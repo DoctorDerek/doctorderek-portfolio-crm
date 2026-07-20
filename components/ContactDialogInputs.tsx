@@ -6,7 +6,8 @@ import {
 } from "react-hook-form"
 import ContactCard from "@/components/ContactCard"
 import ContactDialogToggle from "@/components/ContactDialogToggle"
-import { Contact, DialogState } from "@/types"
+import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
 
 function ContactDialogInput({
@@ -113,11 +114,13 @@ function ErrorMessage({
 
 export default function ContactDialogInputs({
   dialogState,
+  slideIndex,
   register,
   errors,
   getValues,
 }: {
   dialogState: DialogState
+  slideIndex: number
   register: UseFormRegister<Contact>
   errors: Partial<FieldErrorsImpl<Contact>>
   getValues: UseFormGetValues<Contact>
@@ -131,7 +134,7 @@ export default function ContactDialogInputs({
 
   return (
     <>
-      <div className="keen-slider__slide">
+      <div className="keen-slider__slide" inert={slideIndex !== 0}>
         <ContactDialogInput
           label="Email Address"
           fieldName="email"
@@ -144,7 +147,7 @@ export default function ContactDialogInputs({
           <ErrorMessage errors={errors} />
         )}
       </div>
-      <div className="keen-slider__slide">
+      <div className="keen-slider__slide" inert={slideIndex !== 1}>
         <ContactDialogInput
           label="First Name"
           fieldName="firstName"
@@ -248,7 +251,10 @@ export default function ContactDialogInputs({
             errors?.state?.message ||
             errors?.zipCode?.message) && <ErrorMessage errors={errors} />}
       </div>
-      <div className="keen-slider__slide space-y-4 text-sm">
+      <div
+        className="keen-slider__slide space-y-4 text-sm"
+        inert={slideIndex !== 2}
+      >
         <div className="text-base font-bold italic">Review and Submit</div>
         <ContactCard contact={getValues()} setDialogState={() => {}} />
       </div>

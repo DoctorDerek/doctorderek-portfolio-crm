@@ -62,4 +62,4 @@ pnpm build
 pnpm audit --prod
 ```
 
-Pull requests run ESLint and Vitest coverage in GitHub Actions, publish coverage to Codecov, and receive a Vercel preview deployment.
+Pull requests run ESLint, Vitest coverage, and Playwright E2E checks in GitHub Actions, publish coverage to Codecov, and receive a Vercel preview deployment.

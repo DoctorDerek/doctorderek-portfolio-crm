@@ -4,6 +4,7 @@ on:
   deployment_status:
 
 permissions:
+  pull-requests: write
   contents: read
 
 jobs:
@@ -43,8 +44,17 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --with-deps
 
-      - name: Run Playwright tests
-        run: pnpm exec playwright test --pass-with-no-tests
+      - name: Run Playwright Tests and Capture Summary
+        id: playwright
+        if: always()
+        run: |
+          set +e
+          pnpm exec playwright test --pass-with-no-tests 2>&1 | tee "$RUNNER_TEMP/playwright-output.txt"
+          PLAYWRIGHT_EXIT_CODE=${PIPESTATUS[0]}
+          set -e
+
+          echo "PLAYWRIGHT_EXIT_CODE=$PLAYWRIGHT_EXIT_CODE" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_OUTPUT_FILE=$RUNNER_TEMP/playwright-output.txt" >> "$GITHUB_ENV"
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}
 
@@ -55,3 +65,97 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 14
+
+      - name: Post Playwright PR Comment
+        if: always()
+        continue-on-error: true
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
+        with:
+          retries: 3
+          script: |
+            const fs = require('fs');
+            const deploymentSha = context.payload.deployment.sha;
+            const deploymentRef = context.payload.deployment.ref;
+            const outputPath = process.env.PLAYWRIGHT_OUTPUT_FILE;
+            const output = outputPath && fs.existsSync(outputPath)
+              ? fs.readFileSync(outputPath, 'utf8')
+              : '';
+            const cleanOutput = output.replace(/\u001b\[[0-9;]*m/g, '');
+            const exitCode = Number.parseInt(process.env.PLAYWRIGHT_EXIT_CODE ?? '', 10);
+            const header = '### 🎭 Playwright';
+            const qualityPosition = '**Quality check 3 of 3**';
+            const summaryLines = cleanOutput
+              .split(/\r?\n/)
+              .filter(line => /Running \d+ tests?|\d+ (passed|failed|flaky|skipped)|Error:/.test(line))
+              .slice(-12);
+            const fallbackLines = cleanOutput
+              .split(/\r?\n/)
+              .filter(Boolean)
+              .slice(-12);
+            const summary = (summaryLines.length > 0 ? summaryLines : fallbackLines).join('\n');
+            const status = Number.isInteger(exitCode) && exitCode === 0
+              ? '✅ **Playwright completed successfully.**'
+              : '❌ **Playwright tests failed or the runner could not complete.**';
+            const previewUrl = context.payload.deployment_status.target_url;
+            const previewLink = previewUrl ? `\n\n[Open preview deployment](${previewUrl})` : '';
+            const body = `${header}\n\n${qualityPosition}\n\n${status}${summary ? `\n\n\`\`\`text\n${summary}\n\`\`\`` : ''}${previewLink}`;
+
+            const { data: associatedPullRequests } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: deploymentSha,
+            });
+            let pullRequests = associatedPullRequests;
+
+            if (pullRequests.length === 0 && deploymentRef) {
+              const { data: matchingPullRequests } = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                head: `${context.repo.owner}:${deploymentRef}`,
+                state: 'open',
+              });
+              pullRequests = matchingPullRequests;
+            }
+
+            const pullRequest = pullRequests.find(
+              candidate => candidate.state === 'open' && candidate.head.sha === deploymentSha,
+            ) ?? pullRequests.find(candidate => candidate.state === 'open') ?? pullRequests[0];
+
+            if (!pullRequest) {
+              core.warning(`No pull request is associated with deployment ${deploymentSha}.`);
+              return;
+            }
+
+            const { data: comments } = await github.rest.issues.listComments({
+              issue_number: pullRequest.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100,
+            });
+            const botComment = comments.find(
+              comment => comment.user.type === 'Bot' && comment.body?.includes(header),
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                comment_id: botComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: pullRequest.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
+              });
+            }
+
+      - name: Enforce Playwright Result
+        if: always()
+        run: |
+          if ! [[ "$PLAYWRIGHT_EXIT_CODE" =~ ^[0-9]+$ ]] || [ "$PLAYWRIGHT_EXIT_CODE" -ne 0 ]; then
+            echo "Playwright tests failed or the runner could not complete."
+            exit 1
+          fi

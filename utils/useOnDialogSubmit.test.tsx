@@ -110,4 +110,26 @@ describe("contact action notifications", () => {
       expect(closeDialog).toHaveBeenCalledTimes(1)
     },
   )
+
+  it("leaves updated age derivation to the state machine", () => {
+    render(
+      <Providers>
+        <ContactActionHarness
+          closeDialog={vi.fn()}
+          dialogState={{
+            type: "UPDATE",
+            contact: { ...contact, age: 99 },
+          }}
+        />
+      </Providers>,
+    )
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Complete contact action" }),
+    )
+
+    const updateEvent = send.mock.calls[0]?.[0]
+    expect(updateEvent).toEqual(expect.objectContaining({ type: "UPDATE" }))
+    expect(updateEvent.contact).not.toHaveProperty("age")
+  })
 })

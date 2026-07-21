@@ -283,7 +283,7 @@ export default function ContactDialogInputs({
         inert={slideIndex !== 2}
       >
         <div className="text-base font-bold italic">Review and Submit</div>
-        <ContactCard contact={getValues()} setDialogState={() => {}} />
+        <ContactCard contact={getValues()} />
       </div>
     </>
   )

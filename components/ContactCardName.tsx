@@ -8,7 +8,7 @@ export default function ContactCardNameAndCity({
   setDialogState,
 }: {
   contact: Contact
-  setDialogState: Dispatch<SetStateAction<DialogState>>
+  setDialogState?: Dispatch<SetStateAction<DialogState>>
 }) {
   const { firstName, lastName, city } = contact || {
     firstName: "",
@@ -27,15 +27,17 @@ export default function ContactCardNameAndCity({
           {city}
         </span>
       </h3>
-      <button
-        type="button"
-        aria-label={`Edit ${contactName}`}
-        title={`Edit ${contactName}`}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-blue-100 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-blue-950 dark:hover:text-blue-200"
-        onClick={() => setDialogState({ type: "UPDATE", contact })}
-      >
-        <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
-      </button>
+      {setDialogState && (
+        <button
+          type="button"
+          aria-label={`Edit ${contactName}`}
+          title={`Edit ${contactName}`}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-blue-100 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-blue-950 dark:hover:text-blue-200"
+          onClick={() => setDialogState({ type: "UPDATE", contact })}
+        >
+          <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
+        </button>
+      )}
     </div>
   )
 }

@@ -34,7 +34,7 @@ export default function ContactCard({
   onToggleFavorite,
 }: {
   contact: Contact
-  setDialogState: Dispatch<SetStateAction<DialogState>>
+  setDialogState?: Dispatch<SetStateAction<DialogState>>
   onToggleFavorite?: (contact: Contact) => void
 }) {
   const { birthYear, birthMonth, birthDay, phoneNumber, email } = contact

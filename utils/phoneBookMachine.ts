@@ -52,7 +52,7 @@ const phoneBookMachine = setup({
           ...event.contact,
           age: calculateAge({ birthYear, birthMonth, birthDay }),
         }
-        return [...context.contacts, newContact]
+        return [...context.contacts, newContact].sort(sortByLastName)
       },
     }),
     updateContact: assign({
@@ -63,9 +63,11 @@ const phoneBookMachine = setup({
           ...event.contact,
           age: calculateAge({ birthYear, birthMonth, birthDay }),
         }
-        return context.contacts.map((contact) =>
-          contact.id === updatedContact.id ? updatedContact : contact,
-        )
+        return context.contacts
+          .map((contact) =>
+            contact.id === updatedContact.id ? updatedContact : contact,
+          )
+          .sort(sortByLastName)
       },
     }),
     deleteContact: assign({

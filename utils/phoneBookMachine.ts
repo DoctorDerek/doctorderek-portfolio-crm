@@ -47,25 +47,25 @@ const phoneBookMachine = setup({
     createContact: assign({
       contacts: ({ context, event }) => {
         if (event.type !== "CREATE") return context.contacts
-        const currentPhoneBookEntries = [...context.contacts]
-        const newContact = event.contact
-
-        const { birthYear, birthMonth, birthDay } = newContact
-        newContact.age = calculateAge({ birthYear, birthMonth, birthDay })
-        currentPhoneBookEntries.push(newContact)
-        return currentPhoneBookEntries
+        const { birthYear, birthMonth, birthDay } = event.contact
+        const newContact = {
+          ...event.contact,
+          age: calculateAge({ birthYear, birthMonth, birthDay }),
+        }
+        return [...context.contacts, newContact]
       },
     }),
     updateContact: assign({
       contacts: ({ context, event }) => {
         if (event.type !== "UPDATE") return context.contacts
-        const currentPhoneBookEntries = [...context.contacts]
-        const updatedContact = event.contact
-        const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
-          ({ id }) => id !== updatedContact.id,
+        const { birthYear, birthMonth, birthDay } = event.contact
+        const updatedContact = {
+          ...event.contact,
+          age: calculateAge({ birthYear, birthMonth, birthDay }),
+        }
+        return context.contacts.map((contact) =>
+          contact.id === updatedContact.id ? updatedContact : contact,
         )
-        filteredPhoneBookEntries.push(updatedContact)
-        return filteredPhoneBookEntries
       },
     }),
     deleteContact: assign({

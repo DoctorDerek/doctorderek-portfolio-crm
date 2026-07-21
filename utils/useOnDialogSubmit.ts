@@ -1,7 +1,6 @@
 import { toast } from "react-toastify"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
-import { calculateAge } from "@/utils/calculateAge"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 
 export default function useOnDialogSubmit({
@@ -73,10 +72,6 @@ export default function useOnDialogSubmit({
 
       const photo = oldContact?.photo || ""
       const isFavorite = oldContact?.isFavorite
-      const age =
-        oldContact?.age ||
-        calculateAge({ birthYear, birthMonth, birthDay }) ||
-        -1
 
       const contact = {
         id,
@@ -86,7 +81,6 @@ export default function useOnDialogSubmit({
         birthYear,
         birthMonth,
         birthDay,
-        age,
         photo,
         isFavorite,
         streetAddress,

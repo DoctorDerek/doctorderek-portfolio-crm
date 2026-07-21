@@ -4,8 +4,12 @@ import parseContactBirthday from "@/utils/contactBirthday"
 import transformBirthday from "@/utils/transformBirthday"
 
 describe("contact birthday parsing", () => {
+  const originalTimeZone = process.env.TZ
+
   afterEach(() => {
     vi.useRealTimers()
+    if (originalTimeZone === undefined) delete process.env.TZ
+    else process.env.TZ = originalTimeZone
   })
 
   it("parses real calendar dates without timezone drift", () => {
@@ -54,6 +58,18 @@ describe("contact birthday parsing", () => {
 
     expect(calculateAge(birthday)).toBe(25)
     expect(transformBirthday(birthday)).toBe("July 21, 2000")
+  })
+
+  it("preserves the calendar date in far-ahead time zones", () => {
+    process.env.TZ = "Pacific/Kiritimati"
+
+    expect(
+      transformBirthday({
+        birthYear: "2000",
+        birthMonth: "07",
+        birthDay: "21",
+      }),
+    ).toBe("July 21, 2000")
   })
 
   it("returns explicit non-throwing fallbacks for impossible birthdays", () => {

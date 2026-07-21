@@ -9,6 +9,7 @@ import ContactDialogToggle from "@/components/ContactDialogToggle"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
+import parseContactBirthday from "@/utils/contactBirthday"
 
 function ContactDialogInput({
   label,
@@ -16,6 +17,7 @@ function ContactDialogInput({
   dialogState,
   register,
   errors,
+  getValues,
   disabled,
   addressEnabled,
   placeholder,
@@ -25,6 +27,7 @@ function ContactDialogInput({
   dialogState: DialogState
   register: UseFormRegister<Contact>
   errors: Partial<FieldErrorsImpl<Contact>>
+  getValues: UseFormGetValues<Contact>
   disabled?: boolean
   addressEnabled: boolean
   placeholder?: string
@@ -69,8 +72,21 @@ function ContactDialogInput({
               fieldName === "birthMonth" ||
               fieldName === "birthDay" ||
               fieldName === "birthYear"
-            )
-              return Boolean(value) || "All fields are required."
+            ) {
+              if (!value) return "All fields are required."
+            }
+            if (fieldName === "birthDay") {
+              const birthDay = typeof value === "string" ? value : undefined
+              return (
+                Boolean(
+                  parseContactBirthday({
+                    birthYear: getValues("birthYear"),
+                    birthMonth: getValues("birthMonth"),
+                    birthDay,
+                  }),
+                ) || "Please enter a valid date of birth."
+              )
+            }
             if (
               addressEnabled &&
               (fieldName === "streetAddress" ||
@@ -141,6 +157,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           addressEnabled={addressEnabled}
         />
         {dialogState.type === "CREATE" && errors?.email?.message && (
@@ -154,6 +171,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           addressEnabled={addressEnabled}
         />
         <ContactDialogInput
@@ -162,6 +180,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           addressEnabled={addressEnabled}
         />
         <ContactDialogInput
@@ -170,6 +189,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           addressEnabled={addressEnabled}
           placeholder="MM"
         />
@@ -179,6 +199,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           addressEnabled={addressEnabled}
           placeholder="DD"
         />
@@ -188,6 +209,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           addressEnabled={addressEnabled}
           placeholder="YYYY"
         />
@@ -197,6 +219,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           addressEnabled={addressEnabled}
         />
         <ContactDialogToggle
@@ -209,6 +232,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           disabled={!addressEnabled}
           addressEnabled={addressEnabled}
         />
@@ -218,6 +242,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           disabled={!addressEnabled}
           addressEnabled={addressEnabled}
         />
@@ -227,6 +252,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           disabled={!addressEnabled}
           addressEnabled={addressEnabled}
         />
@@ -236,6 +262,7 @@ export default function ContactDialogInputs({
           dialogState={dialogState}
           register={register}
           errors={errors}
+          getValues={getValues}
           disabled={!addressEnabled}
           addressEnabled={addressEnabled}
         />

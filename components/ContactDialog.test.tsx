@@ -54,12 +54,26 @@ async function showInformationStep() {
   })
   fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
-  await waitFor(() => {
-    expect(screen.getByText("Info").closest("li")).toHaveAttribute(
-      "aria-current",
-      "step",
-    )
-  })
+  await expectInformationStep()
+}
+
+async function expectInformationStep() {
+  expect(
+    await screen.findByRole("region", { name: "Contact information" }),
+  ).toBeInTheDocument()
+  expect(
+    screen.getByRole("list").querySelector('[aria-current="step"]'),
+  ).toHaveTextContent("Contact information")
+}
+
+async function expectReviewStep() {
+  expect(
+    await screen.findByRole("region", { name: "Review and Submit" }),
+  ).toBeInTheDocument()
+  expect(screen.getByText("Review").closest("li")).toHaveAttribute(
+    "aria-current",
+    "step",
+  )
 }
 
 function fillContactInformation(birthDay: string) {
@@ -89,10 +103,9 @@ describe("contact dialog validation and review", () => {
     expect(
       await screen.findByText("Please enter a valid date of birth."),
     ).toBeInTheDocument()
-    expect(screen.getByText("Info").closest("li")).toHaveAttribute(
-      "aria-current",
-      "step",
-    )
+    expect(
+      screen.getByRole("list").querySelector('[aria-current="step"]'),
+    ).toHaveTextContent("Contact information")
     expect(screen.getByText("Review").closest("li")).not.toHaveAttribute(
       "aria-current",
     )
@@ -104,12 +117,7 @@ describe("contact dialog validation and review", () => {
     fillContactInformation("29")
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
-    await waitFor(() => {
-      expect(screen.getByText("Review").closest("li")).toHaveAttribute(
-        "aria-current",
-        "step",
-      )
-    })
+    await expectReviewStep()
     expect(screen.getByText("Review and Submit")).toBeInTheDocument()
     expect(screen.getByText("Ada Lovelace")).toBeInTheDocument()
     expect(
@@ -127,6 +135,34 @@ describe("contact dialog validation and review", () => {
     ).not.toBeInTheDocument()
   })
 
+  it("preserves form values across backward and forward step transitions", async () => {
+    renderCreateDialog()
+    await showInformationStep()
+    fillContactInformation("29")
+
+    fireEvent.click(screen.getByRole("button", { name: "Back" }))
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("region", { name: "Contact email" }),
+      ).toBeInTheDocument()
+    })
+    expect(screen.getByLabelText("Email Address")).toHaveValue(
+      "ada@example.com",
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: "Next" }))
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("region", { name: "Contact information" }),
+      ).toBeInTheDocument()
+    })
+    expect(screen.getByLabelText("First Name")).toHaveValue("Ada")
+    expect(screen.getByLabelText("Last Name")).toHaveValue("Lovelace")
+    expect(screen.getByLabelText("Date of Birth - Day")).toHaveValue("29")
+  })
+
   it("reviews untouched update values exactly as they are stored", async () => {
     renderUpdateDialog()
 
@@ -135,12 +171,7 @@ describe("contact dialog validation and review", () => {
     )
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
-    await waitFor(() => {
-      expect(screen.getByText("Info").closest("li")).toHaveAttribute(
-        "aria-current",
-        "step",
-      )
-    })
+    await expectInformationStep()
     expect(screen.getByLabelText("First Name")).toHaveValue(
       existingContact.firstName,
     )
@@ -187,12 +218,7 @@ describe("contact dialog validation and review", () => {
       target: { value: existingContact.email },
     })
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
-    await waitFor(() => {
-      expect(screen.getByText("Info").closest("li")).toHaveAttribute(
-        "aria-current",
-        "step",
-      )
-    })
+    await expectInformationStep()
 
     fireEvent.change(screen.getByLabelText("Date of Birth - Month"), {
       target: { value: "02" },
@@ -205,10 +231,9 @@ describe("contact dialog validation and review", () => {
     expect(
       await screen.findByText("Please enter a valid date of birth."),
     ).toBeInTheDocument()
-    expect(screen.getByText("Info").closest("li")).toHaveAttribute(
-      "aria-current",
-      "step",
-    )
+    expect(
+      screen.getByRole("list").querySelector('[aria-current="step"]'),
+    ).toHaveTextContent("Contact information")
   })
 
   it("clears optional update values while preserving hidden address inputs", async () => {
@@ -218,12 +243,7 @@ describe("contact dialog validation and review", () => {
       target: { value: "" },
     })
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
-    await waitFor(() => {
-      expect(screen.getByText("Info").closest("li")).toHaveAttribute(
-        "aria-current",
-        "step",
-      )
-    })
+    await expectInformationStep()
 
     for (const label of [
       "Date of Birth - Month",

@@ -1,48 +1,31 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import ThemeSwitch from "@/components/ThemeSwitch"
-
-const { setTheme, themeState } = vi.hoisted(() => ({
-  setTheme: vi.fn(),
-  themeState: {
-    resolvedTheme: "light" as "dark" | "light",
-  },
-}))
-
-vi.mock("next-themes", () => ({
-  useTheme: () => ({
-    resolvedTheme: themeState.resolvedTheme,
-    setTheme,
-  }),
-}))
+import ThemeToggle from "@/components/ThemeToggle"
 
 const themeToggleTestCases = [
   {
     accessibleName: "Use dark mode",
     isPressed: false,
-    requestedTheme: "dark",
-    resolvedTheme: "light",
+    isDarkTheme: false,
   },
   {
     accessibleName: "Use light mode",
     isPressed: true,
-    requestedTheme: "light",
-    resolvedTheme: "dark",
+    isDarkTheme: true,
   },
 ] as const
 
-describe("theme switch", () => {
+describe("theme toggle", () => {
+  const onToggle = vi.fn()
+
   beforeEach(() => {
-    setTheme.mockReset()
-    themeState.resolvedTheme = "light"
+    onToggle.mockReset()
   })
 
   it.each(themeToggleTestCases)(
-    "requests $requestedTheme from the resolved $resolvedTheme theme",
-    ({ accessibleName, isPressed, requestedTheme, resolvedTheme }) => {
-      themeState.resolvedTheme = resolvedTheme
-
-      render(<ThemeSwitch />)
+    "renders the $accessibleName state and delegates its action",
+    ({ accessibleName, isDarkTheme, isPressed }) => {
+      render(<ThemeToggle isDarkTheme={isDarkTheme} onToggle={onToggle} />)
 
       const themeSwitch = screen.getByRole("button", {
         name: accessibleName,
@@ -56,16 +39,16 @@ describe("theme switch", () => {
 
       fireEvent.click(themeSwitch)
 
-      expect(setTheme).toHaveBeenCalledOnce()
-      expect(setTheme).toHaveBeenCalledWith(requestedTheme)
+      expect(onToggle).toHaveBeenCalledOnce()
     },
   )
 
   it("applies completed animation states to the referenced button", async () => {
-    const { rerender } = render(<ThemeSwitch />)
+    const { rerender } = render(
+      <ThemeToggle isDarkTheme={false} onToggle={onToggle} />,
+    )
 
-    themeState.resolvedTheme = "dark"
-    rerender(<ThemeSwitch />)
+    rerender(<ThemeToggle isDarkTheme onToggle={onToggle} />)
 
     await waitFor(() => {
       expect(
@@ -73,8 +56,7 @@ describe("theme switch", () => {
       ).toHaveClass("switch-enter-done")
     })
 
-    themeState.resolvedTheme = "light"
-    rerender(<ThemeSwitch />)
+    rerender(<ThemeToggle isDarkTheme={false} onToggle={onToggle} />)
 
     await waitFor(() => {
       expect(screen.getByRole("button", { name: "Use dark mode" })).toHaveClass(

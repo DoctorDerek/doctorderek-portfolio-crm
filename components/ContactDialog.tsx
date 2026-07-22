@@ -2,12 +2,15 @@
 
 import { Dialog } from "@headlessui/react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useForm, useWatch } from "react-hook-form"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ContactDialogButtons from "@/components/ContactDialogButtons"
 import ContactDialogDescription from "@/components/ContactDialogDescription"
 import ContactDialogInputs from "@/components/ContactDialogInputs"
 import ContactDialogTitle from "@/components/ContactDialogTitle"
 import ContactDialogWarning from "@/components/ContactDialogWarning"
+import { ContactDialogStep } from "@/contacts/CONTACT_DIALOG_STEPS"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
 import {
@@ -16,10 +19,6 @@ import {
   getContactFormDefaultValues,
 } from "@/utils/contactForm"
 import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
-import "keen-slider/keen-slider.min.css"
-import { useKeenSlider } from "keen-slider/react.es"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { useForm, useWatch } from "react-hook-form"
 
 export default function ContactDialog({
   dialogState,
@@ -50,12 +49,14 @@ export default function ContactDialog({
     control,
     compute: (completeFormValues) => completeFormValues,
   })
+  const [dialogStep, setDialogStep] = useState<ContactDialogStep>("email")
 
   useEffect(() => {
     reset(getContactFormDefaultValues(dialogState))
   }, [dialogState, reset])
 
   const closeDialog = () => {
+    setDialogStep("email")
     setDialogState({ type: "CLOSED" })
     reset()
   }
@@ -65,27 +66,13 @@ export default function ContactDialog({
     contacts,
     closeDialog,
   })
-  const submitDialog = handleSubmit(onDialogSubmit)
-
-  const [slideIndex, setSlideIndex] = useState(0)
-  const [sliderRef, instanceRef] = useKeenSlider({
-    created() {
-      setSlideIndex(0)
-    },
-    destroyed() {
-      setSlideIndex(0)
-    },
-    drag: false,
+  const submitDialog = handleSubmit(onDialogSubmit, (submissionErrors) => {
+    setDialogStep(submissionErrors.email ? "email" : "information")
   })
 
-  const showSlide = (nextSlideIndex: number) => {
-    setSlideIndex(nextSlideIndex)
-    instanceRef.current?.moveToIdx(nextSlideIndex, true)
-  }
-
-  function validateSlide() {
-    if (slideIndex === 0) return trigger("email")
-    if (slideIndex === 1)
+  function validateStep() {
+    if (dialogStep === "email") return trigger("email")
+    if (dialogStep === "information")
       return trigger([
         "firstName",
         "lastName",
@@ -100,48 +87,6 @@ export default function ContactDialog({
       ])
     return Promise.resolve(true)
   }
-
-  useEffect(() => {
-    async function showSlideWithError() {
-      if (slideIndex === 0) return
-      if (errors?.email) {
-        setSlideIndex(0)
-        instanceRef?.current?.moveToIdx(0, true)
-      }
-      if (slideIndex === 1) return
-      if (
-        errors?.firstName ||
-        errors?.lastName ||
-        errors?.birthYear ||
-        errors?.birthMonth ||
-        errors?.birthDay ||
-        errors?.streetAddress ||
-        errors?.city ||
-        errors?.state ||
-        errors?.zipCode ||
-        errors?.phoneNumber
-      ) {
-        setSlideIndex(1)
-        instanceRef?.current?.moveToIdx(1, true)
-      }
-    }
-    showSlideWithError()
-  }, [
-    errors?.birthDay,
-    errors?.birthMonth,
-    errors?.birthYear,
-    errors?.city,
-    errors?.email,
-    errors?.firstName,
-    errors?.lastName,
-    errors?.phoneNumber,
-    errors?.state,
-    errors?.streetAddress,
-    errors?.zipCode,
-    instanceRef,
-    slideIndex,
-    trigger,
-  ])
 
   return (
     <Dialog
@@ -163,23 +108,21 @@ export default function ContactDialog({
               <ContactDialogDescription dialogState={dialogState} />
               <ContactDialogWarning dialogState={dialogState} />
             </div>
-            <div ref={sliderRef} className="keen-slider">
-              <ContactDialogInputs
-                dialogState={dialogState}
-                slideIndex={slideIndex}
-                register={register}
-                errors={errors}
-                formValues={formValues}
-                setValue={setValue}
-              />
-            </div>
+            <ContactDialogInputs
+              dialogState={dialogState}
+              dialogStep={dialogStep}
+              register={register}
+              errors={errors}
+              formValues={formValues}
+              setValue={setValue}
+            />
             <ContactDialogButtons
               dialogState={dialogState}
               closeDialog={closeDialog}
-              slideIndex={slideIndex}
-              showSlide={showSlide}
+              dialogStep={dialogStep}
+              showStep={setDialogStep}
               submitDialog={() => void submitDialog()}
-              validateSlide={validateSlide}
+              validateStep={validateStep}
             />
           </Dialog.Panel>
         </form>

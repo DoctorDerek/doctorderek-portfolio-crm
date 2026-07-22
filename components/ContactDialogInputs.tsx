@@ -1,6 +1,10 @@
+import { AnimatePresence, motion } from "motion/react"
+import { ReactNode } from "react"
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form"
 import ContactCard from "@/components/ContactCard"
 import ContactDialogToggle from "@/components/ContactDialogToggle"
+import { useMotionPreference } from "@/components/MotionPreferenceContext"
+import { ContactDialogStep } from "@/contacts/CONTACT_DIALOG_STEPS"
 import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
 import {
@@ -76,19 +80,21 @@ function ErrorMessage({ errors }: { errors: FieldErrors<ContactFormValues> }) {
 
 export default function ContactDialogInputs({
   dialogState,
-  slideIndex,
+  dialogStep,
   register,
   errors,
   formValues,
   setValue,
 }: {
   dialogState: DialogState
-  slideIndex: number
+  dialogStep: ContactDialogStep
   register: UseFormRegister<ContactFormValues>
   errors: FieldErrors<ContactFormValues>
   formValues: ContactFormValues
   setValue: UseFormSetValue<ContactFormValues>
 }) {
+  const { shouldReduceMotion } = useMotionPreference()
+
   if (dialogState.type === "RESET") return null
 
   if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
@@ -104,9 +110,12 @@ export default function ContactDialogInputs({
         : undefined,
   })
 
-  return (
-    <>
-      <div className="keen-slider__slide" inert={slideIndex !== 0}>
+  const dialogStepContent = {
+    email: (
+      <section aria-labelledby="contact-email-step-title">
+        <h3 id="contact-email-step-title" className="sr-only">
+          Contact email
+        </h3>
         <ContactDialogInput
           label="Email Address"
           fieldName="email"
@@ -114,8 +123,13 @@ export default function ContactDialogInputs({
           errors={errors}
         />
         {errors?.email?.message && <ErrorMessage errors={errors} />}
-      </div>
-      <div className="keen-slider__slide" inert={slideIndex !== 1}>
+      </section>
+    ),
+    information: (
+      <section aria-labelledby="contact-information-step-title">
+        <h3 id="contact-information-step-title" className="sr-only">
+          Contact information
+        </h3>
         <ContactDialogInput
           label="First Name"
           fieldName="firstName"
@@ -202,14 +216,36 @@ export default function ContactDialogInputs({
           errors?.city?.message ||
           errors?.state?.message ||
           errors?.zipCode?.message) && <ErrorMessage errors={errors} />}
-      </div>
-      <div
-        className="keen-slider__slide space-y-4 text-sm"
-        inert={slideIndex !== 2}
+      </section>
+    ),
+    review: (
+      <section
+        aria-labelledby="contact-review-step-title"
+        className="space-y-4 text-sm"
       >
-        <div className="text-base font-bold italic">Review and Submit</div>
+        <h3
+          id="contact-review-step-title"
+          className="text-base font-bold italic"
+        >
+          Review and Submit
+        </h3>
         <ContactCard contact={reviewContact} />
-      </div>
-    </>
+      </section>
+    ),
+  } satisfies Record<ContactDialogStep, ReactNode>
+
+  return (
+    <AnimatePresence initial={false} mode="wait">
+      <motion.div
+        key={dialogStep}
+        aria-live="polite"
+        initial={shouldReduceMotion ? false : { opacity: 0, x: 24 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={shouldReduceMotion ? undefined : { opacity: 0, x: -24 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
+      >
+        {dialogStepContent[dialogStep]}
+      </motion.div>
+    </AnimatePresence>
   )
 }

@@ -77,9 +77,11 @@ const contactActionTestCases: {
 function ContactActionHarness({
   closeDialog,
   dialogState,
+  formValues = contactFormValues,
 }: {
   closeDialog: () => void
   dialogState: DialogState
+  formValues?: ContactFormValues
 }) {
   const { onDialogSubmit } = useOnDialogSubmit({
     closeDialog,
@@ -88,7 +90,7 @@ function ContactActionHarness({
   })
 
   return (
-    <button onClick={() => onDialogSubmit(contactFormValues)} type="button">
+    <button onClick={() => onDialogSubmit(formValues)} type="button">
       Complete contact action
     </button>
   )
@@ -148,6 +150,54 @@ describe("contact action notifications", () => {
     const updateEvent = send.mock.calls[0]?.[0]
     expect(updateEvent).toEqual(expect.objectContaining({ type: "UPDATE" }))
     expect(updateEvent.contact).not.toHaveProperty("age")
+  })
+
+  it("clears optional update values without replacing immutable metadata", () => {
+    const existingContact = {
+      ...contact,
+      photo: "jessica.png",
+      isFavorite: true,
+    }
+
+    render(
+      <Providers>
+        <ContactActionHarness
+          closeDialog={vi.fn()}
+          dialogState={{ type: "UPDATE", contact: existingContact }}
+          formValues={{
+            ...contactFormValues,
+            firstName: "  Jessica  ",
+            lastName: "  Christian  ",
+            birthYear: "",
+            birthMonth: "",
+            birthDay: "",
+            phoneNumber: "",
+            email: "",
+            addressEnabled: false,
+          }}
+        />
+      </Providers>,
+    )
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Complete contact action" }),
+    )
+
+    expect(send).toHaveBeenCalledWith({
+      type: "UPDATE",
+      contact: {
+        id: existingContact.id,
+        firstName: "Jessica",
+        lastName: "Christian",
+        birthYear: undefined,
+        birthMonth: undefined,
+        birthDay: undefined,
+        phoneNumber: undefined,
+        email: undefined,
+        photo: existingContact.photo,
+        isFavorite: true,
+      },
+    })
   })
 
   it("replaces obsolete feedback during a rapid contact lifecycle", async () => {

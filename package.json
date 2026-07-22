@@ -16,7 +16,7 @@
   "dependencies": {
     "@headlessui/react": "^2",
     "@heroicons/react": "^2",
-    "@hookform/resolvers": "^3",
+    "@hookform/resolvers": "^5",
     "@types/react-transition-group": "^4",
     "@xstate/react": "^5",
     "keen-slider": "^6",
@@ -30,7 +30,7 @@
     "react-toastify": "^11",
     "react-transition-group": "^4",
     "xstate": "^5",
-    "zod": "^3"
+    "zod": "^4"
   },
   "postcss": {
     "plugins": {

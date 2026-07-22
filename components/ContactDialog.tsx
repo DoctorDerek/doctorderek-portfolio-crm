@@ -1,6 +1,7 @@
 "use client"
 
 import { Dialog } from "@headlessui/react"
+import { zodResolver } from "@hookform/resolvers/zod"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ContactDialogButtons from "@/components/ContactDialogButtons"
 import ContactDialogDescription from "@/components/ContactDialogDescription"
@@ -9,11 +10,16 @@ import ContactDialogTitle from "@/components/ContactDialogTitle"
 import ContactDialogWarning from "@/components/ContactDialogWarning"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
+import {
+  contactFormSchema,
+  ContactFormValues,
+  getContactFormDefaultValues,
+} from "@/utils/contactForm"
 import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
 import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react.es"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 
 export default function ContactDialog({
   dialogState,
@@ -30,8 +36,21 @@ export default function ContactDialog({
     formState: { errors },
     reset,
     trigger,
-    getValues,
-  } = useForm<Contact>({ mode: "onTouched" })
+    setValue,
+    control,
+  } = useForm<ContactFormValues>({
+    mode: "onTouched",
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: getContactFormDefaultValues(dialogState),
+  })
+  const formValues = useWatch({
+    control,
+    compute: (completeFormValues) => completeFormValues,
+  })
+
+  useEffect(() => {
+    reset(getContactFormDefaultValues(dialogState))
+  }, [dialogState, reset])
 
   const closeDialog = () => {
     setDialogState({ type: "CLOSED" })
@@ -147,7 +166,8 @@ export default function ContactDialog({
                 slideIndex={slideIndex}
                 register={register}
                 errors={errors}
-                getValues={getValues}
+                formValues={formValues}
+                setValue={setValue}
               />
             </div>
             <ContactDialogButtons

@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import Providers from "@/app/providers"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
+import { ContactFormValues } from "@/utils/contactForm"
 import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
 
 const { send } = vi.hoisted(() => ({
@@ -27,6 +28,21 @@ const contact: Contact = {
   zipCode: "94111",
   phoneNumber: "555-555-5555",
   email: "Jessica.Christian@example.com",
+}
+
+const contactFormValues: ContactFormValues = {
+  firstName: contact.firstName,
+  lastName: contact.lastName,
+  birthYear: contact.birthYear ?? "",
+  birthMonth: contact.birthMonth ?? "",
+  birthDay: contact.birthDay ?? "",
+  streetAddress: contact.streetAddress ?? "",
+  city: contact.city ?? "",
+  state: contact.state ?? "",
+  zipCode: contact.zipCode ?? "",
+  phoneNumber: contact.phoneNumber ?? "",
+  email: contact.email ?? "",
+  addressEnabled: true,
 }
 
 type ContactActionType = Exclude<DialogState["type"], "CLOSED">
@@ -72,7 +88,7 @@ function ContactActionHarness({
   })
 
   return (
-    <button onClick={() => onDialogSubmit(contact)} type="button">
+    <button onClick={() => onDialogSubmit(contactFormValues)} type="button">
       Complete contact action
     </button>
   )

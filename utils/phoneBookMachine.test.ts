@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createActor } from "xstate"
 import phoneBookMachine, {
-  LOCALSTORAGE_KEY_AUTH,
+  CONTACTS_STORAGE_KEY,
 } from "@/utils/phoneBookMachine"
 
 describe("phoneBookMachine persistence", () => {
@@ -16,7 +16,7 @@ describe("phoneBookMachine persistence", () => {
 
   it("validates and sorts stored contacts when the machine starts", () => {
     localStorage.setItem(
-      LOCALSTORAGE_KEY_AUTH,
+      CONTACTS_STORAGE_KEY,
       JSON.stringify([
         { id: 2, firstName: "Grace", lastName: "Hopper" },
         { id: 1, firstName: "Ada", lastName: "Lovelace" },
@@ -36,7 +36,7 @@ describe("phoneBookMachine persistence", () => {
   })
 
   it("restores demonstration contacts when stored data is invalid", () => {
-    localStorage.setItem(LOCALSTORAGE_KEY_AUTH, "not valid contact JSON")
+    localStorage.setItem(CONTACTS_STORAGE_KEY, "not valid contact JSON")
     const phoneBookActor = createActor(phoneBookMachine).start()
 
     phoneBookActor.send({ type: "READ" })
@@ -56,7 +56,7 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.send({ type: "TOGGLE_FAVORITE", contactId })
 
     const storedContacts = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_KEY_AUTH) ?? "[]",
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; isFavorite?: boolean }[]
     expect(
       storedContacts.find((contact) => contact.id === contactId)?.isFavorite,
@@ -92,7 +92,7 @@ describe("phoneBookMachine persistence", () => {
   })
 
   it("clears persistence failures after the interface announces them", () => {
-    localStorage.setItem(LOCALSTORAGE_KEY_AUTH, "invalid")
+    localStorage.setItem(CONTACTS_STORAGE_KEY, "invalid")
     const phoneBookActor = createActor(phoneBookMachine).start()
     phoneBookActor.send({ type: "READ" })
 
@@ -126,7 +126,7 @@ describe("phoneBookMachine persistence", () => {
     )
 
     const storedContacts = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_KEY_AUTH) ?? "[]",
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; age?: number }[]
     expect(storedContacts[0]).toEqual(
       expect.objectContaining({ id: 100, age: 26 }),
@@ -159,7 +159,7 @@ describe("phoneBookMachine persistence", () => {
     )
 
     const storedContacts = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_KEY_AUTH) ?? "[]",
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; age?: number }[]
     expect(storedContacts.at(-1)).toEqual(
       expect.objectContaining({ id: originalContact.id, age: 25 }),

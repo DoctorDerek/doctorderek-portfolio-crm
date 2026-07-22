@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
 import Providers from "@/app/providers"
 import PhoneBookApp from "@/components/PhoneBookApp"
-import { LOCALSTORAGE_KEY_AUTH } from "@/utils/phoneBookMachine"
+import { CONTACTS_STORAGE_KEY } from "@/utils/phoneBookMachine"
 
 function renderPhoneBookApp() {
   return render(
@@ -70,7 +70,7 @@ describe("contact discovery", () => {
     ).toHaveAttribute("aria-pressed", "true")
 
     const storedContacts = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_KEY_AUTH) ?? "[]",
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { firstName: string; isFavorite?: boolean }[]
     expect(
       storedContacts.find(({ firstName }) => firstName === "Jessica")

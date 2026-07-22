@@ -7,7 +7,7 @@ import { getErrorMessage } from "@/utils/errors"
 import { sortByLastName } from "@/utils/sortByLastName"
 import parseStoredContacts from "@/utils/storedContactsSchema"
 
-export const LOCALSTORAGE_KEY_AUTH = "phonebook-filter-by-age"
+export const CONTACTS_STORAGE_KEY = "phonebook-filter-by-age"
 
 const phoneBookMachine = setup({
   types: {} as {
@@ -26,7 +26,7 @@ const phoneBookMachine = setup({
   },
   actions: {
     readPhoneBookFromLocalStorage: assign(() => {
-      const storedContacts = localStorage.getItem(LOCALSTORAGE_KEY_AUTH)
+      const storedContacts = localStorage.getItem(CONTACTS_STORAGE_KEY)
       if (!storedContacts)
         return { contacts: CONTACTS_WITH_AGES, persistenceFailure: null }
 
@@ -95,7 +95,7 @@ const phoneBookMachine = setup({
     writePhoneBookToLocalStorage: assign(({ context }) => {
       try {
         localStorage.setItem(
-          LOCALSTORAGE_KEY_AUTH,
+          CONTACTS_STORAGE_KEY,
           JSON.stringify(context.contacts),
         )
         return { persistenceFailure: null }

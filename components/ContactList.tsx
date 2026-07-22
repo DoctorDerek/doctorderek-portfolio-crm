@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from "react"
 import ContactCard from "@/components/ContactCard"
 import ContactListEmptyState from "@/components/ContactListEmptyState"
 import ContactResultsSummary from "@/components/ContactResultsSummary"
+import { useMotionPreference } from "@/components/MotionPreferenceContext"
 import { Contact } from "@/types/Contact"
 import { ContactFilters } from "@/types/ContactFilters"
 import { DialogState } from "@/types/DialogState"
@@ -20,6 +21,8 @@ export default function ContactList({
   onToggleFavorite: (contact: Contact) => void
 }) {
   const filteredPhoneBookEntries = filterContacts(contacts, contactFilters)
+  const { shouldReduceMotion } = useMotionPreference()
+  const contactTransition = { duration: shouldReduceMotion ? 0 : 0.2 }
 
   return (
     <section className="relative w-full space-y-4" aria-label="Contact results">
@@ -32,10 +35,10 @@ export default function ContactList({
           {filteredPhoneBookEntries.length === 0 && (
             <motion.div
               key="contact-list-empty-state"
-              initial={{ opacity: 0, y: 12 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.2 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, y: -12 }}
+              transition={contactTransition}
             >
               <ContactListEmptyState hasContacts={contacts.length > 0} />
             </motion.div>
@@ -44,11 +47,13 @@ export default function ContactList({
             return (
               <motion.div
                 key={contact.id}
-                layout="position"
-                initial={{ opacity: 0, y: 12 }}
+                layout={shouldReduceMotion ? false : "position"}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.2 }}
+                exit={
+                  shouldReduceMotion ? undefined : { opacity: 0, scale: 0.98 }
+                }
+                transition={contactTransition}
               >
                 <ContactCard
                   contact={contact}

@@ -30,6 +30,34 @@ body {
   font-family: Inter, Arial, Helvetica, sans-serif;
 }
 
+html[data-motion-preference="reduce"] {
+  scroll-behavior: auto;
+}
+
+html[data-motion-preference="reduce"] *,
+html[data-motion-preference="reduce"] ::before,
+html[data-motion-preference="reduce"] ::after {
+  scroll-behavior: auto !important;
+  animation: none !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion-preference="full"]) {
+    scroll-behavior: auto;
+  }
+
+  html:not([data-motion-preference="full"]) *,
+  html:not([data-motion-preference="full"]) ::before,
+  html:not([data-motion-preference="full"]) ::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}
+
 :focus-visible {
   outline: 0.125rem solid #facc15;
   outline-offset: 0.1875rem;

@@ -5,7 +5,9 @@ import { PersistenceFailure } from "@/types/PersistenceFailure"
 import { calculateAge } from "@/utils/calculateAge"
 import { getErrorMessage } from "@/utils/errors"
 import { sortByLastName } from "@/utils/sortByLastName"
-import parseStoredContacts from "@/utils/storedContactsSchema"
+import parseStoredContacts, {
+  serializeStoredContacts,
+} from "@/utils/storedContactsSchema"
 
 export const CONTACTS_STORAGE_KEY = "phonebook-filter-by-age"
 
@@ -99,7 +101,7 @@ const phoneBookMachine = setup({
       try {
         localStorage.setItem(
           CONTACTS_STORAGE_KEY,
-          JSON.stringify(context.contacts),
+          serializeStoredContacts(context.contacts),
         )
         return { persistenceFailure: null }
       } catch (error) {

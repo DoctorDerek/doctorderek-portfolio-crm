@@ -128,9 +128,8 @@ describe("phoneBookMachine persistence", () => {
     const storedContacts = JSON.parse(
       localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; age?: number }[]
-    expect(storedContacts[0]).toEqual(
-      expect.objectContaining({ id: 100, age: 26 }),
-    )
+    expect(storedContacts[0]).toEqual(expect.objectContaining({ id: 100 }))
+    expect(storedContacts[0]).not.toHaveProperty("age")
     phoneBookActor.stop()
   })
 
@@ -162,8 +161,9 @@ describe("phoneBookMachine persistence", () => {
       localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; age?: number }[]
     expect(storedContacts.at(-1)).toEqual(
-      expect.objectContaining({ id: originalContact.id, age: 25 }),
+      expect.objectContaining({ id: originalContact.id }),
     )
+    expect(storedContacts.at(-1)).not.toHaveProperty("age")
     phoneBookActor.stop()
   })
 })

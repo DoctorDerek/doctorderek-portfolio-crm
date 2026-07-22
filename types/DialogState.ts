@@ -1,6 +1,8 @@
 import { Contact } from "@/types/Contact"
 
-export type DialogState = {
-  type: "CLOSED" | "CREATE" | "UPDATE" | "DELETE" | "RESET"
-  contact?: Contact
-}
+export type DialogState =
+  | { type: "CLOSED"; contact?: never }
+  | { type: "CREATE"; contact?: never }
+  | { type: "UPDATE"; contact: Contact }
+  | { type: "DELETE"; contact: Contact }
+  | { type: "RESET"; contact?: never }

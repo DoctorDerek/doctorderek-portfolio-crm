@@ -34,7 +34,7 @@ export default function ContactDialog({
   } = useForm<Contact>({ mode: "onTouched" })
 
   const closeDialog = () => {
-    setDialogState({ type: "CLOSED", contact: undefined })
+    setDialogState({ type: "CLOSED" })
     reset()
   }
 

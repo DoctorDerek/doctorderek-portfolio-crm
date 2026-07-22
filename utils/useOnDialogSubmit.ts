@@ -65,27 +65,25 @@ export default function useOnDialogSubmit({
     }
 
     if (dialogState.type === "UPDATE") {
-      const oldContact = dialogState?.contact
+      const oldContact = dialogState.contact
 
-      const firstName = data.firstName || oldContact?.firstName || ""
-      const lastName = data.lastName || oldContact?.lastName || ""
-      const birthYear = data.birthYear || oldContact?.birthYear || ""
-      const birthMonth = data.birthMonth || oldContact?.birthMonth || ""
-      const birthDay = data.birthDay || oldContact?.birthDay || ""
-      const streetAddress =
-        data.streetAddress || oldContact?.streetAddress || ""
-      const city = data.city || oldContact?.city || ""
-      const state = data.state || oldContact?.state || ""
-      const zipCode = data.zipCode || oldContact?.zipCode || ""
-      const phoneNumber = data.phoneNumber || oldContact?.phoneNumber || ""
-      const email = data.email || oldContact?.email || ""
-      const id = oldContact?.id || -1
+      const firstName = data.firstName || oldContact.firstName
+      const lastName = data.lastName || oldContact.lastName
+      const birthYear = data.birthYear || oldContact.birthYear || ""
+      const birthMonth = data.birthMonth || oldContact.birthMonth || ""
+      const birthDay = data.birthDay || oldContact.birthDay || ""
+      const streetAddress = data.streetAddress || oldContact.streetAddress || ""
+      const city = data.city || oldContact.city || ""
+      const state = data.state || oldContact.state || ""
+      const zipCode = data.zipCode || oldContact.zipCode || ""
+      const phoneNumber = data.phoneNumber || oldContact.phoneNumber || ""
+      const email = data.email || oldContact.email || ""
 
-      const photo = oldContact?.photo || ""
-      const isFavorite = oldContact?.isFavorite
+      const photo = oldContact.photo || ""
+      const isFavorite = oldContact.isFavorite
 
       const contact = {
-        id,
+        id: oldContact.id,
         firstName,
         lastName,
         phoneNumber,
@@ -105,8 +103,8 @@ export default function useOnDialogSubmit({
       showContactActionSuccess("Contact updated.")
     }
 
-    if (dialogState.type === "DELETE" && dialogState?.contact) {
-      send({ type: "DELETE", contact: dialogState?.contact })
+    if (dialogState.type === "DELETE") {
+      send({ type: "DELETE", contact: dialogState.contact })
       showContactActionSuccess("Contact deleted.")
     }
 

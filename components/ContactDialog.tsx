@@ -40,7 +40,10 @@ export default function ContactDialog({
     control,
   } = useForm<ContactFormValues>({
     mode: "onTouched",
-    resolver: zodResolver(contactFormSchema),
+    resolver:
+      dialogState.type === "CREATE" || dialogState.type === "UPDATE"
+        ? zodResolver(contactFormSchema)
+        : undefined,
     defaultValues: getContactFormDefaultValues(dialogState),
   })
   const formValues = useWatch({

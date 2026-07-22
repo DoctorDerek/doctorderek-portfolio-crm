@@ -256,4 +256,34 @@ describe("contact dialog validation and review", () => {
       expect(setDialogState).toHaveBeenCalledWith({ type: "CLOSED" })
     })
   })
+
+  it.each([
+    {
+      dialogState: { type: "DELETE", contact: existingContact } as const,
+      notification: "Contact deleted.",
+    },
+    {
+      dialogState: { type: "RESET" } as const,
+      notification: "Contacts reset.",
+    },
+  ])(
+    "submits $dialogState.type confirmations without form validation",
+    async ({ dialogState, notification }) => {
+      const setDialogState = vi.fn()
+      render(
+        <Providers>
+          <ContactDialog
+            contacts={[existingContact]}
+            dialogState={dialogState}
+            setDialogState={setDialogState}
+          />
+        </Providers>,
+      )
+
+      fireEvent.click(screen.getByRole("button", { name: "Submit" }))
+
+      expect(await screen.findByRole("alert")).toHaveTextContent(notification)
+      expect(setDialogState).toHaveBeenCalledWith({ type: "CLOSED" })
+    },
+  )
 })

@@ -1,5 +1,5 @@
 import { assign, setup } from "xstate"
-import CONTACTS_WITH_AGES from "@/contacts/CONTACTS"
+import createDemonstrationContacts from "@/contacts/CONTACTS"
 import { Contact } from "@/types/Contact"
 import { PersistenceFailure } from "@/types/PersistenceFailure"
 import { calculateAge } from "@/utils/calculateAge"
@@ -28,7 +28,10 @@ const phoneBookMachine = setup({
     readPhoneBookFromLocalStorage: assign(() => {
       const storedContacts = localStorage.getItem(CONTACTS_STORAGE_KEY)
       if (!storedContacts)
-        return { contacts: CONTACTS_WITH_AGES, persistenceFailure: null }
+        return {
+          contacts: createDemonstrationContacts(),
+          persistenceFailure: null,
+        }
 
       try {
         const contacts = parseStoredContacts(storedContacts)
@@ -36,7 +39,7 @@ const phoneBookMachine = setup({
         return { contacts, persistenceFailure: null }
       } catch (error) {
         return {
-          contacts: CONTACTS_WITH_AGES,
+          contacts: createDemonstrationContacts(),
           persistenceFailure: {
             operation: "read",
             message: getErrorMessage(error),
@@ -112,16 +115,16 @@ const phoneBookMachine = setup({
       persistenceFailure: () => null,
     }),
     resetPhoneBookEntries: assign({
-      contacts: () => CONTACTS_WITH_AGES,
+      contacts: () => createDemonstrationContacts(),
     }),
   },
 }).createMachine({
   id: "phoneBook",
   initial: "idle",
-  context: {
-    contacts: CONTACTS_WITH_AGES as Contact[],
+  context: () => ({
+    contacts: createDemonstrationContacts(),
     persistenceFailure: null,
-  },
+  }),
   states: {
     idle: {
       on: {

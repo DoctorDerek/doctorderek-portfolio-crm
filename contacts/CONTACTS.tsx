@@ -1,7 +1,8 @@
 import { Contact } from "@/types/Contact"
 import { calculateAge } from "@/utils/calculateAge"
+import { sortByLastName } from "@/utils/sortByLastName"
 
-const CONTACTS: Contact[] = [
+const DEMONSTRATION_CONTACTS: Contact[] = [
   {
     id: 1,
     photo: "Unsplash Jessica Christian.png",
@@ -94,21 +95,9 @@ const CONTACTS: Contact[] = [
   },
 ]
 
-const CONTACTS_WITH_AGES: Contact[] = CONTACTS.map((contact) => {
-  const { birthYear, birthMonth, birthDay } = contact
-  const age = calculateAge({ birthYear, birthMonth, birthDay })
-  return { ...contact, age }
-})
-
-export const sortByLastName = (a: Contact, b: Contact) => {
-  const aName = a?.lastName || ""
-  const bName = b?.lastName || ""
-
-  const aLastName = aName.split(" ").pop()?.toLocaleLowerCase() || ""
-  const bLastName = bName.split(" ").pop()?.toLocaleLowerCase() || ""
-  return aLastName.localeCompare(bLastName)
+export default function createDemonstrationContacts() {
+  return DEMONSTRATION_CONTACTS.map((contact) => ({
+    ...contact,
+    age: calculateAge(contact),
+  })).sort(sortByLastName)
 }
-
-CONTACTS_WITH_AGES.sort(sortByLastName)
-
-export default CONTACTS_WITH_AGES

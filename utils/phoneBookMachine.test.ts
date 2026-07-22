@@ -48,6 +48,36 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.stop()
   })
 
+  it("recalculates legacy stored ages on both sides of a birthday", () => {
+    localStorage.setItem(
+      CONTACTS_STORAGE_KEY,
+      JSON.stringify([
+        {
+          id: 1,
+          firstName: "Ada",
+          lastName: "Lovelace",
+          birthYear: "2000",
+          birthMonth: "07",
+          birthDay: "21",
+          age: 999,
+        },
+      ]),
+    )
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date("2026-07-20T12:00:00.000Z"))
+
+    const beforeBirthdayActor = createActor(phoneBookMachine).start()
+    beforeBirthdayActor.send({ type: "READ" })
+    expect(beforeBirthdayActor.getSnapshot().context.contacts[0].age).toBe(25)
+    beforeBirthdayActor.stop()
+
+    vi.setSystemTime(new Date("2026-07-21T12:00:00.000Z"))
+    const onBirthdayActor = createActor(phoneBookMachine).start()
+    onBirthdayActor.send({ type: "READ" })
+    expect(onBirthdayActor.getSnapshot().context.contacts[0].age).toBe(26)
+    onBirthdayActor.stop()
+  })
+
   it("persists favorite mutations without an intermediary state", () => {
     const phoneBookActor = createActor(phoneBookMachine).start()
     phoneBookActor.send({ type: "READ" })
@@ -164,6 +194,36 @@ describe("phoneBookMachine persistence", () => {
       expect.objectContaining({ id: originalContact.id }),
     )
     expect(storedContacts.at(-1)).not.toHaveProperty("age")
+    phoneBookActor.stop()
+  })
+
+  it("restores fresh demonstration contacts on every reset", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+    const initialContacts = phoneBookActor.getSnapshot().context.contacts
+    const initialContact = initialContacts[0]
+
+    phoneBookActor.send({
+      type: "UPDATE",
+      contact: { ...initialContact, firstName: "Changed" },
+    })
+    phoneBookActor.send({ type: "RESET" })
+
+    const firstResetContacts = phoneBookActor.getSnapshot().context.contacts
+    expect(firstResetContacts).not.toBe(initialContacts)
+    expect(firstResetContacts[0]).not.toBe(initialContact)
+    expect(firstResetContacts[0].firstName).toBe(initialContact.firstName)
+
+    phoneBookActor.send({
+      type: "UPDATE",
+      contact: { ...firstResetContacts[0], firstName: "Changed again" },
+    })
+    phoneBookActor.send({ type: "RESET" })
+
+    const secondResetContacts = phoneBookActor.getSnapshot().context.contacts
+    expect(secondResetContacts).not.toBe(firstResetContacts)
+    expect(secondResetContacts[0]).not.toBe(firstResetContacts[0])
+    expect(secondResetContacts[0].firstName).toBe(initialContact.firstName)
     phoneBookActor.stop()
   })
 })

@@ -18,7 +18,7 @@
     "@heroicons/react": "^2",
     "@hookform/resolvers": "^5",
     "@types/react-transition-group": "^4",
-    "@xstate/react": "^5",
+    "@xstate/react": "^6",
     "keen-slider": "^6",
     "motion": "^12",
     "next": "^16",

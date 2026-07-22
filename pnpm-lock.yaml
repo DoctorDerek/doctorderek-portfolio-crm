@@ -25,8 +25,8 @@ importers:
         specifier: ^4
         version: 4.4.12(@types/react@19.2.17)
       '@xstate/react':
-        specifier: ^5
-        version: 5.0.5(@types/react@19.2.17)(react@19.2.7)(xstate@5.32.4)
+        specifier: ^6
+        version: 6.1.0(@types/react@19.2.17)(react@19.2.7)(xstate@5.32.5)
       keen-slider:
         specifier: ^6
         version: 6.8.6
@@ -59,7 +59,7 @@ importers:
         version: 4.4.5(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       xstate:
         specifier: ^5
-        version: 5.32.4
+        version: 5.32.5
       zod:
         specifier: ^4
         version: 4.4.3
@@ -1177,11 +1177,11 @@ packages:
   '@vitest/utils@4.1.10':
     resolution: {integrity: sha512-fy9am/HWxbaGt/Sawrp90vt6Y6jQwf1RX77cz3uwoJwJVMli/e1IEwRPnMNJ7vKfPTwo0diXifkpPvwH9v7nGA==}
 
-  '@xstate/react@5.0.5':
-    resolution: {integrity: sha512-MfF/cPHa3lNKJmGFpUycMbNP25qBXyZXrxc8VYNroAu0Nnk0DV5WzAkTcQXma0xEC4dSwsoA+YQuKbZATtqvgg==}
+  '@xstate/react@6.1.0':
+    resolution: {integrity: sha512-ep9F0jGTI63B/jE8GHdMpUqtuz7yRebNaKv8EMUaiSi29NOglywc2X2YSOV/ygbIK+LtmgZ0q9anoEA2iBSEOw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-      xstate: ^5.19.4
+      xstate: ^5.28.0
     peerDependenciesMeta:
       xstate:
         optional: true
@@ -2883,8 +2883,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  xstate@5.32.4:
-    resolution: {integrity: sha512-E5WtDB8DBs2ZWliz2Ry9XfbSZTbBRcK/cwefBot04qQ/L5SLP16xpnTDU4/ZFXuXFhNxi7JP2RhuoGwBnM+S4A==}
+  xstate@5.32.5:
+    resolution: {integrity: sha512-ULazi1oe6wGrXl0Frb6otSlkm5HLifbbVTkMk5kkSKqz4TkxJaVpnl6jOJwKeid3ORPxYyZQgNLUSYX9q65SIA==}
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
@@ -3836,13 +3836,13 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.0
 
-  '@xstate/react@5.0.5(@types/react@19.2.17)(react@19.2.7)(xstate@5.32.4)':
+  '@xstate/react@6.1.0(@types/react@19.2.17)(react@19.2.7)(xstate@5.32.5)':
     dependencies:
       react: 19.2.7
       use-isomorphic-layout-effect: 1.2.1(@types/react@19.2.17)(react@19.2.7)
       use-sync-external-store: 1.6.0(react@19.2.7)
     optionalDependencies:
-      xstate: 5.32.4
+      xstate: 5.32.5
     transitivePeerDependencies:
       - '@types/react'
 
@@ -5714,7 +5714,7 @@ snapshots:
 
   ws@8.21.0: {}
 
-  xstate@5.32.4: {}
+  xstate@5.32.5: {}
 
   yallist@3.1.1: {}
 

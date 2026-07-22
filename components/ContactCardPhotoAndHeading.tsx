@@ -16,7 +16,7 @@ export default function ContactCardPhotoAndHeading({
   onToggleFavorite,
 }: {
   contact: Contact
-  setDialogState: Dispatch<SetStateAction<DialogState>>
+  setDialogState?: Dispatch<SetStateAction<DialogState>>
   onToggleFavorite?: (contact: Contact) => void
 }) {
   const { firstName, lastName, photo } = contact || {
@@ -46,7 +46,7 @@ export default function ContactCardPhotoAndHeading({
         </div>
         <ContactCardName contact={contact} setDialogState={setDialogState} />
       </div>
-      {onToggleFavorite && (
+      {onToggleFavorite && setDialogState && (
         <div className="flex items-center gap-1 self-end sm:self-start">
           <ButtonFavorite
             contact={contact}

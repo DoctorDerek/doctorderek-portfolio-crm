@@ -81,6 +81,7 @@ function ContactActionHarness({
 describe("contact action notifications", () => {
   afterEach(() => {
     toast.dismiss()
+    toast.clearWaitingQueue()
     send.mockReset()
   })
 
@@ -110,4 +111,56 @@ describe("contact action notifications", () => {
       expect(closeDialog).toHaveBeenCalledTimes(1)
     },
   )
+
+  it("leaves updated age derivation to the state machine", () => {
+    render(
+      <Providers>
+        <ContactActionHarness
+          closeDialog={vi.fn()}
+          dialogState={{
+            type: "UPDATE",
+            contact: { ...contact, age: 99 },
+          }}
+        />
+      </Providers>,
+    )
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Complete contact action" }),
+    )
+
+    const updateEvent = send.mock.calls[0]?.[0]
+    expect(updateEvent).toEqual(expect.objectContaining({ type: "UPDATE" }))
+    expect(updateEvent.contact).not.toHaveProperty("age")
+  })
+
+  it("replaces obsolete feedback during a rapid contact lifecycle", async () => {
+    const closeDialog = vi.fn()
+    const renderHarness = (dialogState: DialogState) => (
+      <Providers>
+        <ContactActionHarness
+          closeDialog={closeDialog}
+          dialogState={dialogState}
+        />
+      </Providers>
+    )
+    const { rerender } = render(renderHarness({ type: "CREATE" }))
+
+    for (const { dialogState } of contactActionTestCases) {
+      rerender(renderHarness(dialogState))
+      fireEvent.click(
+        screen.getByRole("button", { name: "Complete contact action" }),
+      )
+    }
+
+    expect(await screen.findByText("Contacts reset.")).toBeInTheDocument()
+    expect(screen.getAllByRole("alert")).toHaveLength(1)
+    expect(send.mock.calls.map(([event]) => event.type)).toEqual([
+      "CREATE",
+      "UPDATE",
+      "DELETE",
+      "RESET",
+    ])
+    expect(closeDialog).toHaveBeenCalledTimes(4)
+  })
 })

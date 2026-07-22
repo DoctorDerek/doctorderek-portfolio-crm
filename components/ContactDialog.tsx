@@ -8,16 +8,12 @@ import ContactDialogInputs from "@/components/ContactDialogInputs"
 import ContactDialogTitle from "@/components/ContactDialogTitle"
 import ContactDialogWarning from "@/components/ContactDialogWarning"
 import { Contact } from "@/types/Contact"
+import { DialogState } from "@/types/DialogState"
 import useOnDialogSubmit from "@/utils/useOnDialogSubmit"
 import "keen-slider/keen-slider.min.css"
 import { useKeenSlider } from "keen-slider/react.es"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-
-export type DialogState = {
-  type: "CLOSED" | "CREATE" | "UPDATE" | "DELETE" | "RESET"
-  contact?: Contact
-}
 
 export default function ContactDialog({
   dialogState,

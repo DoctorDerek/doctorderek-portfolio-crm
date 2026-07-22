@@ -1,7 +1,7 @@
-import { toast } from "react-toastify"
+import { useRef } from "react"
+import { Id, toast } from "react-toastify"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
-import { calculateAge } from "@/utils/calculateAge"
 import usePhoneBookService from "@/utils/usePhoneBookService"
 
 export default function useOnDialogSubmit({
@@ -14,6 +14,16 @@ export default function useOnDialogSubmit({
   closeDialog: () => void
 }) {
   const { send } = usePhoneBookService()
+  const contactActionToastId = useRef<Id | undefined>(undefined)
+
+  const showContactActionSuccess = (message: string) => {
+    const currentToastId = contactActionToastId.current
+    if (currentToastId !== undefined && toast.isActive(currentToastId)) {
+      toast.update(currentToastId, { render: message, type: "success" })
+      return
+    }
+    contactActionToastId.current = toast.success(message)
+  }
 
   const onDialogSubmit = (data: Contact) => {
     if (dialogState.type === "CREATE") {
@@ -51,7 +61,7 @@ export default function useOnDialogSubmit({
       }
 
       send({ type: "CREATE", contact })
-      toast.success("Contact created.")
+      showContactActionSuccess("Contact created.")
     }
 
     if (dialogState.type === "UPDATE") {
@@ -73,10 +83,6 @@ export default function useOnDialogSubmit({
 
       const photo = oldContact?.photo || ""
       const isFavorite = oldContact?.isFavorite
-      const age =
-        oldContact?.age ||
-        calculateAge({ birthYear, birthMonth, birthDay }) ||
-        -1
 
       const contact = {
         id,
@@ -86,7 +92,6 @@ export default function useOnDialogSubmit({
         birthYear,
         birthMonth,
         birthDay,
-        age,
         photo,
         isFavorite,
         streetAddress,
@@ -97,17 +102,17 @@ export default function useOnDialogSubmit({
       }
 
       send({ type: "UPDATE", contact })
-      toast.success("Contact updated.")
+      showContactActionSuccess("Contact updated.")
     }
 
     if (dialogState.type === "DELETE" && dialogState?.contact) {
       send({ type: "DELETE", contact: dialogState?.contact })
-      toast.success("Contact deleted.")
+      showContactActionSuccess("Contact deleted.")
     }
 
     if (dialogState.type === "RESET") {
       send({ type: "RESET" })
-      toast.success("Contacts reset.")
+      showContactActionSuccess("Contacts reset.")
     }
 
     closeDialog()

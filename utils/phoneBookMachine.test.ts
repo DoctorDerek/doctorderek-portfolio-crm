@@ -10,6 +10,7 @@ describe("phoneBookMachine persistence", () => {
   })
 
   afterEach(() => {
+    vi.useRealTimers()
     vi.restoreAllMocks()
   })
 
@@ -98,6 +99,71 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.send({ type: "CLEAR_PERSISTENCE_FAILURE" })
 
     expect(phoneBookActor.getSnapshot().context.persistenceFailure).toBeNull()
+    phoneBookActor.stop()
+  })
+
+  it("normalizes and sorts created contacts without mutating the event payload", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date("2026-07-20T12:00:00.000Z"))
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+    const contact = {
+      id: 100,
+      firstName: "Zelda",
+      lastName: "Aardvark",
+      birthYear: "2000",
+      birthMonth: "01",
+      birthDay: "01",
+    }
+
+    phoneBookActor.send({ type: "CREATE", contact })
+
+    const contacts = phoneBookActor.getSnapshot().context.contacts
+    expect(contact).not.toHaveProperty("age")
+    expect(contacts[0]).toEqual(expect.objectContaining({ id: 100, age: 26 }))
+    expect(contacts.map(({ lastName }) => lastName)).toEqual(
+      [...contacts.map(({ lastName }) => lastName)].sort(),
+    )
+
+    const storedContacts = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_KEY_AUTH) ?? "[]",
+    ) as { id: number; age?: number }[]
+    expect(storedContacts[0]).toEqual(
+      expect.objectContaining({ id: 100, age: 26 }),
+    )
+    phoneBookActor.stop()
+  })
+
+  it("recalculates and reorders updated contacts before persistence", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date("2026-07-20T12:00:00.000Z"))
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+    const originalContact = phoneBookActor.getSnapshot().context.contacts[0]
+
+    phoneBookActor.send({
+      type: "UPDATE",
+      contact: {
+        ...originalContact,
+        lastName: "Zulu",
+        birthYear: "2000",
+        birthMonth: "07",
+        birthDay: "21",
+        age: 999,
+      },
+    })
+
+    const contacts = phoneBookActor.getSnapshot().context.contacts
+    expect(contacts.at(-1)).toEqual(
+      expect.objectContaining({ id: originalContact.id, age: 25 }),
+    )
+
+    const storedContacts = JSON.parse(
+      localStorage.getItem(LOCALSTORAGE_KEY_AUTH) ?? "[]",
+    ) as { id: number; age?: number }[]
+    expect(storedContacts.at(-1)).toEqual(
+      expect.objectContaining({ id: originalContact.id, age: 25 }),
+    )
     phoneBookActor.stop()
   })
 })

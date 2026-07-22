@@ -27,6 +27,9 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
   await page.getByLabel("Phone Number").fill("555-867-5309")
   await page.getByRole("button", { name: "Next", exact: true }).click()
   await expect(page.locator('[aria-current="step"]')).toContainText("Review")
+  await expect(
+    page.getByRole("button", { name: "Edit Mapachito Austin" }),
+  ).toHaveCount(0)
   await page.getByRole("button", { name: "Submit", exact: true }).click()
 
   await expect(page.getByText("Contact created.")).toBeVisible()

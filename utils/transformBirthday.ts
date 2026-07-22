@@ -1,22 +1,16 @@
-import { getErrorMessage } from "@/utils/errors"
+import parseContactBirthday, { ContactBirthday } from "@/utils/contactBirthday"
 
 export default function transformBirthday({
   birthYear,
   birthMonth,
   birthDay,
-}: {
-  birthYear?: string
-  birthMonth?: string
-  birthDay?: string
-}) {
+}: ContactBirthday) {
   if (!(birthYear && birthMonth && birthDay)) return ""
-  try {
-    const date = new Date(`${birthYear}-${birthMonth}-${birthDay}`)
+  const date = parseContactBirthday({ birthYear, birthMonth, birthDay })
+  if (!date) return `Invalid date: ${birthYear}-${birthMonth}-${birthDay}`
 
-    date.setUTCHours(12, 0, 0, 0)
-    return new Intl.DateTimeFormat("en-US", { dateStyle: "long" }).format(date)
-  } catch (error) {
-    console.error(getErrorMessage(error))
-    return `Invalid date: ${birthYear}-${birthMonth}-${birthDay}`
-  }
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "long",
+    timeZone: "UTC",
+  }).format(date)
 }

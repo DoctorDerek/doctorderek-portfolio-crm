@@ -32,10 +32,16 @@ export default function ContactCard({
   contact,
   setDialogState,
   onToggleFavorite,
+  onMoveContact,
+  isFirst,
+  isLast,
 }: {
   contact: Contact
   setDialogState?: Dispatch<SetStateAction<DialogState>>
   onToggleFavorite?: (contact: Contact) => void
+  onMoveContact?: (contact: Contact, direction: "up" | "down") => void
+  isFirst?: boolean
+  isLast?: boolean
 }) {
   const { birthYear, birthMonth, birthDay, phoneNumber, email } = contact
   return (
@@ -44,6 +50,9 @@ export default function ContactCard({
         contact={contact}
         setDialogState={setDialogState}
         onToggleFavorite={onToggleFavorite}
+        onMoveContact={onMoveContact}
+        isFirst={isFirst}
+        isLast={isLast}
       />
       <div className="grid w-full grid-cols-1 space-y-6 sm:grid-cols-2 sm:space-y-0 sm:gap-y-4 xl:grid-cols-4 xl:gap-0">
         <ContactCardLabelAndData

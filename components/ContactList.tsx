@@ -14,11 +14,13 @@ export default function ContactList({
   contactFilters,
   setDialogState,
   onToggleFavorite,
+  onMoveContact,
 }: {
   contacts: Contact[]
   contactFilters: ContactFilters
   setDialogState: Dispatch<SetStateAction<DialogState>>
   onToggleFavorite: (contact: Contact) => void
+  onMoveContact: (contact: Contact, direction: "down" | "up") => void
 }) {
   const filteredPhoneBookEntries = filterContacts(contacts, contactFilters)
   const { shouldReduceMotion } = useMotionPreference()
@@ -43,7 +45,7 @@ export default function ContactList({
               <ContactListEmptyState hasContacts={contacts.length > 0} />
             </motion.div>
           )}
-          {filteredPhoneBookEntries.map((contact) => {
+          {filteredPhoneBookEntries.map((contact, contactIndex) => {
             return (
               <motion.div
                 key={contact.id}
@@ -59,6 +61,9 @@ export default function ContactList({
                   contact={contact}
                   setDialogState={setDialogState}
                   onToggleFavorite={onToggleFavorite}
+                  onMoveContact={onMoveContact}
+                  isLast={contactIndex === filteredPhoneBookEntries.length - 1}
+                  isFirst={contactIndex === 0}
                 />
               </motion.div>
             )

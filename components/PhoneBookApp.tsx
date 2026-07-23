@@ -51,6 +51,10 @@ export default function PhoneBookApp() {
     )
   }
 
+  const reorderContact = (contact: Contact, direction: "up" | "down") => {
+    send({ type: "MOVE_CONTACT", contactId: contact.id, direction })
+  }
+
   return (
     <>
       <ContactActionDialog
@@ -60,7 +64,7 @@ export default function PhoneBookApp() {
       />
 
       <div className="flex flex-col items-center justify-center space-y-6">
-        <div className="flex w-full flex-col gap-4">
+        <div id="filter" className="flex w-full flex-col gap-4">
           <SearchBar
             contactFilters={contactFilters}
             onSearchQueryChange={(searchQuery) =>
@@ -93,6 +97,7 @@ export default function PhoneBookApp() {
           contactFilters={contactFilters}
           setDialogState={setDialogState}
           onToggleFavorite={toggleFavorite}
+          onMoveContact={reorderContact}
         />
       </div>
     </>

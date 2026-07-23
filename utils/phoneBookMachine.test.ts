@@ -201,6 +201,37 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.stop()
   })
 
+  it("reorders contacts relative to a drop target", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+    const originalContactEntries = phoneBookActor.getSnapshot().context.contacts
+    const firstContact = originalContactEntries[0]
+    const fourthContact = originalContactEntries[3]
+    expect(firstContact).toBeDefined()
+    expect(fourthContact).toBeDefined()
+
+    phoneBookActor.send({
+      type: "MOVE_CONTACT_TO_CONTACT",
+      contactId: firstContact.id,
+      targetContactId: fourthContact.id,
+      insertAfter: true,
+    })
+
+    const contactsAfterMove = phoneBookActor.getSnapshot().context.contacts
+    expect(contactsAfterMove[3]).toEqual(
+      expect.objectContaining({ id: firstContact.id }),
+    )
+
+    const storedContacts = JSON.parse(
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
+    ) as { id: number; order?: number; age?: number }[]
+    expect(storedContacts[3]).toEqual(
+      expect.objectContaining({ id: firstContact.id, order: 3 }),
+    )
+    expect(storedContacts[3]).not.toHaveProperty("age")
+    phoneBookActor.stop()
+  })
+
   it("recalculates updated contacts before persistence", () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2026-07-20T12:00:00.000Z"))

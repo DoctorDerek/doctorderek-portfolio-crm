@@ -181,7 +181,9 @@ describe("phoneBookMachine persistence", () => {
     })
 
     const contactsAfterMove = phoneBookActor.getSnapshot().context.contacts
-    expect(contactsAfterMove[0]).toEqual(expect.objectContaining({ id: secondContact.id }))
+    expect(contactsAfterMove[0]).toEqual(
+      expect.objectContaining({ id: secondContact.id }),
+    )
     expect(contactsAfterMove[1]).toEqual(
       expect.objectContaining({ id: firstContact.id, order: 1 }),
     )
@@ -189,7 +191,9 @@ describe("phoneBookMachine persistence", () => {
     const storedContacts = JSON.parse(
       localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; order?: number; age?: number }[]
-    expect(storedContacts[0]).toEqual(expect.objectContaining({ id: secondContact.id }))
+    expect(storedContacts[0]).toEqual(
+      expect.objectContaining({ id: secondContact.id }),
+    )
     expect(storedContacts[1]).toEqual(
       expect.objectContaining({ id: firstContact.id, order: 1 }),
     )
@@ -221,15 +225,17 @@ describe("phoneBookMachine persistence", () => {
       expect.objectContaining({ id: originalContact.id, age: 25 }),
     )
 
-    const persistedContact = contacts.find(({ id }) => id === originalContact.id)
+    const persistedContact = contacts.find(
+      ({ id }) => id === originalContact.id,
+    )
     expect(persistedContact).toEqual(expect.objectContaining({ order: 0 }))
 
     const storedContacts = JSON.parse(
       localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; age?: number }[]
-    expect(storedContacts.find((contact) => contact.id === originalContact.id)).toEqual(
-      expect.objectContaining({ id: originalContact.id }),
-    )
+    expect(
+      storedContacts.find((contact) => contact.id === originalContact.id),
+    ).toEqual(expect.objectContaining({ id: originalContact.id }))
     expect(
       storedContacts.find((contact) => contact.id === originalContact.id),
     ).not.toHaveProperty("age")

@@ -35,18 +35,22 @@ function moveContactInOrder(
   contacts: Contact[],
   event: { type: "MOVE_CONTACT"; direction: "down" | "up"; contactId: number },
 ) {
+  const orderedContacts = ensureContactOrder(contacts)
   const { direction, contactId } = event
-  const currentIndex = contacts.findIndex(({ id }) => id === contactId)
+  const currentIndex = orderedContacts.findIndex(({ id }) => id === contactId)
   if (currentIndex < 0) return contacts
 
   const targetIndex = currentIndex + (direction === "down" ? 1 : -1)
-  if (targetIndex < 0 || targetIndex >= contacts.length) return contacts
+  if (targetIndex < 0 || targetIndex >= orderedContacts.length)
+    return orderedContacts
 
-  const nextContacts = [...contacts]
+  const nextContacts = [...orderedContacts]
   const [movedContact] = nextContacts.splice(currentIndex, 1)
   nextContacts.splice(targetIndex, 0, movedContact)
 
-  return ensureContactOrder(nextContacts)
+  return ensureContactOrder(
+    nextContacts.map((contact) => ({ ...contact, order: undefined })),
+  )
 }
 
 const phoneBookMachine = setup({

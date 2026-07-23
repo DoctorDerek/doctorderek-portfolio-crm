@@ -4,12 +4,50 @@ import { Contact } from "@/types/Contact"
 import { PersistenceFailure } from "@/types/PersistenceFailure"
 import { calculateAge } from "@/utils/calculateAge"
 import { getErrorMessage } from "@/utils/errors"
-import { sortByLastName } from "@/utils/sortByLastName"
 import parseStoredContacts, {
   serializeStoredContacts,
 } from "@/utils/storedContactsSchema"
 
 export const CONTACTS_STORAGE_KEY = "phonebook-filter-by-age"
+
+function ensureContactOrder(contacts: Contact[]) {
+  const normalizedContactEntries = contacts.map((contact, index) => ({
+    ...contact,
+    order: contact.order ?? index,
+  }))
+
+  return normalizedContactEntries
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map((contact, index) => ({ ...contact, order: index }))
+}
+
+function reassignContactAges(contacts: Contact[]) {
+  return contacts.map((contact) => {
+    const { birthYear, birthMonth, birthDay } = contact
+    return {
+      ...contact,
+      age: calculateAge({ birthYear, birthMonth, birthDay }),
+    }
+  })
+}
+
+function moveContactInOrder(
+  contacts: Contact[],
+  event: { type: "MOVE_CONTACT"; direction: "down" | "up"; contactId: number },
+) {
+  const { direction, contactId } = event
+  const currentIndex = contacts.findIndex(({ id }) => id === contactId)
+  if (currentIndex < 0) return contacts
+
+  const targetIndex = currentIndex + (direction === "down" ? 1 : -1)
+  if (targetIndex < 0 || targetIndex >= contacts.length) return contacts
+
+  const nextContacts = [...contacts]
+  const [movedContact] = nextContacts.splice(currentIndex, 1)
+  nextContacts.splice(targetIndex, 0, movedContact)
+
+  return ensureContactOrder(nextContacts)
+}
 
 const phoneBookMachine = setup({
   types: {} as {
@@ -23,6 +61,7 @@ const phoneBookMachine = setup({
       | { type: "UPDATE"; contact: Contact }
       | { type: "DELETE"; contact: Contact }
       | { type: "TOGGLE_FAVORITE"; contactId: number }
+      | { type: "MOVE_CONTACT"; contactId: number; direction: "up" | "down" }
       | { type: "CLEAR_PERSISTENCE_FAILURE" }
       | { type: "RESET" }
   },
@@ -36,9 +75,9 @@ const phoneBookMachine = setup({
         }
 
       try {
-        const contacts = parseStoredContacts(storedContacts)
-        contacts.sort(sortByLastName)
-        return { contacts, persistenceFailure: null }
+        const contacts = ensureContactOrder(parseStoredContacts(storedContacts))
+        const contactsWithAge = reassignContactAges(contacts)
+        return { contacts: contactsWithAge, persistenceFailure: null }
       } catch (error) {
         return {
           contacts: createDemonstrationContacts(),
@@ -56,8 +95,9 @@ const phoneBookMachine = setup({
         const newContact = {
           ...event.contact,
           age: calculateAge({ birthYear, birthMonth, birthDay }),
+          order: context.contacts.length,
         }
-        return [...context.contacts, newContact].sort(sortByLastName)
+        return ensureContactOrder([...context.contacts, newContact])
       },
     }),
     updateContact: assign({
@@ -68,11 +108,9 @@ const phoneBookMachine = setup({
           ...event.contact,
           age: calculateAge({ birthYear, birthMonth, birthDay }),
         }
-        return context.contacts
-          .map((contact) =>
-            contact.id === updatedContact.id ? updatedContact : contact,
-          )
-          .sort(sortByLastName)
+        return context.contacts.map((contact) =>
+          contact.id === updatedContact.id ? updatedContact : contact,
+        )
       },
     }),
     deleteContact: assign({
@@ -83,7 +121,7 @@ const phoneBookMachine = setup({
         const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
           ({ id }) => id !== deletedContact.id,
         )
-        return filteredPhoneBookEntries
+        return ensureContactOrder(filteredPhoneBookEntries)
       },
     }),
     toggleContactFavorite: assign({
@@ -119,6 +157,12 @@ const phoneBookMachine = setup({
     resetPhoneBookEntries: assign({
       contacts: () => createDemonstrationContacts(),
     }),
+    reorderContact: assign({
+      contacts: ({ context, event }) => {
+        if (event.type !== "MOVE_CONTACT") return context.contacts
+        return moveContactInOrder(context.contacts, event)
+      },
+    }),
   },
 }).createMachine({
   id: "phoneBook",
@@ -149,6 +193,9 @@ const phoneBookMachine = setup({
         },
         TOGGLE_FAVORITE: {
           actions: ["toggleContactFavorite", "writePhoneBookToLocalStorage"],
+        },
+        MOVE_CONTACT: {
+          actions: ["reorderContact", "writePhoneBookToLocalStorage"],
         },
         RESET: {
           actions: ["resetPhoneBookEntries", "writePhoneBookToLocalStorage"],

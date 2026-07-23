@@ -6,6 +6,7 @@ const canonicalContactSchema = z.object({
   id: z.number(),
   firstName: z.string(),
   lastName: z.string(),
+  order: z.number().int().nonnegative().optional(),
   birthYear: z.string().optional(),
   birthMonth: z.string().optional(),
   birthDay: z.string().optional(),

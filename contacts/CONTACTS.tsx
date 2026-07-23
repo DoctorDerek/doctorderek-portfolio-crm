@@ -99,5 +99,10 @@ export default function createDemonstrationContacts() {
   return DEMONSTRATION_CONTACTS.map((contact) => ({
     ...contact,
     age: calculateAge(contact),
-  })).sort(sortByLastName)
+  }))
+    .sort(sortByLastName)
+    .map((contact, index) => ({
+      ...contact,
+      order: index,
+    }))
 }

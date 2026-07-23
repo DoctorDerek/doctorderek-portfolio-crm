@@ -132,7 +132,7 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.stop()
   })
 
-  it("normalizes and sorts created contacts without mutating the event payload", () => {
+  it("normalizes and persists created contacts without mutating the event payload", () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2026-07-20T12:00:00.000Z"))
     const phoneBookActor = createActor(phoneBookMachine).start()
@@ -150,20 +150,54 @@ describe("phoneBookMachine persistence", () => {
 
     const contacts = phoneBookActor.getSnapshot().context.contacts
     expect(contact).not.toHaveProperty("age")
-    expect(contacts[0]).toEqual(expect.objectContaining({ id: 100, age: 26 }))
-    expect(contacts.map(({ lastName }) => lastName)).toEqual(
-      [...contacts.map(({ lastName }) => lastName)].sort(),
+    expect(contacts.at(-1)).toEqual(
+      expect.objectContaining({ id: 100, age: 26, order: contacts.length - 1 }),
     )
 
     const storedContacts = JSON.parse(
       localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; age?: number }[]
-    expect(storedContacts[0]).toEqual(expect.objectContaining({ id: 100 }))
-    expect(storedContacts[0]).not.toHaveProperty("age")
+    expect(storedContacts.at(-1)).toEqual(expect.objectContaining({ id: 100 }))
+    expect(storedContacts.at(-1)).toEqual(
+      expect.objectContaining({ order: contacts.length - 1 }),
+    )
+    expect(storedContacts.at(-1)).not.toHaveProperty("age")
     phoneBookActor.stop()
   })
 
-  it("recalculates and reorders updated contacts before persistence", () => {
+  it("reorders contacts while preserving other fields and persistence", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+    const originalContactEntries = phoneBookActor.getSnapshot().context.contacts
+    const firstContact = originalContactEntries[0]
+    const secondContact = originalContactEntries[1]
+    expect(firstContact).toBeDefined()
+    expect(secondContact).toBeDefined()
+
+    phoneBookActor.send({
+      type: "MOVE_CONTACT",
+      contactId: firstContact.id,
+      direction: "down",
+    })
+
+    const contactsAfterMove = phoneBookActor.getSnapshot().context.contacts
+    expect(contactsAfterMove[0]).toEqual(expect.objectContaining({ id: secondContact.id }))
+    expect(contactsAfterMove[1]).toEqual(
+      expect.objectContaining({ id: firstContact.id, order: 1 }),
+    )
+
+    const storedContacts = JSON.parse(
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
+    ) as { id: number; order?: number; age?: number }[]
+    expect(storedContacts[0]).toEqual(expect.objectContaining({ id: secondContact.id }))
+    expect(storedContacts[1]).toEqual(
+      expect.objectContaining({ id: firstContact.id, order: 1 }),
+    )
+    expect(storedContacts[1]).not.toHaveProperty("age")
+    phoneBookActor.stop()
+  })
+
+  it("recalculates updated contacts before persistence", () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2026-07-20T12:00:00.000Z"))
     const phoneBookActor = createActor(phoneBookMachine).start()
@@ -183,17 +217,22 @@ describe("phoneBookMachine persistence", () => {
     })
 
     const contacts = phoneBookActor.getSnapshot().context.contacts
-    expect(contacts.at(-1)).toEqual(
+    expect(contacts[0]).toEqual(
       expect.objectContaining({ id: originalContact.id, age: 25 }),
     )
+
+    const persistedContact = contacts.find(({ id }) => id === originalContact.id)
+    expect(persistedContact).toEqual(expect.objectContaining({ order: 0 }))
 
     const storedContacts = JSON.parse(
       localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { id: number; age?: number }[]
-    expect(storedContacts.at(-1)).toEqual(
+    expect(storedContacts.find((contact) => contact.id === originalContact.id)).toEqual(
       expect.objectContaining({ id: originalContact.id }),
     )
-    expect(storedContacts.at(-1)).not.toHaveProperty("age")
+    expect(
+      storedContacts.find((contact) => contact.id === originalContact.id),
+    ).not.toHaveProperty("age")
     phoneBookActor.stop()
   })
 

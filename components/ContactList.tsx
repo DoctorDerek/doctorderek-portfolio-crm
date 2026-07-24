@@ -35,10 +35,14 @@ export default function ContactList({
   const [activeDragContactId, setActiveDragContactId] = useState<number | null>(
     null,
   )
-  const visibleContactIds =
-    reorderedFilteredContactIds.length === filteredContactIds.length
-      ? reorderedFilteredContactIds
-      : filteredContactIds
+  const hasSameReorderedContactIds =
+    reorderedFilteredContactIds.length === filteredContactIds.length &&
+    reorderedFilteredContactIds.every((contactId) =>
+      filteredContactIds.includes(contactId),
+    )
+  const visibleContactIds = hasSameReorderedContactIds
+    ? reorderedFilteredContactIds
+    : filteredContactIds
 
   const contactTransition = { duration: shouldReduceMotion ? 0 : 0.2 }
 

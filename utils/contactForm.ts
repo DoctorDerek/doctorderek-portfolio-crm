@@ -62,7 +62,10 @@ export const contactFormSchema = z
       })
     }
 
-    if (formValues.phoneNumber !== "" && !PHONE_PATTERN.test(formValues.phoneNumber)) {
+    if (
+      formValues.phoneNumber !== "" &&
+      !PHONE_PATTERN.test(formValues.phoneNumber)
+    ) {
       refinementContext.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["phoneNumber"],

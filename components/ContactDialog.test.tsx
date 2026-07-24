@@ -203,7 +203,9 @@ describe("contact dialog validation and review", () => {
       </Providers>,
     )
 
-    expect(screen.getByLabelText("First Name")).toHaveValue(alternateContact.firstName)
+    expect(screen.getByLabelText("First Name")).toHaveValue(
+      alternateContact.firstName,
+    )
     expect(screen.getByLabelText("Email Address")).toHaveValue(
       alternateContact.email,
     )
@@ -294,9 +296,9 @@ describe("contact dialog validation and review", () => {
     expect(
       await screen.findByText("Please enter a valid phone number."),
     ).toBeInTheDocument()
-    expect(screen.getByRole("list").querySelector('[aria-current="step"]')).toHaveTextContent(
-      "Contact information",
-    )
+    expect(
+      screen.getByRole("list").querySelector('[aria-current="step"]'),
+    ).toHaveTextContent("Contact information")
   })
 
   it("clears optional update values while preserving hidden address inputs", async () => {

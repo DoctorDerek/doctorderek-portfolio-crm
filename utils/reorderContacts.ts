@@ -29,7 +29,8 @@ export default function reorderContacts({
     return contacts as Contact[]
 
   const filteredContactIdSet = new Set(filteredContactIds)
-  if (filteredContactIdSet.size !== filteredContactIds.length) return contacts as Contact[]
+  if (filteredContactIdSet.size !== filteredContactIds.length)
+    return contacts as Contact[]
 
   const reorderedFilteredContactIdSet = new Set(reorderedFilteredContactIds)
   if (
@@ -57,7 +58,10 @@ export default function reorderContacts({
 
   const nextContacts = [...contacts]
 
-  for (const [visibleSlotIndex, contactId] of reorderedFilteredContactIds.entries()) {
+  for (const [
+    visibleSlotIndex,
+    contactId,
+  ] of reorderedFilteredContactIds.entries()) {
     const visibleSlot = visibleSlotIndexes[visibleSlotIndex]
     const contact = filteredContactById.get(contactId)
     if (contact === undefined || visibleSlot === undefined) {

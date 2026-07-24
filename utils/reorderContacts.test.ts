@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
-import reorderContacts from "@/utils/reorderContacts"
 import type { Contact } from "@/types/Contact"
+import reorderContacts from "@/utils/reorderContacts"
 
 const makeContact = (id: number, order = 0): Contact => ({
   id,
@@ -25,13 +25,7 @@ describe("reorderContacts", () => {
       reorderedFilteredContactIds: [2, 1, 3],
     })
 
-    expect(reorderedContacts.map(({ id }) => id)).toEqual([
-      2,
-      99,
-      1,
-      3,
-      100,
-    ])
+    expect(reorderedContacts.map(({ id }) => id)).toEqual([2, 99, 1, 3, 100])
   })
 
   it("returns the original list for mismatched reorder payloads", () => {

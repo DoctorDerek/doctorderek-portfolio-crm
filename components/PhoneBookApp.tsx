@@ -55,16 +55,14 @@ export default function PhoneBookApp() {
     send({ type: "MOVE_CONTACT", contactId: contact.id, direction })
   }
 
-  const moveContactToContact = (
-    contactId: number,
-    targetContactId: number,
-    insertAfter: boolean,
+  const reorderFilteredContacts = (
+    filteredContactIds: number[],
+    reorderedFilteredContactIds: number[],
   ) => {
     send({
-      type: "MOVE_CONTACT_TO_CONTACT",
-      contactId,
-      targetContactId,
-      insertAfter,
+      type: "REORDER_FILTERED_CONTACTS",
+      filteredContactIds,
+      reorderedFilteredContactIds,
     })
   }
 
@@ -113,7 +111,7 @@ export default function PhoneBookApp() {
           setDialogState={setDialogState}
           onToggleFavorite={toggleFavorite}
           onMoveContact={reorderContact}
-          onMoveContactToContact={moveContactToContact}
+          onReorderFilteredContacts={reorderFilteredContacts}
         />
       </div>
     </>

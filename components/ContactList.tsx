@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "motion/react"
-import { Dispatch, DragEvent, SetStateAction, useState } from "react"
+import { AnimatePresence, Reorder, motion } from "motion/react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import ContactCard from "@/components/ContactCard"
 import ContactListEmptyState from "@/components/ContactListEmptyState"
 import ContactResultsSummary from "@/components/ContactResultsSummary"
@@ -15,62 +15,49 @@ export default function ContactList({
   setDialogState,
   onToggleFavorite,
   onMoveContact,
-  onMoveContactToContact,
+  onReorderFilteredContacts,
 }: {
   contacts: Contact[]
   contactFilters: ContactFilters
   setDialogState: Dispatch<SetStateAction<DialogState>>
   onToggleFavorite: (contact: Contact) => void
   onMoveContact: (contact: Contact, direction: "down" | "up") => void
-  onMoveContactToContact: (
-    contactId: number,
-    targetContactId: number,
-    insertAfter: boolean,
+  onReorderFilteredContacts?: (
+    filteredContactIds: number[],
+    reorderedFilteredContactIds: number[],
   ) => void
 }) {
   const filteredPhoneBookEntries = filterContacts(contacts, contactFilters)
   const { shouldReduceMotion } = useMotionPreference()
-  const contactTransition = { duration: shouldReduceMotion ? 0 : 0.2 }
-  const [draggingContactId, setDraggingContactId] = useState<number | null>(
+  const filteredContactIds = filteredPhoneBookEntries.map(({ id }) => id)
+  const [reorderContactIds, setReorderContactIds] =
+    useState<number[]>(filteredContactIds)
+  const [activeDragContactId, setActiveDragContactId] = useState<number | null>(
     null,
   )
 
-  const handleMoveContactByDrop = (
-    targetContact: Contact,
-    event: DragEvent<HTMLDivElement>,
-  ) => {
-    event.preventDefault()
-    const payload = event.dataTransfer.getData("text/plain")
-    const sourceContactId = Number(payload)
+  useEffect(() => {
+    setReorderContactIds(filteredContactIds)
+  }, [filteredContactIds])
 
-    if (!Number.isFinite(sourceContactId) || payload.length === 0) {
-      return
-    }
+  const isSameReorderedList = (nextContactIds: number[]) =>
+    nextContactIds.length === filteredContactIds.length &&
+    nextContactIds.every((contactId, index) => filteredContactIds[index] === contactId)
 
-    const { id: targetContactId } = targetContact
-    if (sourceContactId === targetContactId) return
+  const contactTransition = { duration: shouldReduceMotion ? 0 : 0.2 }
 
-    const dropTarget = event.currentTarget.getBoundingClientRect()
-    const shouldInsertAfter =
-      event.clientY > dropTarget.top + dropTarget.height / 2
-
-    onMoveContactToContact(sourceContactId, targetContactId, shouldInsertAfter)
-    setDraggingContactId(null)
+  const handleReorder = (nextContactIds: number[]) => {
+    setReorderContactIds(nextContactIds)
   }
 
-  const handleMoveContactDragStart = (
-    contact: Contact,
-    event: DragEvent<HTMLDivElement>,
-  ) => {
-    setDraggingContactId(contact.id)
-    event.dataTransfer.setData("text/plain", String(contact.id))
-    event.dataTransfer.effectAllowed = "move"
+  const handleDragEnd = () => {
+    if (!onReorderFilteredContacts) return
+    onReorderFilteredContacts(filteredContactIds, reorderContactIds)
+    setActiveDragContactId(null)
   }
 
-  const handleMoveContactDragOver = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    event.dataTransfer.dropEffect = "move"
-  }
+  const findContactById = (contactId: number) =>
+    filteredPhoneBookEntries.find(({ id }) => id === contactId)
 
   return (
     <section className="relative w-full space-y-4" aria-label="Contact results">
@@ -79,7 +66,7 @@ export default function ContactList({
         totalContactCount={contacts.length}
       />
       <div className="space-y-6">
-        <AnimatePresence initial={false} mode="popLayout">
+        <AnimatePresence initial={false} mode="wait">
           {filteredPhoneBookEntries.length === 0 && (
             <motion.div
               key="contact-list-empty-state"
@@ -91,43 +78,47 @@ export default function ContactList({
               <ContactListEmptyState hasContacts={contacts.length > 0} />
             </motion.div>
           )}
-          {filteredPhoneBookEntries.map((contact, contactIndex) => {
+        </AnimatePresence>
+        <Reorder.Group
+          axis="y"
+          values={reorderContactIds}
+          onReorder={handleReorder}
+          disabled={shouldReduceMotion}
+        >
+          {reorderContactIds.map((contactId, contactIndex) => {
+            const contact = findContactById(contactId)
+            if (!contact) return null
+
             return (
-              <motion.div
+              <Reorder.Item
                 key={contact.id}
-                draggable
-                onDragStart={(event) =>
-                  handleMoveContactDragStart(contact, event)
-                }
-                onDragOver={(event) => handleMoveContactDragOver(event)}
-                onDrop={(event) => handleMoveContactByDrop(contact, event)}
-                onDragEnd={() => setDraggingContactId(null)}
-                onDragCancel={() => setDraggingContactId(null)}
+                value={contact.id}
                 layout={shouldReduceMotion ? false : "position"}
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={
-                  shouldReduceMotion ? undefined : { opacity: 0, scale: 0.98 }
-                }
+                exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
                 transition={contactTransition}
                 className={
-                  draggingContactId === contact.id
+                  activeDragContactId === contact.id
                     ? "cursor-grabbing"
                     : "cursor-grab"
                 }
+                onDragStart={() => setActiveDragContactId(contact.id)}
+                onDragEnd={handleDragEnd}
+                onDragCancel={() => setActiveDragContactId(null)}
               >
                 <ContactCard
                   contact={contact}
                   setDialogState={setDialogState}
                   onToggleFavorite={onToggleFavorite}
                   onMoveContact={onMoveContact}
-                  isLast={contactIndex === filteredPhoneBookEntries.length - 1}
+                  isLast={contactIndex === reorderContactIds.length - 1}
                   isFirst={contactIndex === 0}
                 />
-              </motion.div>
+              </Reorder.Item>
             )
           })}
-        </AnimatePresence>
+        </Reorder.Group>
       </div>
     </section>
   )

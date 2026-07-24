@@ -47,12 +47,15 @@ export default function ContactList({
   const contactTransition = { duration: shouldReduceMotion ? 0 : 0.2 }
 
   const handleReorder = (nextContactIds: number[]) => {
+    if (shouldReduceMotion) return
     setReorderedFilteredContactIds(nextContactIds)
   }
 
   const handleDragEnd = () => {
     if (!onReorderFilteredContacts) return
-    onReorderFilteredContacts(filteredContactIds, visibleContactIds)
+    if (!hasSameReorderedContactIds) {
+      onReorderFilteredContacts(filteredContactIds, reorderedFilteredContactIds)
+    }
     setActiveDragContactId(null)
   }
 
@@ -83,7 +86,6 @@ export default function ContactList({
           axis="y"
           values={visibleContactIds}
           onReorder={handleReorder}
-          disabled={shouldReduceMotion}
         >
           {visibleContactIds.map((contactId, contactIndex) => {
             const contact = findContactById(contactId)
@@ -93,7 +95,7 @@ export default function ContactList({
               <Reorder.Item
                 key={contact.id}
                 value={contact.id}
-                layout={shouldReduceMotion ? false : "position"}
+                layout={shouldReduceMotion ? undefined : "position"}
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={
@@ -107,7 +109,6 @@ export default function ContactList({
                 }
                 onDragStart={() => setActiveDragContactId(contact.id)}
                 onDragEnd={handleDragEnd}
-                onDragCancel={() => setActiveDragContactId(null)}
               >
                 <ContactCard
                   contact={contact}

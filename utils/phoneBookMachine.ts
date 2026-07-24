@@ -7,6 +7,7 @@ import { getErrorMessage } from "@/utils/errors"
 import parseStoredContacts, {
   serializeStoredContacts,
 } from "@/utils/storedContactsSchema"
+import reorderContacts from "@/utils/reorderContacts"
 
 export const CONTACTS_STORAGE_KEY = "phonebook-filter-by-age"
 
@@ -103,12 +104,17 @@ const phoneBookMachine = setup({
       | { type: "DELETE"; contact: Contact }
       | { type: "TOGGLE_FAVORITE"; contactId: number }
       | { type: "MOVE_CONTACT"; contactId: number; direction: "up" | "down" }
-      | {
+        | {
           type: "MOVE_CONTACT_TO_CONTACT"
           contactId: number
           targetContactId: number
           insertAfter: boolean
         }
+        | {
+            type: "REORDER_FILTERED_CONTACTS"
+            filteredContactIds: number[]
+            reorderedFilteredContactIds: number[]
+          }
       | { type: "CLEAR_PERSISTENCE_FAILURE" }
       | { type: "RESET" }
   },
@@ -216,6 +222,18 @@ const phoneBookMachine = setup({
         return moveContactToContact(context.contacts, event)
       },
     }),
+    reorderFilteredContacts: assign({
+      contacts: ({ context, event }) => {
+        if (event.type !== "REORDER_FILTERED_CONTACTS") return context.contacts
+        const nextContacts = reorderContacts({
+          contacts: context.contacts,
+          filteredContactIds: event.filteredContactIds,
+          reorderedFilteredContactIds: event.reorderedFilteredContactIds,
+        })
+        if (nextContacts === context.contacts) return context.contacts
+        return ensureContactOrder(nextContacts)
+      },
+    }),
   },
 }).createMachine({
   id: "phoneBook",
@@ -252,6 +270,9 @@ const phoneBookMachine = setup({
         },
         MOVE_CONTACT_TO_CONTACT: {
           actions: ["reorderContactToContact", "writePhoneBookToLocalStorage"],
+        },
+        REORDER_FILTERED_CONTACTS: {
+          actions: ["reorderFilteredContacts", "writePhoneBookToLocalStorage"],
         },
         RESET: {
           actions: ["resetPhoneBookEntries", "writePhoneBookToLocalStorage"],

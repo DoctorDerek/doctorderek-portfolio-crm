@@ -232,6 +232,79 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.stop()
   })
 
+  it("reorders filtered contacts while preserving non-visible contacts", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+
+    const originalContacts = phoneBookActor.getSnapshot().context.contacts
+    const filteredContactIds = [
+      originalContacts[0].id,
+      originalContacts[2].id,
+      originalContacts[3].id,
+    ]
+    const reorderedFilteredContactIds = [
+      filteredContactIds[2],
+      filteredContactIds[0],
+      filteredContactIds[1],
+    ]
+
+    phoneBookActor.send({
+      type: "REORDER_FILTERED_CONTACTS",
+      filteredContactIds,
+      reorderedFilteredContactIds,
+    })
+
+    const reorderedContacts = phoneBookActor.getSnapshot().context.contacts
+    expect(reorderedContacts.map(({ id }) => id)).toEqual([
+      originalContacts[3].id,
+      originalContacts[1].id,
+      originalContacts[0].id,
+      originalContacts[2].id,
+      originalContacts[4].id,
+      originalContacts[5].id,
+    ])
+    const storedContacts = JSON.parse(
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
+    ) as { id: number; order?: number; age?: number }[]
+
+    expect(storedContacts.map(({ id }) => id)).toEqual([
+      originalContacts[3].id,
+      originalContacts[1].id,
+      originalContacts[0].id,
+      originalContacts[2].id,
+      originalContacts[4].id,
+      originalContacts[5].id,
+    ])
+    expect(storedContacts[3]).toEqual(
+      expect.objectContaining({ id: originalContacts[2].id, order: 3 }),
+    )
+    expect(storedContacts[3]).not.toHaveProperty("age")
+    phoneBookActor.stop()
+  })
+
+  it("ignores malformed filtered reorder payloads without mutating order", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+
+    const originalContacts = phoneBookActor.getSnapshot().context.contacts
+    const filteredContactIds = [originalContacts[0].id, originalContacts[1].id]
+    const reorderedFilteredContactIds = [filteredContactIds[0], 99999]
+
+    phoneBookActor.send({
+      type: "REORDER_FILTERED_CONTACTS",
+      filteredContactIds,
+      reorderedFilteredContactIds,
+    })
+
+    expect(phoneBookActor.getSnapshot().context.contacts).toEqual(
+      originalContacts,
+    )
+    expect(localStorage.getItem(CONTACTS_STORAGE_KEY)).toContain(
+      String(originalContacts[0].id),
+    )
+    phoneBookActor.stop()
+  })
+
   it("recalculates updated contacts before persistence", () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2026-07-20T12:00:00.000Z"))

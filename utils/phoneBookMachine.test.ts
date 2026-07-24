@@ -305,6 +305,26 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.stop()
   })
 
+  it("ignores duplicate IDs in filtered reorder payloads without mutating order", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+
+    const originalContacts = phoneBookActor.getSnapshot().context.contacts
+    phoneBookActor.send({
+      type: "REORDER_FILTERED_CONTACTS",
+      filteredContactIds: [originalContacts[0].id, originalContacts[1].id],
+      reorderedFilteredContactIds: [
+        originalContacts[0].id,
+        originalContacts[0].id,
+      ],
+    })
+
+    expect(phoneBookActor.getSnapshot().context.contacts).toEqual(
+      originalContacts,
+    )
+    phoneBookActor.stop()
+  })
+
   it("recalculates updated contacts before persistence", () => {
     vi.useFakeTimers()
     vi.setSystemTime(new Date("2026-07-20T12:00:00.000Z"))

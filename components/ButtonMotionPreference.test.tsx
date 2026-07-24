@@ -32,7 +32,9 @@ function expectMotionPreference(
   motionPreference: "system" | "reduce" | "full",
   shouldReduceMotion: boolean,
 ) {
-  expect(screen.getByLabelText("Reduced motion")).toHaveValue(motionPreference)
+  expect(screen.getByLabelText("Motion preference")).toHaveValue(
+    motionPreference,
+  )
   expect(screen.getByLabelText("Motion preference status")).toHaveAttribute(
     "data-reduced",
     String(shouldReduceMotion),
@@ -92,7 +94,7 @@ describe("motion preference", () => {
     systemShouldReduceMotion = true
     renderMotionPreference()
 
-    const motionPreferenceSelect = screen.getByLabelText("Reduced motion")
+    const motionPreferenceSelect = screen.getByLabelText("Motion preference")
     fireEvent.change(motionPreferenceSelect, { target: { value: "full" } })
 
     expectMotionPreference("full", false)

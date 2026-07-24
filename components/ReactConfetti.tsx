@@ -1,8 +1,8 @@
 "use client"
 
+import { useReducedMotion } from "motion/react"
 import { useEffect, useState } from "react"
 import Confetti from "react-confetti"
-import { useReducedMotion } from "motion/react"
 
 type Size = {
   width: number | undefined

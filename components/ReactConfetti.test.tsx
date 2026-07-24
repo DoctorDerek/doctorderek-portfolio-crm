@@ -5,9 +5,8 @@ import ReactConfetti from "@/components/ReactConfetti"
 let shouldReduceMotion = false
 
 vi.mock("motion/react", async () => {
-  const actual = await vi.importActual<typeof import("motion/react")>(
-    "motion/react",
-  )
+  const actual =
+    await vi.importActual<typeof import("motion/react")>("motion/react")
   return {
     ...actual,
     useReducedMotion: () => shouldReduceMotion,

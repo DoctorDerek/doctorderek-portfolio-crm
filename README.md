@@ -15,7 +15,7 @@ A local-first portfolio CRM with accessible CRUD workflows, age filtering, anima
 - Compose free-text search, age ranges, and favorites-only filtering with consistent last-name sorting.
 - Mark favorite contacts and retain that preference across edits and reloads.
 - Persist contact changes across reloads without an account or remote database.
-- Switch themes and opt in or out of motion independently through keyboard-operable controls.
+- Respect browser and operating-system reduced-motion settings for animations.
 - Receive accessible toast feedback after successful mutations or browser-storage failures.
 - Use the same responsive interface across phone, tablet, and desktop layouts.
 

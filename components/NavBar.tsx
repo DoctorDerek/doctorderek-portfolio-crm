@@ -78,7 +78,7 @@ export default function NavBar() {
     <>
       <nav className="flex w-full items-center justify-between bg-black p-6 text-xs tracking-widest text-white uppercase">
         <div className="flex items-center space-x-12">
-          <span className="text-base">NavBar</span>
+          <span className="text-base">@DoctorDerek</span>
           <div className="hidden items-center space-x-12 xl:flex">
             <NavBarLinks />
           </div>

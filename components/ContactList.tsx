@@ -1,5 +1,5 @@
-import { AnimatePresence, Reorder, motion } from "motion/react"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { AnimatePresence, motion, Reorder } from "motion/react"
+import { Dispatch, SetStateAction, useState } from "react"
 import ContactCard from "@/components/ContactCard"
 import ContactListEmptyState from "@/components/ContactListEmptyState"
 import ContactResultsSummary from "@/components/ContactResultsSummary"
@@ -30,29 +30,25 @@ export default function ContactList({
   const filteredPhoneBookEntries = filterContacts(contacts, contactFilters)
   const { shouldReduceMotion } = useMotionPreference()
   const filteredContactIds = filteredPhoneBookEntries.map(({ id }) => id)
-  const [reorderContactIds, setReorderContactIds] =
+  const [reorderedFilteredContactIds, setReorderedFilteredContactIds] =
     useState<number[]>(filteredContactIds)
   const [activeDragContactId, setActiveDragContactId] = useState<number | null>(
     null,
   )
-
-  useEffect(() => {
-    setReorderContactIds(filteredContactIds)
-  }, [filteredContactIds])
-
-  const isSameReorderedList = (nextContactIds: number[]) =>
-    nextContactIds.length === filteredContactIds.length &&
-    nextContactIds.every((contactId, index) => filteredContactIds[index] === contactId)
+  const visibleContactIds =
+    reorderedFilteredContactIds.length === filteredContactIds.length
+      ? reorderedFilteredContactIds
+      : filteredContactIds
 
   const contactTransition = { duration: shouldReduceMotion ? 0 : 0.2 }
 
   const handleReorder = (nextContactIds: number[]) => {
-    setReorderContactIds(nextContactIds)
+    setReorderedFilteredContactIds(nextContactIds)
   }
 
   const handleDragEnd = () => {
     if (!onReorderFilteredContacts) return
-    onReorderFilteredContacts(filteredContactIds, reorderContactIds)
+    onReorderFilteredContacts(filteredContactIds, visibleContactIds)
     setActiveDragContactId(null)
   }
 
@@ -81,11 +77,11 @@ export default function ContactList({
         </AnimatePresence>
         <Reorder.Group
           axis="y"
-          values={reorderContactIds}
+          values={visibleContactIds}
           onReorder={handleReorder}
           disabled={shouldReduceMotion}
         >
-          {reorderContactIds.map((contactId, contactIndex) => {
+          {visibleContactIds.map((contactId, contactIndex) => {
             const contact = findContactById(contactId)
             if (!contact) return null
 
@@ -96,7 +92,9 @@ export default function ContactList({
                 layout={shouldReduceMotion ? false : "position"}
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
+                exit={
+                  shouldReduceMotion ? undefined : { opacity: 0, scale: 0.98 }
+                }
                 transition={contactTransition}
                 className={
                   activeDragContactId === contact.id
@@ -112,7 +110,7 @@ export default function ContactList({
                   setDialogState={setDialogState}
                   onToggleFavorite={onToggleFavorite}
                   onMoveContact={onMoveContact}
-                  isLast={contactIndex === reorderContactIds.length - 1}
+                  isLast={contactIndex === visibleContactIds.length - 1}
                   isFirst={contactIndex === 0}
                 />
               </Reorder.Item>

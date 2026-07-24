@@ -76,6 +76,8 @@ export default function PhoneBookApp() {
         contacts={contacts}
       />
 
+      <h1 className="sr-only">Portfolio CRM</h1>
+
       <div className="flex flex-col items-center justify-center space-y-6">
         <div id="filter" className="flex w-full flex-col gap-4">
           <SearchBar

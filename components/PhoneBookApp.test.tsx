@@ -23,6 +23,9 @@ describe("contact discovery", () => {
 
   it("composes free-text search and age-range selection", async () => {
     renderPhoneBookApp()
+    expect(
+      screen.getByRole("heading", { name: "Portfolio CRM", level: 1 }),
+    ).toBeInTheDocument()
     await screen.findByText("Jessica Christian")
 
     fireEvent.change(

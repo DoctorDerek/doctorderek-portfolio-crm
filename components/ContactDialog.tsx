@@ -99,9 +99,9 @@ export default function ContactDialog({
         aria-hidden="true"
       />
 
-      <div className="fixed inset-0 flex items-center justify-center p-4">
+      <div className="fixed inset-0 flex items-center justify-center overflow-y-auto p-4">
         <form onSubmit={submitDialog}>
-          <Dialog.Panel className="relative mx-auto flex min-h-[75vh] max-w-lg flex-col justify-between space-y-4 rounded-lg bg-gray-100 p-6 text-lg dark:bg-gray-800">
+          <Dialog.Panel className="relative mx-auto flex max-h-[100dvh] min-h-[75vh] w-full max-w-lg flex-col justify-between space-y-4 overflow-y-auto rounded-lg bg-gray-100 p-6 text-lg dark:bg-gray-800">
             <div>
               <ContactDialogClose closeDialog={closeDialog} />
               <ContactDialogTitle dialogState={dialogState} />

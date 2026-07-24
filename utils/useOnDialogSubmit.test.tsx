@@ -155,6 +155,7 @@ describe("contact action notifications", () => {
   it("clears optional update values without replacing immutable metadata", () => {
     const existingContact = {
       ...contact,
+      order: 5,
       photo: "jessica.png",
       isFavorite: true,
     }
@@ -189,6 +190,7 @@ describe("contact action notifications", () => {
         id: existingContact.id,
         firstName: "Jessica",
         lastName: "Christian",
+        order: 5,
         birthYear: undefined,
         birthMonth: undefined,
         birthDay: undefined,

@@ -190,8 +190,10 @@ describe("contact dialog validation and review", () => {
       </Providers>,
     )
 
-    expect(getByLabelText("First Name")).toHaveValue(existingContact.firstName)
     expect(getByLabelText("Email Address")).toHaveValue(existingContact.email)
+    fireEvent.click(screen.getByRole("button", { name: "Next" }))
+    await expectInformationStep()
+    expect(getByLabelText("First Name")).toHaveValue(existingContact.firstName)
 
     rerender(
       <Providers>
@@ -206,8 +208,19 @@ describe("contact dialog validation and review", () => {
     expect(screen.getByLabelText("First Name")).toHaveValue(
       alternateContact.firstName,
     )
-    expect(screen.getByLabelText("Email Address")).toHaveValue(
-      alternateContact.email,
+    fireEvent.click(screen.getByRole("button", { name: "Back" }))
+    await waitFor(() => {
+      expect(screen.getByLabelText("Email Address")).toHaveValue(
+        alternateContact.email,
+      )
+    })
+    fireEvent.click(screen.getByRole("button", { name: "Next" }))
+    await expectInformationStep()
+    expect(
+      screen.getByRole("list").querySelector('[aria-current="step"]'),
+    ).toHaveTextContent("Contact information")
+    expect(screen.getByLabelText("First Name")).toHaveValue(
+      alternateContact.firstName,
     )
   })
 

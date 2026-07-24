@@ -1,10 +1,11 @@
 import {
+  Bars3Icon,
   ChevronDownIcon,
   ChevronUpIcon,
   UserIcon,
 } from "@heroicons/react/24/solid"
 import Image from "next/image"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, PointerEvent, SetStateAction } from "react"
 import ButtonDelete from "@/components/ButtonDelete"
 import ButtonFavorite from "@/components/ButtonFavorite"
 import ContactCardName from "@/components/ContactCardName"
@@ -19,12 +20,14 @@ export default function ContactCardPhotoAndHeading({
   setDialogState,
   onToggleFavorite,
   onMoveContact,
+  onDragStart,
   isFirst,
   isLast,
 }: {
   contact: Contact
   setDialogState?: Dispatch<SetStateAction<DialogState>>
   onToggleFavorite?: (contact: Contact) => void
+  onDragStart?: (event: PointerEvent) => void
   onMoveContact?: (contact: Contact, direction: "up" | "down") => void
   isFirst?: boolean
   isLast?: boolean
@@ -58,6 +61,19 @@ export default function ContactCardPhotoAndHeading({
       </div>
       {onToggleFavorite && setDialogState && (
         <div className="flex items-center gap-1 self-end sm:self-start">
+          <button
+            type="button"
+            aria-label={`Reorder ${contactName} by dragging`}
+            className="flex h-10 w-10 shrink-0 cursor-grab items-center justify-center rounded-full border border-dashed border-white/40 text-purple-600 transition-colors hover:bg-purple-100 hover:text-purple-700 dark:border-purple-500/50 dark:text-purple-300 dark:hover:bg-purple-950 dark:hover:text-purple-200"
+            onPointerDown={(event) => {
+              onDragStart?.(event)
+            }}
+            onPointerUp={(event) => {
+              event.currentTarget.blur()
+            }}
+          >
+            <Bars3Icon className="h-5 w-5" aria-hidden="true" />
+          </button>
           <button
             type="button"
             aria-label={`Move ${contactName} up`}

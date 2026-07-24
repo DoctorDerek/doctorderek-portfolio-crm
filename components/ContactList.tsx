@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, Reorder } from "motion/react"
+import { AnimatePresence, motion, Reorder, useDragControls } from "motion/react"
 import { Dispatch, SetStateAction, useState } from "react"
 import ContactCard from "@/components/ContactCard"
 import ContactListEmptyState from "@/components/ContactListEmptyState"
@@ -32,15 +32,20 @@ export default function ContactList({
   const filteredContactIds = filteredPhoneBookEntries.map(({ id }) => id)
   const [reorderedFilteredContactIds, setReorderedFilteredContactIds] =
     useState<number[]>(filteredContactIds)
-  const [activeDragContactId, setActiveDragContactId] = useState<number | null>(
-    null,
-  )
-  const hasSameReorderedContactIds =
+  const [reorderAnnouncement, setReorderAnnouncement] = useState("")
+  const reorderedContactIdSet = new Set(reorderedFilteredContactIds)
+  const hasReorderedContactIdSet =
     reorderedFilteredContactIds.length === filteredContactIds.length &&
+    reorderedContactIdSet.size === filteredContactIds.length &&
     reorderedFilteredContactIds.every((contactId) =>
       filteredContactIds.includes(contactId),
     )
-  const visibleContactIds = hasSameReorderedContactIds
+  const hasReorderedContactOrder =
+    hasReorderedContactIdSet &&
+    reorderedFilteredContactIds.every(
+      (contactId, index) => contactId === filteredContactIds[index],
+    )
+  const visibleContactIds = hasReorderedContactIdSet
     ? reorderedFilteredContactIds
     : filteredContactIds
 
@@ -51,12 +56,36 @@ export default function ContactList({
     setReorderedFilteredContactIds(nextContactIds)
   }
 
+  const announceReorder = (nextContactIds: number[]) => {
+    const movedContactIndex = nextContactIds.findIndex(
+      (contactId, index) => contactId !== filteredContactIds[index],
+    )
+    if (movedContactIndex < 0) {
+      setReorderAnnouncement("")
+      return
+    }
+
+    const movedContactId = nextContactIds[movedContactIndex]
+    const movedContact = findContactById(movedContactId)
+    if (!movedContact) {
+      setReorderAnnouncement("")
+      return
+    }
+
+    const position = movedContactIndex + 1
+    setReorderAnnouncement(
+      `${movedContact.firstName} ${movedContact.lastName} moved to position ${position}.`,
+    )
+  }
+
   const handleDragEnd = () => {
     if (!onReorderFilteredContacts) return
-    if (!hasSameReorderedContactIds) {
+    if (!hasReorderedContactOrder) {
+      announceReorder(reorderedFilteredContactIds)
       onReorderFilteredContacts(filteredContactIds, reorderedFilteredContactIds)
+    } else {
+      setReorderAnnouncement("")
     }
-    setActiveDragContactId(null)
   }
 
   const findContactById = (contactId: number) =>
@@ -64,6 +93,9 @@ export default function ContactList({
 
   return (
     <section className="relative w-full space-y-4" aria-label="Contact results">
+      <p aria-live="polite" aria-atomic="true" className="sr-only">
+        {reorderAnnouncement}
+      </p>
       <ContactResultsSummary
         filteredContactCount={filteredPhoneBookEntries.length}
         totalContactCount={contacts.length}
@@ -92,37 +124,73 @@ export default function ContactList({
             if (!contact) return null
 
             return (
-              <Reorder.Item
+              <SortableContact
                 key={contact.id}
-                value={contact.id}
-                layout={shouldReduceMotion ? undefined : "position"}
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={
-                  shouldReduceMotion ? undefined : { opacity: 0, scale: 0.98 }
-                }
-                transition={contactTransition}
-                className={
-                  activeDragContactId === contact.id
-                    ? "cursor-grabbing"
-                    : "cursor-grab"
-                }
-                onDragStart={() => setActiveDragContactId(contact.id)}
+                contact={contact}
+                shouldReduceMotion={shouldReduceMotion}
+                contactTransition={contactTransition}
                 onDragEnd={handleDragEnd}
-              >
-                <ContactCard
-                  contact={contact}
-                  setDialogState={setDialogState}
-                  onToggleFavorite={onToggleFavorite}
-                  onMoveContact={onMoveContact}
-                  isLast={contactIndex === visibleContactIds.length - 1}
-                  isFirst={contactIndex === 0}
-                />
-              </Reorder.Item>
+                setDialogState={setDialogState}
+                onToggleFavorite={onToggleFavorite}
+                onMoveContact={onMoveContact}
+                isFirst={contactIndex === 0}
+                isLast={contactIndex === visibleContactIds.length - 1}
+              />
             )
           })}
         </Reorder.Group>
       </div>
     </section>
+  )
+}
+
+function SortableContact({
+  contact,
+  shouldReduceMotion,
+  contactTransition,
+  onDragEnd,
+  setDialogState,
+  onToggleFavorite,
+  onMoveContact,
+  isFirst,
+  isLast,
+}: {
+  contact: Contact
+  shouldReduceMotion: boolean
+  contactTransition: { duration: number }
+  onDragEnd: () => void
+  setDialogState: Dispatch<SetStateAction<DialogState>>
+  onToggleFavorite: (contact: Contact) => void
+  onMoveContact: (contact: Contact, direction: "down" | "up") => void
+  isFirst: boolean
+  isLast: boolean
+}) {
+  const dragControls = useDragControls()
+
+  return (
+    <Reorder.Item
+      value={contact.id}
+      layout={shouldReduceMotion ? undefined : "position"}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.98 }}
+      transition={contactTransition}
+      onDragEnd={onDragEnd}
+      dragListener={false}
+      dragControls={dragControls}
+    >
+      <ContactCard
+        contact={contact}
+        setDialogState={setDialogState}
+        onToggleFavorite={onToggleFavorite}
+        onDragStart={(event) => {
+          if (shouldReduceMotion) return
+          dragControls.start(event)
+        }}
+        onMoveContact={onMoveContact}
+        isLast={isLast}
+        isFirst={isFirst}
+      />
+    </Reorder.Item>
   )
 }

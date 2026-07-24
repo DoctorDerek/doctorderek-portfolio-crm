@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, PointerEvent, SetStateAction } from "react"
 import ContactCardEmail from "@/components/ContactCardEmail"
 import ContactCardLabelAndData from "@/components/ContactCardLabelAndData"
 import ContactCardPhoneNumber from "@/components/ContactCardPhoneNumber"
@@ -32,6 +32,7 @@ export default function ContactCard({
   contact,
   setDialogState,
   onToggleFavorite,
+  onDragStart,
   onMoveContact,
   isFirst,
   isLast,
@@ -39,6 +40,7 @@ export default function ContactCard({
   contact: Contact
   setDialogState?: Dispatch<SetStateAction<DialogState>>
   onToggleFavorite?: (contact: Contact) => void
+  onDragStart?: (event: PointerEvent) => void
   onMoveContact?: (contact: Contact, direction: "up" | "down") => void
   isFirst?: boolean
   isLast?: boolean
@@ -50,6 +52,7 @@ export default function ContactCard({
         contact={contact}
         setDialogState={setDialogState}
         onToggleFavorite={onToggleFavorite}
+        onDragStart={onDragStart}
         onMoveContact={onMoveContact}
         isFirst={isFirst}
         isLast={isLast}

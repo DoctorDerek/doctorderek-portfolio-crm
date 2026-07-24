@@ -4,6 +4,7 @@ import { DialogState } from "@/types/DialogState"
 import parseContactBirthday from "@/utils/contactBirthday"
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const PHONE_PATTERN = /^\+?[0-9][0-9\s().-]{5,}$/
 const ADDRESS_FIELD_NAMES = [
   "streetAddress",
   "city",
@@ -61,6 +62,14 @@ export const contactFormSchema = z
       })
     }
 
+    if (formValues.phoneNumber !== "" && !PHONE_PATTERN.test(formValues.phoneNumber)) {
+      refinementContext.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["phoneNumber"],
+        message: "Please enter a valid phone number.",
+      })
+    }
+
     if (!formValues.addressEnabled) return
 
     for (const addressFieldName of ADDRESS_FIELD_NAMES) {
@@ -75,6 +84,19 @@ export const contactFormSchema = z
 
 export type ContactFormValues = z.infer<typeof contactFormSchema>
 
+function getContactFormAddressEnabled(contact: Contact | undefined): boolean {
+  return (
+    Boolean(contact?.streetAddress) ||
+    Boolean(contact?.city) ||
+    Boolean(contact?.state) ||
+    Boolean(contact?.zipCode)
+  )
+}
+
+function getContactFormValue(value: string | undefined): string {
+  return value ?? ""
+}
+
 export function getContactFormDefaultValues(
   dialogState: DialogState,
 ): ContactFormValues {
@@ -82,23 +104,18 @@ export function getContactFormDefaultValues(
     dialogState.type === "UPDATE" ? dialogState.contact : undefined
 
   return {
-    firstName: contact?.firstName ?? "",
-    lastName: contact?.lastName ?? "",
-    birthYear: contact?.birthYear ?? "",
-    birthMonth: contact?.birthMonth ?? "",
-    birthDay: contact?.birthDay ?? "",
-    streetAddress: contact?.streetAddress ?? "",
-    city: contact?.city ?? "",
-    state: contact?.state ?? "",
-    zipCode: contact?.zipCode ?? "",
-    phoneNumber: contact?.phoneNumber ?? "",
-    email: contact?.email ?? "",
-    addressEnabled: Boolean(
-      contact?.streetAddress ||
-      contact?.city ||
-      contact?.state ||
-      contact?.zipCode,
-    ),
+    firstName: getContactFormValue(contact?.firstName),
+    lastName: getContactFormValue(contact?.lastName),
+    birthYear: getContactFormValue(contact?.birthYear),
+    birthMonth: getContactFormValue(contact?.birthMonth),
+    birthDay: getContactFormValue(contact?.birthDay),
+    streetAddress: getContactFormValue(contact?.streetAddress),
+    city: getContactFormValue(contact?.city),
+    state: getContactFormValue(contact?.state),
+    zipCode: getContactFormValue(contact?.zipCode),
+    phoneNumber: getContactFormValue(contact?.phoneNumber),
+    email: getContactFormValue(contact?.email),
+    addressEnabled: getContactFormAddressEnabled(contact),
   }
 }
 

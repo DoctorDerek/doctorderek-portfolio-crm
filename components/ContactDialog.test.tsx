@@ -20,6 +20,22 @@ const existingContact: Contact = {
   isFavorite: true,
 }
 
+const alternateContact: Contact = {
+  id: 8,
+  firstName: "Alan",
+  lastName: "Turing",
+  birthYear: "1912",
+  birthMonth: "06",
+  birthDay: "23",
+  streetAddress: "Main Street",
+  city: "London",
+  state: "England",
+  zipCode: "WC1",
+  phoneNumber: "555-1122",
+  email: "alan@example.com",
+  isFavorite: false,
+}
+
 function renderCreateDialog() {
   render(
     <Providers>
@@ -32,14 +48,14 @@ function renderCreateDialog() {
   )
 }
 
-function renderUpdateDialog() {
+function renderUpdateDialog(contact = existingContact) {
   const setDialogState = vi.fn()
 
   render(
     <Providers>
       <ContactDialog
         contacts={[existingContact]}
-        dialogState={{ type: "UPDATE", contact: existingContact }}
+        dialogState={{ type: "UPDATE", contact }}
         setDialogState={setDialogState}
       />
     </Providers>,
@@ -163,6 +179,36 @@ describe("contact dialog validation and review", () => {
     expect(screen.getByLabelText("Date of Birth - Day")).toHaveValue("29")
   })
 
+  it("resets defaults when switching update targets", async () => {
+    const { rerender, getByLabelText } = render(
+      <Providers>
+        <ContactDialog
+          contacts={[existingContact, alternateContact]}
+          dialogState={{ type: "UPDATE", contact: existingContact }}
+          setDialogState={vi.fn()}
+        />
+      </Providers>,
+    )
+
+    expect(getByLabelText("First Name")).toHaveValue(existingContact.firstName)
+    expect(getByLabelText("Email Address")).toHaveValue(existingContact.email)
+
+    rerender(
+      <Providers>
+        <ContactDialog
+          contacts={[existingContact, alternateContact]}
+          dialogState={{ type: "UPDATE", contact: alternateContact }}
+          setDialogState={vi.fn()}
+        />
+      </Providers>,
+    )
+
+    expect(screen.getByLabelText("First Name")).toHaveValue(alternateContact.firstName)
+    expect(screen.getByLabelText("Email Address")).toHaveValue(
+      alternateContact.email,
+    )
+  })
+
   it("reviews untouched update values exactly as they are stored", async () => {
     renderUpdateDialog()
 
@@ -234,6 +280,23 @@ describe("contact dialog validation and review", () => {
     expect(
       screen.getByRole("list").querySelector('[aria-current="step"]'),
     ).toHaveTextContent("Contact information")
+  })
+
+  it("validates a nonblank phone number during creation", async () => {
+    renderCreateDialog()
+    await showInformationStep()
+    fillContactInformation("29")
+    fireEvent.change(screen.getByLabelText("Phone Number"), {
+      target: { value: "invalid phone" },
+    })
+    fireEvent.click(screen.getByRole("button", { name: "Next" }))
+
+    expect(
+      await screen.findByText("Please enter a valid phone number."),
+    ).toBeInTheDocument()
+    expect(screen.getByRole("list").querySelector('[aria-current="step"]')).toHaveTextContent(
+      "Contact information",
+    )
   })
 
   it("clears optional update values while preserving hidden address inputs", async () => {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Confetti from "react-confetti"
-import { useMotionPreference } from "@/components/MotionPreferenceContext"
+import { useReducedMotion } from "motion/react"
 
 type Size = {
   width: number | undefined
@@ -37,6 +37,6 @@ function ResponsiveConfetti() {
 }
 
 export default function ReactConfetti() {
-  const { shouldReduceMotion } = useMotionPreference()
+  const shouldReduceMotion = useReducedMotion() ?? true
   return shouldReduceMotion ? null : <ResponsiveConfetti />
 }

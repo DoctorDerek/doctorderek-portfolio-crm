@@ -47,12 +47,9 @@ vi.mock("motion/react", async () => {
         React.createElement("div", undefined, children),
     },
     useDragControls: () => ({ start: vi.fn() }),
+    useReducedMotion: () => shouldReduceMotion,
   }
 })
-
-vi.mock("@/components/MotionPreferenceContext", () => ({
-  useMotionPreference: () => ({ shouldReduceMotion }),
-}))
 
 const CONTACTS: Contact[] = [
   { id: 1, firstName: "Ada", lastName: "Lovelace", email: "ada@example.com" },
@@ -98,7 +95,7 @@ describe("contact list", () => {
     shouldReduceMotion = false
   })
 
-  it("proposes filtered reorder payloads and commits the reorder when motion is enabled", () => {
+  it("proposes filtered reorder payloads and commits the reorder", () => {
     const onReorderFilteredContacts = vi.fn()
 
     renderContactList({ onReorderFilteredContacts })
@@ -119,7 +116,7 @@ describe("contact list", () => {
     )
   })
 
-  it("does not emit a filtered reorder when reduced motion is active", () => {
+  it("keeps filtered reorder available when reduced motion is active", () => {
     shouldReduceMotion = true
     const onReorderFilteredContacts = vi.fn()
 
@@ -128,10 +125,15 @@ describe("contact list", () => {
     const reorderedIds = [3, 2, 1]
     act(() => {
       capturedReorderHandler?.(reorderedIds)
+    })
+    act(() => {
       capturedDragEndHandler?.()
     })
 
-    expect(onReorderFilteredContacts).not.toHaveBeenCalled()
+    expect(onReorderFilteredContacts).toHaveBeenCalledWith(
+      ASSERTED_FILTERED_IDS,
+      reorderedIds,
+    )
   })
 
   it("does not emit a reorder when visible ids are unchanged", () => {

@@ -1,7 +1,18 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import MotionPreferenceProvider from "@/components/MotionPreferenceContext"
 import ReactConfetti from "@/components/ReactConfetti"
+
+let shouldReduceMotion = false
+
+vi.mock("motion/react", async () => {
+  const actual = await vi.importActual<typeof import("motion/react")>(
+    "motion/react",
+  )
+  return {
+    ...actual,
+    useReducedMotion: () => shouldReduceMotion,
+  }
+})
 
 vi.mock("react-confetti", () => ({
   default: ({ width, height }: { width?: number; height?: number }) => (
@@ -21,16 +32,12 @@ function setViewportSize(width: number, height: number) {
 }
 
 function renderConfetti() {
-  return render(
-    <MotionPreferenceProvider>
-      <ReactConfetti />
-    </MotionPreferenceProvider>,
-  )
+  return render(<ReactConfetti />)
 }
 
 describe("confetti viewport", () => {
   beforeEach(() => {
-    localStorage.clear()
+    shouldReduceMotion = false
   })
 
   it("matches the browser viewport and responds to resizing", async () => {
@@ -53,7 +60,7 @@ describe("confetti viewport", () => {
   })
 
   it("omits decorative confetti when reduced motion is active", () => {
-    localStorage.setItem("portfolio-crm-motion-preference", "reduce")
+    shouldReduceMotion = true
 
     renderConfetti()
 

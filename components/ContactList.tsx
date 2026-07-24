@@ -1,9 +1,14 @@
-import { AnimatePresence, motion, Reorder, useDragControls } from "motion/react"
+import {
+  AnimatePresence,
+  motion,
+  Reorder,
+  useDragControls,
+  useReducedMotion,
+} from "motion/react"
 import { Dispatch, SetStateAction, useState } from "react"
 import ContactCard from "@/components/ContactCard"
 import ContactListEmptyState from "@/components/ContactListEmptyState"
 import ContactResultsSummary from "@/components/ContactResultsSummary"
-import { useMotionPreference } from "@/components/MotionPreferenceContext"
 import { Contact } from "@/types/Contact"
 import { ContactFilters } from "@/types/ContactFilters"
 import { DialogState } from "@/types/DialogState"
@@ -28,7 +33,7 @@ export default function ContactList({
   ) => void
 }) {
   const filteredPhoneBookEntries = filterContacts(contacts, contactFilters)
-  const { shouldReduceMotion } = useMotionPreference()
+  const shouldReduceMotion = useReducedMotion() ?? true
   const filteredContactIds = filteredPhoneBookEntries.map(({ id }) => id)
   const [reorderedFilteredContactIds, setReorderedFilteredContactIds] =
     useState<number[]>(filteredContactIds)
@@ -52,7 +57,6 @@ export default function ContactList({
   const contactTransition = { duration: shouldReduceMotion ? 0 : 0.2 }
 
   const handleReorder = (nextContactIds: number[]) => {
-    if (shouldReduceMotion) return
     setReorderedFilteredContactIds(nextContactIds)
   }
 
@@ -184,7 +188,6 @@ function SortableContact({
         setDialogState={setDialogState}
         onToggleFavorite={onToggleFavorite}
         onDragStart={(event) => {
-          if (shouldReduceMotion) return
           dragControls.start(event)
         }}
         onMoveContact={onMoveContact}

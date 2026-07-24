@@ -6,7 +6,6 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useState } from "react"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
-import ButtonMotionPreference from "@/components/ButtonMotionPreference"
 import ReactConfetti from "@/components/ReactConfetti"
 
 const ToggleDarkMode = dynamic(() => import("@/components/ToggleDarkMode"), {
@@ -84,7 +83,6 @@ export default function NavBar() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <ButtonMotionPreference />
           <ToggleDarkMode />
         </div>
         <div className="hidden xl:flex">

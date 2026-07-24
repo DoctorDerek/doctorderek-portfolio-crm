@@ -1,9 +1,8 @@
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { ReactNode } from "react"
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form"
 import ContactCard from "@/components/ContactCard"
 import ContactDialogToggle from "@/components/ContactDialogToggle"
-import { useMotionPreference } from "@/components/MotionPreferenceContext"
 import { ContactDialogStep } from "@/contacts/CONTACT_DIALOG_STEPS"
 import { DialogState } from "@/types/DialogState"
 import classNames from "@/utils/classNames"
@@ -93,7 +92,7 @@ export default function ContactDialogInputs({
   formValues: ContactFormValues
   setValue: UseFormSetValue<ContactFormValues>
 }) {
-  const { shouldReduceMotion } = useMotionPreference()
+  const shouldReduceMotion = useReducedMotion() ?? true
 
   if (dialogState.type === "RESET") return null
 

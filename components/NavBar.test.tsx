@@ -33,6 +33,7 @@ describe("navigation", () => {
       "href",
       "#top",
     )
+    expect(screen.getByText("@DoctorDerek")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Filter" })).toHaveAttribute(
       "href",
       "#filter",

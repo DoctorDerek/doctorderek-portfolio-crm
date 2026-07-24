@@ -4,10 +4,10 @@ import { Contact } from "@/types/Contact"
 import { PersistenceFailure } from "@/types/PersistenceFailure"
 import { calculateAge } from "@/utils/calculateAge"
 import { getErrorMessage } from "@/utils/errors"
+import reorderContacts from "@/utils/reorderContacts"
 import parseStoredContacts, {
   serializeStoredContacts,
 } from "@/utils/storedContactsSchema"
-import reorderContacts from "@/utils/reorderContacts"
 
 export const CONTACTS_STORAGE_KEY = "phonebook-filter-by-age"
 
@@ -104,17 +104,17 @@ const phoneBookMachine = setup({
       | { type: "DELETE"; contact: Contact }
       | { type: "TOGGLE_FAVORITE"; contactId: number }
       | { type: "MOVE_CONTACT"; contactId: number; direction: "up" | "down" }
-        | {
+      | {
           type: "MOVE_CONTACT_TO_CONTACT"
           contactId: number
           targetContactId: number
           insertAfter: boolean
         }
-        | {
-            type: "REORDER_FILTERED_CONTACTS"
-            filteredContactIds: number[]
-            reorderedFilteredContactIds: number[]
-          }
+      | {
+          type: "REORDER_FILTERED_CONTACTS"
+          filteredContactIds: number[]
+          reorderedFilteredContactIds: number[]
+        }
       | { type: "CLEAR_PERSISTENCE_FAILURE" }
       | { type: "RESET" }
   },
@@ -231,7 +231,9 @@ const phoneBookMachine = setup({
           reorderedFilteredContactIds: event.reorderedFilteredContactIds,
         })
         if (nextContacts === context.contacts) return context.contacts
-        return ensureContactOrder(nextContacts)
+        return ensureContactOrder(
+          nextContacts.map((contact) => ({ ...contact, order: undefined })),
+        )
       },
     }),
   },

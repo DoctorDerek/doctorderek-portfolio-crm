@@ -42,7 +42,7 @@ vi.mock("motion/react", async () => {
       },
     },
     motion: {
-      ...actual.motion,
+      ...(actual.motion as Record<string, unknown>),
       div: ({ children }: { children: React.ReactNode }) =>
         React.createElement("div", undefined, children),
     },

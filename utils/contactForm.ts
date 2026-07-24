@@ -123,7 +123,7 @@ export function getContactFormDefaultValues(
 }
 
 type ContactMetadata = Pick<Contact, "id"> &
-  Partial<Pick<Contact, "photo" | "isFavorite">>
+  Partial<Pick<Contact, "photo" | "isFavorite" | "order">>
 
 const getOptionalContactValue = (value: string) => value.trim() || undefined
 
@@ -142,6 +142,7 @@ export function buildContactFromFormValues(
 
   return {
     id: contactMetadata.id,
+    order: contactMetadata.order,
     firstName: formValues.firstName.trim(),
     lastName: formValues.lastName.trim(),
     birthYear: getOptionalContactValue(formValues.birthYear),

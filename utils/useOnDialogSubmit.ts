@@ -46,6 +46,7 @@ export default function useOnDialogSubmit({
       const oldContact = dialogState.contact
       const contact = buildContactFromFormValues(formValues, {
         id: oldContact.id,
+        order: oldContact.order,
         photo: oldContact.photo,
         isFavorite: oldContact.isFavorite,
       })

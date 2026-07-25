@@ -26,7 +26,7 @@ test("opens and dismisses the create dialog entirely from the keyboard", async (
   await page
     .getByRole("textbox", { name: "Email Address" })
     .fill("keyboard@example.com")
-  const nextButton = page.getByRole("button", { name: "Next" })
+  const nextButton = page.getByRole("button", { name: "Next", exact: true })
   await nextButton.focus()
   await page.keyboard.press("Enter")
 

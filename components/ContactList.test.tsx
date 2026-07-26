@@ -1,10 +1,11 @@
-import { act, render, screen } from "@testing-library/react"
+import { act, fireEvent, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import ContactList from "@/components/ContactList"
 import { Contact } from "@/types/Contact"
 
 let capturedReorderHandler: ((value: number[]) => void) | null = null
 let capturedDragEndHandler: (() => void) | null = null
+const mockDragStart = vi.fn()
 let shouldReduceMotion = false
 
 vi.mock("motion/react", async () => {
@@ -46,7 +47,7 @@ vi.mock("motion/react", async () => {
       div: ({ children }: { children: React.ReactNode }) =>
         React.createElement("div", undefined, children),
     },
-    useDragControls: () => ({ start: vi.fn() }),
+    useDragControls: () => ({ start: mockDragStart }),
     useReducedMotion: () => shouldReduceMotion,
   }
 })
@@ -64,11 +65,13 @@ const CONTACTS: Contact[] = [
 
 function renderContactList({
   onReorderFilteredContacts,
+  onMoveContact = vi.fn(),
 }: {
   onReorderFilteredContacts?: (
     filteredContactIds: number[],
     reorderedFilteredContactIds: number[],
   ) => void
+  onMoveContact?: (contact: Contact, direction: "down" | "up") => void
 } = {}) {
   return render(
     <ContactList
@@ -80,7 +83,7 @@ function renderContactList({
       }}
       setDialogState={vi.fn()}
       onToggleFavorite={vi.fn()}
-      onMoveContact={vi.fn()}
+      onMoveContact={onMoveContact}
       onReorderFilteredContacts={onReorderFilteredContacts}
     />,
   )
@@ -92,6 +95,7 @@ describe("contact list", () => {
   beforeEach(() => {
     capturedReorderHandler = null
     capturedDragEndHandler = null
+    mockDragStart.mockClear()
     shouldReduceMotion = false
   })
 
@@ -152,9 +156,33 @@ describe("contact list", () => {
   it("renders drag handles for accessible manual reordering", () => {
     renderContactList()
 
+    const dragHandles = screen.getAllByRole("button", {
+      name: /Reorder .* by dragging/,
+    })
+    expect(dragHandles).toHaveLength(CONTACTS.length)
+
+    fireEvent.pointerDown(dragHandles[0])
+    fireEvent.pointerUp(dragHandles[0])
+
+    expect(mockDragStart).toHaveBeenCalledOnce()
+  })
+
+  it("exposes directional controls for keyboard reordering", () => {
+    const onMoveContact = vi.fn()
+    renderContactList({ onMoveContact })
+
     expect(
-      screen.getAllByRole("button", { name: /Reorder .* by dragging/ }),
-    ).toHaveLength(CONTACTS.length)
+      screen.getByRole("button", { name: "Move Ada Lovelace up" }),
+    ).toBeDisabled()
+    fireEvent.click(
+      screen.getByRole("button", { name: "Move Ada Lovelace down" }),
+    )
+    fireEvent.click(
+      screen.getByRole("button", { name: "Move Grace Hopper up" }),
+    )
+
+    expect(onMoveContact).toHaveBeenNthCalledWith(1, CONTACTS[0], "down")
+    expect(onMoveContact).toHaveBeenNthCalledWith(2, CONTACTS[1], "up")
   })
 
   it("does not emit a reorder when drag output contains duplicate ids", () => {
@@ -168,5 +196,26 @@ describe("contact list", () => {
     })
 
     expect(onReorderFilteredContacts).not.toHaveBeenCalled()
+  })
+
+  it("does not announce an unknown contact id during reorder", () => {
+    const onReorderFilteredContacts = vi.fn()
+
+    renderContactList({ onReorderFilteredContacts })
+
+    act(() => {
+      capturedReorderHandler?.([999, 2, 3])
+    })
+    act(() => {
+      capturedDragEndHandler?.()
+    })
+
+    expect(onReorderFilteredContacts).toHaveBeenCalledWith(
+      ASSERTED_FILTERED_IDS,
+      [999, 2, 3],
+    )
+    expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent(
+      "",
+    )
   })
 })

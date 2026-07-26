@@ -272,7 +272,7 @@ describe("phoneBookMachine persistence", () => {
 
     const originalContacts = phoneBookActor.getSnapshot().context.contacts
     const firstContact = originalContacts[0]
-    const lastContact = originalContacts.at(-1)
+    const lastContact = originalContacts[originalContacts.length - 1]
     expect(firstContact).toBeDefined()
     expect(lastContact).toBeDefined()
 

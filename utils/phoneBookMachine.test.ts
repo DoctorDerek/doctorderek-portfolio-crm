@@ -95,6 +95,40 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.stop()
   })
 
+  it("deletes contacts, reindexes the remainder, and persists the result", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+
+    const originalContacts = phoneBookActor.getSnapshot().context.contacts
+    const deletedContact = originalContacts[2]
+    expect(deletedContact).toBeDefined()
+
+    phoneBookActor.send({ type: "DELETE", contact: deletedContact })
+
+    const remainingContacts = phoneBookActor.getSnapshot().context.contacts
+    expect(remainingContacts).toHaveLength(originalContacts.length - 1)
+    expect(remainingContacts.map(({ id }) => id)).toEqual(
+      originalContacts
+        .filter(({ id }) => id !== deletedContact.id)
+        .map(({ id }) => id),
+    )
+    expect(remainingContacts.map(({ order }) => order)).toEqual(
+      remainingContacts.map((_, index) => index),
+    )
+
+    const storedContacts = JSON.parse(
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
+    ) as { id: number; order?: number; age?: number }[]
+    expect(storedContacts.map(({ id }) => id)).toEqual(
+      remainingContacts.map(({ id }) => id),
+    )
+    expect(storedContacts.map(({ order }) => order)).toEqual(
+      remainingContacts.map(({ order }) => order),
+    )
+    expect(storedContacts.every((contact) => !("age" in contact))).toBe(true)
+    phoneBookActor.stop()
+  })
+
   it("keeps in-memory changes and records typed write failures", () => {
     const phoneBookActor = createActor(phoneBookMachine).start()
     phoneBookActor.send({ type: "READ" })

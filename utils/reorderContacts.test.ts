@@ -44,7 +44,29 @@ describe("reorderContacts", () => {
     const reorderedContacts = reorderContacts({
       contacts,
       filteredContactIds: [1, 1, 2],
-      reorderedFilteredContactIds: [1, 1, 2],
+      reorderedFilteredContactIds: [1, 2, 1],
+    })
+
+    expect(reorderedContacts).toBe(contacts)
+  })
+
+  it("returns the original list when reordered ids contain duplicates", () => {
+    const contacts = [makeContact(1), makeContact(2), makeContact(3)]
+    const reorderedContacts = reorderContacts({
+      contacts,
+      filteredContactIds: [1, 2, 3],
+      reorderedFilteredContactIds: [1, 1, 3],
+    })
+
+    expect(reorderedContacts).toBe(contacts)
+  })
+
+  it("returns the original list when a filtered contact is absent", () => {
+    const contacts = [makeContact(1), makeContact(2), makeContact(3)]
+    const reorderedContacts = reorderContacts({
+      contacts,
+      filteredContactIds: [1, 2, 99],
+      reorderedFilteredContactIds: [2, 1, 99],
     })
 
     expect(reorderedContacts).toBe(contacts)

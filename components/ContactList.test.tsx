@@ -214,8 +214,6 @@ describe("contact list", () => {
       ASSERTED_FILTERED_IDS,
       [999, 2, 3],
     )
-    expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent(
-      "",
-    )
+    expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent("")
   })
 })

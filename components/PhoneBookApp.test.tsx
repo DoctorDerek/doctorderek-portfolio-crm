@@ -86,6 +86,23 @@ describe("contact discovery", () => {
     ).toBe(true)
   })
 
+  it("persists directional contact reordering from the card controls", async () => {
+    renderPhoneBookApp()
+    await screen.findByText("Jessica Christian")
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Move Jessica Christian down" }),
+    )
+
+    await waitFor(() => {
+      const storedContacts = JSON.parse(
+        localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
+      ) as { id: number; order?: number }[]
+      expect(storedContacts.find(({ id }) => id === 1)?.order).toBe(2)
+      expect(storedContacts.find(({ id }) => id === 4)?.order).toBe(1)
+    })
+  })
+
   it("explains empty results and restores all contacts from Clear", async () => {
     renderPhoneBookApp()
     await screen.findByText("Jessica Christian")

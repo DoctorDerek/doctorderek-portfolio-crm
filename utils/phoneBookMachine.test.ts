@@ -266,6 +266,51 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.stop()
   })
 
+  it("keeps order stable when a move reaches a list boundary", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+
+    const originalContacts = phoneBookActor.getSnapshot().context.contacts
+    const firstContact = originalContacts[0]
+    const lastContact = originalContacts.at(-1)
+    expect(firstContact).toBeDefined()
+    expect(lastContact).toBeDefined()
+
+    phoneBookActor.send({
+      type: "MOVE_CONTACT",
+      contactId: firstContact.id,
+      direction: "up",
+    })
+    phoneBookActor.send({
+      type: "MOVE_CONTACT",
+      contactId: lastContact.id,
+      direction: "down",
+    })
+
+    expect(phoneBookActor.getSnapshot().context.contacts).toEqual(
+      originalContacts,
+    )
+    phoneBookActor.stop()
+  })
+
+  it("keeps order stable when a drop target cannot be found", () => {
+    const phoneBookActor = createActor(phoneBookMachine).start()
+    phoneBookActor.send({ type: "READ" })
+    const originalContacts = phoneBookActor.getSnapshot().context.contacts
+
+    phoneBookActor.send({
+      type: "MOVE_CONTACT_TO_CONTACT",
+      contactId: originalContacts[0].id,
+      targetContactId: 99999,
+      insertAfter: false,
+    })
+
+    expect(phoneBookActor.getSnapshot().context.contacts).toEqual(
+      originalContacts,
+    )
+    phoneBookActor.stop()
+  })
+
   it("reorders filtered contacts while preserving non-visible contacts", () => {
     const phoneBookActor = createActor(phoneBookMachine).start()
     phoneBookActor.send({ type: "READ" })

@@ -27,8 +27,10 @@ type AddressErrorField = (typeof ADDRESS_ERROR_FIELDS)[number]
 
 function ContactDialogInputsHarness({
   errorField,
+  rootError = false,
 }: {
   errorField: AddressErrorField
+  rootError?: boolean
 }) {
   const { control, formState, register, setError, setValue } =
     useForm<ContactFormValues>({
@@ -41,11 +43,15 @@ function ContactDialogInputsHarness({
   })
 
   useEffect(() => {
+    if (rootError) {
+      setError("root", { type: "manual" })
+      return
+    }
     setError(errorField, {
       type: "manual",
       message: `Validation failed for ${errorField}.`,
     })
-  }, [errorField, setError])
+  }, [errorField, rootError, setError])
 
   return (
     <ContactDialogInputs
@@ -82,6 +88,19 @@ describe("contact dialog input errors", () => {
 
     expect(
       await screen.findByRole("region", { name: "Contact information" }),
+    ).toBeInTheDocument()
+  })
+
+  it("renders the fallback message for a root form error", async () => {
+    render(
+      <ContactDialogInputsHarness
+        errorField="streetAddress"
+        rootError
+      />,
+    )
+
+    expect(
+      await screen.findByText("Please correct the highlighted field."),
     ).toBeInTheDocument()
   })
 })

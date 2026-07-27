@@ -75,10 +75,6 @@ function renderUpdateDialog(contact = existingContact) {
   return setDialogState
 }
 
-async function showInformationStep() {
-  await expectInformationStep()
-}
-
 async function expectInformationStep() {
   expect(
     await screen.findByRole("region", { name: "Contact information" }),
@@ -119,7 +115,7 @@ function fillContactInformation(birthDay: string) {
 describe("contact dialog validation and review", () => {
   it("keeps an impossible birthday off the review step", async () => {
     renderCreateDialog()
-    await showInformationStep()
+    await expectInformationStep()
     fillContactInformation("30")
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
@@ -136,7 +132,7 @@ describe("contact dialog validation and review", () => {
 
   it("presents a valid contact as a read-only review confirmation", async () => {
     renderCreateDialog()
-    await showInformationStep()
+    await expectInformationStep()
     fillContactInformation("29")
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
@@ -160,7 +156,7 @@ describe("contact dialog validation and review", () => {
 
   it("preserves form values across backward and forward step transitions", async () => {
     renderCreateDialog()
-    await showInformationStep()
+    await expectInformationStep()
     fireEvent.change(screen.getByLabelText("Email Address"), {
       target: { value: "ada@example.com" },
     })
@@ -318,7 +314,7 @@ describe("contact dialog validation and review", () => {
 
     try {
       renderCreateDialog()
-      await showInformationStep()
+      await expectInformationStep()
       expect(
         screen.getByRole("region", { name: "Contact information" }),
       ).toBeInTheDocument()
@@ -329,7 +325,7 @@ describe("contact dialog validation and review", () => {
 
   it("validates a nonblank phone number during creation", async () => {
     renderCreateDialog()
-    await showInformationStep()
+    await expectInformationStep()
     fillContactInformation("29")
     fireEvent.change(screen.getByLabelText("Phone Number"), {
       target: { value: "invalid phone" },

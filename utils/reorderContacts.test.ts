@@ -61,6 +61,17 @@ describe("reorderContacts", () => {
     expect(reorderedContacts).toBe(contacts)
   })
 
+  it("rejects duplicate target ids that replace a duplicate source id", () => {
+    const contacts = [makeContact(1), makeContact(2), makeContact(3)]
+    const reorderedContacts = reorderContacts({
+      contacts,
+      filteredContactIds: [1, 1, 2],
+      reorderedFilteredContactIds: [1, 2, 2],
+    })
+
+    expect(reorderedContacts).toBe(contacts)
+  })
+
   it("returns the original list when a filtered contact is absent", () => {
     const contacts = [makeContact(1), makeContact(2), makeContact(3)]
     const reorderedContacts = reorderContacts({

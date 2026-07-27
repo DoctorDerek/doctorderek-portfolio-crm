@@ -10,11 +10,7 @@ export default function ButtonDelete({
   contact: Contact
   setDialogState: Dispatch<SetStateAction<DialogState>>
 }) {
-  const { firstName, lastName, phoneNumber } = contact || {
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-  }
+  const { firstName, lastName, phoneNumber } = contact
   return (
     <button
       type="button"

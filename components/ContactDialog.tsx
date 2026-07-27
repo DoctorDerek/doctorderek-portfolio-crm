@@ -71,21 +71,19 @@ export default function ContactDialog({
   })
 
   function validateStep() {
-    if (dialogStep === "information")
-      return trigger([
-        "email",
-        "firstName",
-        "lastName",
-        "birthYear",
-        "birthMonth",
-        "birthDay",
-        "streetAddress",
-        "city",
-        "state",
-        "zipCode",
-        "phoneNumber",
-      ])
-    return Promise.resolve(true)
+    return trigger([
+      "email",
+      "firstName",
+      "lastName",
+      "birthYear",
+      "birthMonth",
+      "birthDay",
+      "streetAddress",
+      "city",
+      "state",
+      "zipCode",
+      "phoneNumber",
+    ])
   }
 
   return (

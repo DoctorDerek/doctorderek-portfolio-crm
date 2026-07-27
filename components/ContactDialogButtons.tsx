@@ -130,8 +130,6 @@ export default function ContactDialogButtons({
     return "Back"
   }
   const handleNext = async () => {
-    if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") return
-    if (dialogStep === "review") return
     const isCurrentStepValid = await validateStep()
     if (!isCurrentStepValid) return
     showStep("review")

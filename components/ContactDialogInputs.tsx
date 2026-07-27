@@ -197,17 +197,7 @@ export default function ContactDialogInputs({
           errors={errors}
           disabled={!formValues.addressEnabled}
         />
-        {(errors?.email?.message ||
-          errors?.firstName?.message ||
-          errors?.lastName?.message ||
-          errors?.birthMonth?.message ||
-          errors?.birthDay?.message ||
-          errors?.birthYear?.message ||
-          errors?.phoneNumber?.message ||
-          errors?.streetAddress?.message ||
-          errors?.city?.message ||
-          errors?.state?.message ||
-          errors?.zipCode?.message) && <ErrorMessage errors={errors} />}
+        {Object.values(errors).some(Boolean) && <ErrorMessage errors={errors} />}
       </section>
     ),
     review: (

@@ -83,6 +83,17 @@ describe("reorderContacts", () => {
     expect(reorderedContacts).toBe(contacts)
   })
 
+  it("returns the original list when duplicate contacts hide a filtered id", () => {
+    const contacts = [makeContact(1), makeContact(2), makeContact(2)]
+    const reorderedContacts = reorderContacts({
+      contacts,
+      filteredContactIds: [1, 2, 3],
+      reorderedFilteredContactIds: [2, 1, 3],
+    })
+
+    expect(reorderedContacts).toBe(contacts)
+  })
+
   it("returns the original list if filtered list order is unchanged", () => {
     const contacts = [makeContact(1), makeContact(2), makeContact(3)]
     const reorderedContacts = reorderContacts({

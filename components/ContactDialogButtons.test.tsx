@@ -1,11 +1,17 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import ContactDialogButtons from "@/components/ContactDialogButtons"
+import { ContactDialogStep } from "@/contacts/CONTACT_DIALOG_STEPS"
+import { DialogState } from "@/types/DialogState"
 
 function renderButtons({
-  dialogState = { type: "CREATE" as const },
-  dialogStep = "email" as const,
+  dialogState = { type: "CREATE" },
+  dialogStep = "email",
   validateStep = vi.fn().mockResolvedValue(true),
+}: {
+  dialogState?: DialogState
+  dialogStep?: ContactDialogStep
+  validateStep?: () => Promise<boolean>
 } = {}) {
   const closeDialog = vi.fn()
   const showStep = vi.fn()

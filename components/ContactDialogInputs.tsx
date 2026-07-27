@@ -197,7 +197,8 @@ export default function ContactDialogInputs({
           errors={errors}
           disabled={!formValues.addressEnabled}
         />
-        {(errors?.firstName?.message ||
+        {(errors?.email?.message ||
+          errors?.firstName?.message ||
           errors?.lastName?.message ||
           errors?.birthMonth?.message ||
           errors?.birthDay?.message ||

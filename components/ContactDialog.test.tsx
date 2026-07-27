@@ -268,10 +268,7 @@ describe("contact dialog validation and review", () => {
     ).toBeInTheDocument()
     expect(
       screen.getByText("Contact information").closest("li"),
-    ).toHaveAttribute(
-      "aria-current",
-      "step",
-    )
+    ).toHaveAttribute("aria-current", "step")
 
     fireEvent.change(screen.getByLabelText("Email Address"), {
       target: { value: existingContact.email },
@@ -313,10 +310,7 @@ describe("contact dialog validation and review", () => {
     ).toBeInTheDocument()
     expect(
       screen.getByText("Contact information").closest("li"),
-    ).toHaveAttribute(
-      "aria-current",
-      "step",
-    )
+    ).toHaveAttribute("aria-current", "step")
   })
 
   it("renders the reduced-motion dialog transition path", async () => {

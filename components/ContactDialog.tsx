@@ -49,8 +49,7 @@ export default function ContactDialog({
     control,
     compute: (completeFormValues) => completeFormValues,
   })
-  const [dialogStep, setDialogStep] =
-    useState<ContactDialogStep>("information")
+  const [dialogStep, setDialogStep] = useState<ContactDialogStep>("information")
 
   useEffect(() => {
     reset(getContactFormDefaultValues(dialogState))

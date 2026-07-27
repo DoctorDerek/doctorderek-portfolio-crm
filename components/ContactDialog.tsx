@@ -49,14 +49,15 @@ export default function ContactDialog({
     control,
     compute: (completeFormValues) => completeFormValues,
   })
-  const [dialogStep, setDialogStep] = useState<ContactDialogStep>("email")
+  const [dialogStep, setDialogStep] =
+    useState<ContactDialogStep>("information")
 
   useEffect(() => {
     reset(getContactFormDefaultValues(dialogState))
   }, [dialogState, reset])
 
   const closeDialog = () => {
-    setDialogStep("email")
+    setDialogStep("information")
     setDialogState({ type: "CLOSED" })
     reset()
   }
@@ -66,14 +67,14 @@ export default function ContactDialog({
     contacts,
     closeDialog,
   })
-  const submitDialog = handleSubmit(onDialogSubmit, (submissionErrors) => {
-    setDialogStep(submissionErrors.email ? "email" : "information")
+  const submitDialog = handleSubmit(onDialogSubmit, () => {
+    setDialogStep("information")
   })
 
   function validateStep() {
-    if (dialogStep === "email") return trigger("email")
     if (dialogStep === "information")
       return trigger([
+        "email",
         "firstName",
         "lastName",
         "birthYear",

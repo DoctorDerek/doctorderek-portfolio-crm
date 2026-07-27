@@ -1,7 +1,6 @@
 "use client"
 
-import { useRef } from "react"
-import { CSSTransition } from "react-transition-group"
+import classNames from "@/utils/classNames"
 
 export default function ThemeToggle({
   isDarkTheme,
@@ -10,30 +9,24 @@ export default function ThemeToggle({
   isDarkTheme: boolean
   onToggle: () => void
 }) {
-  const themeSwitchTransitionNodeReference = useRef<HTMLButtonElement>(null)
-
   return (
-    <CSSTransition
-      nodeRef={themeSwitchTransitionNodeReference}
-      in={isDarkTheme}
-      classNames="switch"
-      timeout={0}
+    <button
+      type="button"
+      aria-label={isDarkTheme ? "Use light mode" : "Use dark mode"}
+      aria-pressed={isDarkTheme}
+      className={classNames(
+        "mx-1 w-28 shrink-0 rounded-full bg-transparent p-1 focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:w-36",
+        isDarkTheme ? "theme-toggle--dark" : "theme-toggle--light",
+      )}
+      onClick={onToggle}
     >
-      <button
-        ref={themeSwitchTransitionNodeReference}
-        type="button"
-        aria-label={isDarkTheme ? "Use light mode" : "Use dark mode"}
-        aria-pressed={isDarkTheme}
-        className="mx-1 w-28 shrink-0 rounded-full bg-transparent p-1 focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:w-36"
-        onClick={onToggle}
-      >
         <svg
           width="170"
           height="70"
           viewBox="0 0 170 70"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="block h-auto w-full"
+          className="switch block h-auto w-full"
           aria-hidden="true"
         >
           <mask
@@ -231,7 +224,6 @@ export default function ThemeToggle({
             </radialGradient>
           </defs>
         </svg>
-      </button>
-    </CSSTransition>
+    </button>
   )
 }

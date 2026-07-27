@@ -39,6 +39,28 @@ describe("reorderContacts", () => {
     expect(reorderedContacts).toBe(contacts)
   })
 
+  it("returns the original list when reorder payload lengths differ", () => {
+    const contacts = [makeContact(1), makeContact(2), makeContact(3)]
+    const reorderedContacts = reorderContacts({
+      contacts,
+      filteredContactIds: [1, 2, 3],
+      reorderedFilteredContactIds: [2, 1],
+    })
+
+    expect(reorderedContacts).toBe(contacts)
+  })
+
+  it("rejects an unknown reordered id with matching payload length", () => {
+    const contacts = [makeContact(1), makeContact(2), makeContact(3)]
+    const reorderedContacts = reorderContacts({
+      contacts,
+      filteredContactIds: [1, 2, 3],
+      reorderedFilteredContactIds: [2, 1, 99],
+    })
+
+    expect(reorderedContacts).toBe(contacts)
+  })
+
   it("returns the original list when filtered list includes duplicates", () => {
     const contacts = [makeContact(1), makeContact(2), makeContact(3)]
     const reorderedContacts = reorderContacts({

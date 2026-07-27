@@ -6,7 +6,7 @@ import { Contact } from "@/types/Contact"
 let capturedReorderHandler: ((value: number[]) => void) | null = null
 let capturedDragEndHandler: (() => void) | null = null
 const mockDragStart = vi.fn()
-let shouldReduceMotion = false
+let shouldReduceMotion: boolean | null = false
 
 vi.mock("motion/react", async () => {
   const React = await import("react")
@@ -64,9 +64,21 @@ const CONTACTS: Contact[] = [
 ]
 
 function renderContactList({
+  contacts = CONTACTS,
+  contactFilters = {
+    searchQuery: "",
+    selectedAgeRangeLabel: "",
+    showFavoritesOnly: false,
+  },
   onReorderFilteredContacts,
   onMoveContact = vi.fn(),
 }: {
+  contacts?: Contact[]
+  contactFilters?: {
+    searchQuery: string
+    selectedAgeRangeLabel: string
+    showFavoritesOnly: boolean
+  }
   onReorderFilteredContacts?: (
     filteredContactIds: number[],
     reorderedFilteredContactIds: number[],
@@ -75,12 +87,8 @@ function renderContactList({
 } = {}) {
   return render(
     <ContactList
-      contacts={CONTACTS}
-      contactFilters={{
-        searchQuery: "",
-        selectedAgeRangeLabel: "",
-        showFavoritesOnly: false,
-      }}
+      contacts={contacts}
+      contactFilters={contactFilters}
       setDialogState={vi.fn()}
       onToggleFavorite={vi.fn()}
       onMoveContact={onMoveContact}
@@ -245,5 +253,29 @@ describe("contact list", () => {
       [1, 2],
     )
     expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent("")
+  })
+
+  it("renders the matching-contacts empty state", () => {
+    renderContactList({
+      contactFilters: {
+        searchQuery: "No matching contact",
+        selectedAgeRangeLabel: "",
+        showFavoritesOnly: false,
+      },
+    })
+
+    expect(
+      screen.getByRole("heading", { name: "No matching contacts" }),
+    ).toBeInTheDocument()
+  })
+
+  it("defaults to reduced motion while the preference is unresolved", () => {
+    shouldReduceMotion = null
+
+    renderContactList({ contacts: [] })
+
+    expect(
+      screen.getByRole("heading", { name: "No contacts yet" }),
+    ).toBeInTheDocument()
   })
 })

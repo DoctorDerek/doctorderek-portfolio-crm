@@ -77,15 +77,17 @@ const contactActionTestCases: {
 function ContactActionHarness({
   closeDialog,
   dialogState,
+  contacts = [contact],
   formValues = contactFormValues,
 }: {
   closeDialog: () => void
   dialogState: DialogState
+  contacts?: Contact[]
   formValues?: ContactFormValues
 }) {
   const { onDialogSubmit } = useOnDialogSubmit({
     closeDialog,
-    contacts: [contact],
+    contacts,
     dialogState,
   })
 
@@ -150,6 +152,29 @@ describe("contact action notifications", () => {
     const updateEvent = send.mock.calls[0]?.[0]
     expect(updateEvent).toEqual(expect.objectContaining({ type: "UPDATE" }))
     expect(updateEvent.contact).not.toHaveProperty("age")
+  })
+
+  it("starts created contact ids at one when the list is empty", async () => {
+    render(
+      <Providers>
+        <ContactActionHarness
+          closeDialog={vi.fn()}
+          contacts={[]}
+          dialogState={{ type: "CREATE" }}
+        />
+      </Providers>,
+    )
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Complete contact action" }),
+    )
+
+    expect(send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: "CREATE",
+        contact: expect.objectContaining({ id: 1 }),
+      }),
+    )
   })
 
   it("clears optional update values without replacing immutable metadata", () => {

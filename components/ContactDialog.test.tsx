@@ -297,6 +297,25 @@ describe("contact dialog validation and review", () => {
     ).toHaveTextContent("Contact information")
   })
 
+  it("returns to the email step when native submission finds an email error", async () => {
+    renderCreateDialog()
+    fireEvent.change(screen.getByLabelText("Email Address"), {
+      target: { value: "not-an-email" },
+    })
+
+    const form = screen.getByRole("dialog").querySelector("form")
+    expect(form).not.toBeNull()
+    fireEvent.submit(form as HTMLFormElement)
+
+    expect(
+      await screen.findByText("Please enter a valid email address."),
+    ).toBeInTheDocument()
+    expect(screen.getByText("Email").closest("li")).toHaveAttribute(
+      "aria-current",
+      "step",
+    )
+  })
+
   it("validates a nonblank phone number during creation", async () => {
     renderCreateDialog()
     await showInformationStep()

@@ -216,4 +216,23 @@ describe("contact list", () => {
     )
     expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent("")
   })
+
+  it("does not announce an incomplete reorder payload", () => {
+    const onReorderFilteredContacts = vi.fn()
+
+    renderContactList({ onReorderFilteredContacts })
+
+    act(() => {
+      capturedReorderHandler?.([1, 2])
+    })
+    act(() => {
+      capturedDragEndHandler?.()
+    })
+
+    expect(onReorderFilteredContacts).toHaveBeenCalledWith(
+      ASSERTED_FILTERED_IDS,
+      [1, 2],
+    )
+    expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent("")
+  })
 })

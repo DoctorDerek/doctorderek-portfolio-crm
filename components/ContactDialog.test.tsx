@@ -267,8 +267,8 @@ describe("contact dialog validation and review", () => {
       await screen.findByText("Please enter a valid email address."),
     ).toBeInTheDocument()
     expect(
-      screen.getByText("Contact information").closest("li"),
-    ).toHaveAttribute("aria-current", "step")
+      screen.getByRole("list").querySelector('[aria-current="step"]'),
+    ).toHaveTextContent("Contact information")
 
     fireEvent.change(screen.getByLabelText("Email Address"), {
       target: { value: existingContact.email },
@@ -309,8 +309,8 @@ describe("contact dialog validation and review", () => {
       await screen.findByText("Please enter a valid email address."),
     ).toBeInTheDocument()
     expect(
-      screen.getByText("Contact information").closest("li"),
-    ).toHaveAttribute("aria-current", "step")
+      screen.getByRole("list").querySelector('[aria-current="step"]'),
+    ).toHaveTextContent("Contact information")
   })
 
   it("renders the reduced-motion dialog transition path", async () => {

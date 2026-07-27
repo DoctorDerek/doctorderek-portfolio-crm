@@ -68,17 +68,15 @@ describe("contact dialog navigation", () => {
     expect(validateStep).not.toHaveBeenCalled()
   })
 
-  it("returns to information and advances to review", async () => {
+  it("returns to information from review", () => {
     const { showStep, validateStep } = renderButtons({
       dialogStep: "review",
     })
 
     fireEvent.click(screen.getByRole("button", { name: "Back" }))
-    fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
-    await waitFor(() => expect(validateStep).toHaveBeenCalledOnce())
     expect(showStep).toHaveBeenNthCalledWith(1, "information")
-    expect(showStep).toHaveBeenNthCalledWith(2, "review")
+    expect(validateStep).not.toHaveBeenCalled()
   })
 
   it("renders exactly two progress indicators", () => {

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
-import { beforeEach, describe, expect, it } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import Providers from "@/app/providers"
 import PhoneBookApp from "@/components/PhoneBookApp"
-import { LOCALSTORAGE_KEY_AUTH } from "@/utils/phoneBookMachine"
+import { CONTACTS_STORAGE_KEY } from "@/utils/phoneBookMachine"
 
 function renderPhoneBookApp() {
   return render(
@@ -17,8 +17,16 @@ describe("contact discovery", () => {
     localStorage.clear()
   })
 
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it("composes free-text search and age-range selection", async () => {
     renderPhoneBookApp()
+    expect(
+      screen.getByRole("heading", { name: "Portfolio CRM", level: 1 }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole("main")).toHaveAttribute("id", "top")
     await screen.findByText("Jessica Christian")
 
     fireEvent.change(
@@ -70,12 +78,51 @@ describe("contact discovery", () => {
     ).toHaveAttribute("aria-pressed", "true")
 
     const storedContacts = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_KEY_AUTH) ?? "[]",
+      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
     ) as { firstName: string; isFavorite?: boolean }[]
     expect(
       storedContacts.find(({ firstName }) => firstName === "Jessica")
         ?.isFavorite,
     ).toBe(true)
+  })
+
+  it("persists removing an existing favorite", async () => {
+    renderPhoneBookApp()
+    await screen.findByText("Jessica Christian")
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Add Jessica Christian to favorites",
+      }),
+    )
+    fireEvent.click(
+      await screen.findByRole("button", {
+        name: "Remove Jessica Christian from favorites",
+      }),
+    )
+
+    expect(
+      await screen.findByRole("button", {
+        name: "Add Jessica Christian to favorites",
+      }),
+    ).toHaveAttribute("aria-pressed", "false")
+  })
+
+  it("persists directional contact reordering from the card controls", async () => {
+    renderPhoneBookApp()
+    await screen.findByText("Jessica Christian")
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "Move Jessica Christian down" }),
+    )
+
+    await waitFor(() => {
+      const storedContacts = JSON.parse(
+        localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
+      ) as { id: number; order?: number }[]
+      expect(storedContacts.find(({ id }) => id === 1)?.order).toBe(2)
+      expect(storedContacts.find(({ id }) => id === 4)?.order).toBe(1)
+    })
   })
 
   it("explains empty results and restores all contacts from Clear", async () => {
@@ -99,5 +146,44 @@ describe("contact discovery", () => {
         "Showing 6 of 6 contacts",
       )
     })
+  })
+
+  it("restores demo contacts and explains an invalid saved payload", async () => {
+    localStorage.setItem(CONTACTS_STORAGE_KEY, "invalid contact data")
+
+    renderPhoneBookApp()
+
+    expect(await screen.findByText("Jessica Christian")).toBeInTheDocument()
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Saved contacts couldn’t be loaded. Demo contacts restored.",
+    )
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Showing 6 of 6 contacts",
+    )
+  })
+
+  it("keeps an in-memory favorite and explains a failed persistence write", async () => {
+    renderPhoneBookApp()
+    await screen.findByText("Jessica Christian")
+    vi.spyOn(localStorage, "setItem").mockImplementation(() => {
+      throw new Error("Storage unavailable")
+    })
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Add Jessica Christian to favorites",
+      }),
+    )
+
+    expect(
+      await screen.findByRole("button", {
+        name: "Remove Jessica Christian from favorites",
+      }),
+    ).toHaveAttribute("aria-pressed", "true")
+    expect(
+      await screen.findByText(
+        "Changes are available now but couldn’t be saved for your next visit.",
+      ),
+    ).toBeInTheDocument()
   })
 })

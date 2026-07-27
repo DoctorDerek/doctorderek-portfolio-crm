@@ -30,6 +30,21 @@ body {
   font-family: Inter, Arial, Helvetica, sans-serif;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html *,
+  html ::before,
+  html ::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}
+
 :focus-visible {
   outline: 0.125rem solid #facc15;
   outline-offset: 0.1875rem;

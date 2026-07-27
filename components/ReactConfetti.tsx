@@ -1,5 +1,6 @@
 "use client"
 
+import { useReducedMotion } from "motion/react"
 import { useEffect, useState } from "react"
 import Confetti from "react-confetti"
 
@@ -30,7 +31,12 @@ function useWindowSize() {
   return windowSize
 }
 
-export default function ReactConfetti() {
+function ResponsiveConfetti() {
   const { width, height } = useWindowSize()
   return <Confetti width={width} height={height} />
+}
+
+export default function ReactConfetti() {
+  const shouldReduceMotion = useReducedMotion() ?? true
+  return shouldReduceMotion ? null : <ResponsiveConfetti />
 }

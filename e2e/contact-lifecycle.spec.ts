@@ -17,7 +17,9 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
   ).toBeVisible()
   await page.getByLabel("Email Address").fill("mapachito@example.com")
   await page.getByRole("button", { name: "Next", exact: true }).click()
-  await expect(page.locator('[aria-current="step"]')).toContainText("Info")
+  await expect(
+    page.getByRole("region", { name: "Contact information" }),
+  ).toBeVisible()
 
   await page.getByLabel("First Name").fill("Mapachito")
   await page.getByLabel("Last Name").fill("Austin")
@@ -26,7 +28,9 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
   await page.getByLabel("Date of Birth - Year").fill("1980")
   await page.getByLabel("Phone Number").fill("555-867-5309")
   await page.getByRole("button", { name: "Next", exact: true }).click()
-  await expect(page.locator('[aria-current="step"]')).toContainText("Review")
+  await expect(
+    page.getByRole("region", { name: "Review and Submit" }),
+  ).toBeVisible()
   await expect(
     page.getByRole("button", { name: "Edit Mapachito Austin" }),
   ).toHaveCount(0)
@@ -40,10 +44,14 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
 
   await page.getByRole("button", { name: "Edit Mapachito Austin" }).click()
   await page.getByRole("button", { name: "Next", exact: true }).click()
-  await expect(page.locator('[aria-current="step"]')).toContainText("Info")
+  await expect(
+    page.getByRole("region", { name: "Contact information" }),
+  ).toBeVisible()
   await page.getByLabel("First Name").fill("Mapachote")
   await page.getByRole("button", { name: "Next", exact: true }).click()
-  await expect(page.locator('[aria-current="step"]')).toContainText("Review")
+  await expect(
+    page.getByRole("region", { name: "Review and Submit" }),
+  ).toBeVisible()
   await page.getByRole("button", { name: "Submit", exact: true }).click()
 
   expect(pageErrors).toEqual([])

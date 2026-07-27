@@ -3,6 +3,7 @@ packages:
 
 overrides:
   postcss@<8.5.10: "^8.5.10"
+  sharp@<0.35.3: "^0.35.3"
 
 allowBuilds:
   core-js: true

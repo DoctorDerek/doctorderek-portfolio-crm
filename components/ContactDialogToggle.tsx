@@ -1,15 +1,14 @@
 "use client"
 
 import { Switch } from "@headlessui/react"
-import { Dispatch, SetStateAction } from "react"
 import classNames from "@/utils/classNames"
 
 export default function ContactDialogToggle({
   addressEnabled,
-  setAddressEnabled,
+  onAddressEnabledChange,
 }: {
   addressEnabled: boolean
-  setAddressEnabled: Dispatch<SetStateAction<boolean>>
+  onAddressEnabledChange: (addressEnabled: boolean) => void
 }) {
   return (
     <Switch.Group
@@ -28,7 +27,7 @@ export default function ContactDialogToggle({
 
       <Switch
         checked={addressEnabled}
-        onChange={setAddressEnabled}
+        onChange={onAddressEnabledChange}
         className={classNames(
           addressEnabled ? "bg-indigo-600" : "bg-gray-200 dark:bg-gray-700",
           "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 focus:outline-hidden",

@@ -1,20 +1,16 @@
 "use client"
 
-import { useTheme } from "next-themes"
-import { useRef, useSyncExternalStore } from "react"
+import { useRef } from "react"
 import { CSSTransition } from "react-transition-group"
 
-export default function ThemeSwitch() {
-  const { resolvedTheme, setTheme } = useTheme()
+export default function ThemeToggle({
+  isDarkTheme,
+  onToggle,
+}: {
+  isDarkTheme: boolean
+  onToggle: () => void
+}) {
   const themeSwitchTransitionNodeReference = useRef<HTMLButtonElement>(null)
-
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  )
-
-  const isDarkTheme = mounted && resolvedTheme === "dark"
 
   return (
     <CSSTransition
@@ -29,9 +25,7 @@ export default function ThemeSwitch() {
         aria-label={isDarkTheme ? "Use light mode" : "Use dark mode"}
         aria-pressed={isDarkTheme}
         className="mx-1 w-28 shrink-0 rounded-full bg-transparent p-1 focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:w-36"
-        onClick={() => {
-          setTheme(resolvedTheme === "dark" ? "light" : "dark")
-        }}
+        onClick={onToggle}
       >
         <svg
           width="170"

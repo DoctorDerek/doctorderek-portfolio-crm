@@ -56,6 +56,20 @@ describe("filterContacts", () => {
     ).toEqual([contacts[1]])
   })
 
+  it("excludes contacts without an age from an age-range filter", () => {
+    const contactWithoutAge = {
+      ...contacts[0],
+      age: undefined,
+    }
+
+    expect(
+      filterContacts([contactWithoutAge], {
+        ...DEFAULT_CONTACT_FILTERS,
+        selectedAgeRangeLabel: "Seniors",
+      }),
+    ).toEqual([])
+  })
+
   it("composes search age and favorite filters", () => {
     expect(
       filterContacts(contacts, {

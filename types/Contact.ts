@@ -2,6 +2,7 @@ export type Contact = {
   id: number
   firstName: string
   lastName: string
+  order?: number
   birthYear?: string
   birthMonth?: string
   birthDay?: string

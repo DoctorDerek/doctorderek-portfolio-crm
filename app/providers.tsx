@@ -1,11 +1,11 @@
 "use client"
 
 import { useActorRef } from "@xstate/react"
+import { MotionConfig } from "motion/react"
 import { ThemeProvider } from "next-themes"
 import { ReactNode } from "react"
 import { ToastContainer } from "react-toastify"
 import GlobalStateContext from "@/components/GlobalStateContext"
-import MotionPreferenceProvider from "@/components/MotionPreferenceContext"
 import phoneBookMachine from "@/utils/phoneBookMachine"
 
 export default function Providers({ children }: { children: ReactNode }) {
@@ -14,7 +14,7 @@ export default function Providers({ children }: { children: ReactNode }) {
   return (
     <GlobalStateContext.Provider value={{ phoneBookService }}>
       <ThemeProvider attribute="class" defaultTheme="system">
-        <MotionPreferenceProvider>
+        <MotionConfig reducedMotion="user">
           {children}
           <ToastContainer
             aria-label="Contact notifications"
@@ -22,7 +22,7 @@ export default function Providers({ children }: { children: ReactNode }) {
             position="bottom-right"
             theme="colored"
           />
-        </MotionPreferenceProvider>
+        </MotionConfig>
       </ThemeProvider>
     </GlobalStateContext.Provider>
   )

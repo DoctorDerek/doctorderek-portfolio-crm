@@ -13,5 +13,17 @@ export default defineConfig({
     environment: "happy-dom",
     include: ["**/*.test.tsx", "**/*.test.ts"],
     setupFiles: ["./vitest.setup.ts"],
+    coverage: {
+      provider: "v8",
+      include: [
+        "app/**/*.{ts,tsx}",
+        "components/**/*.{ts,tsx}",
+        "contacts/**/*.{ts,tsx}",
+        "types/**/*.{ts,tsx}",
+        "utils/**/*.{ts,tsx}",
+      ],
+      exclude: ["**/*.test.{ts,tsx}", "**/*.d.ts", ".next/**", "coverage/**"],
+      reporter: ["text", "json", "html", "lcov"],
+    },
   },
 })

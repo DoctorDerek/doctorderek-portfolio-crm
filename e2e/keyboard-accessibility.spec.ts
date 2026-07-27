@@ -18,14 +18,26 @@ test("opens and dismisses the create dialog entirely from the keyboard", async (
   await expect(
     page.getByRole("dialog", { name: "Create Phone Book Entry" }),
   ).toBeFocused()
-  const inactiveFirstNameInput = page.getByRole("textbox", {
+  const firstNameInput = page.getByRole("textbox", {
     name: "First Name",
   })
+  await expect(firstNameInput).toHaveCount(0)
+
+  await page
+    .getByRole("textbox", { name: "Email Address" })
+    .fill("keyboard@example.com")
+  const nextButton = page.getByRole("button", { name: "Next", exact: true })
+  await nextButton.focus()
+  await page.keyboard.press("Enter")
+
   await expect(
-    inactiveFirstNameInput.locator("xpath=ancestor::*[@inert][1]"),
-  ).toHaveAttribute("inert", "")
-  await inactiveFirstNameInput.focus()
-  await expect(inactiveFirstNameInput).not.toBeFocused()
+    page.getByRole("region", { name: "Contact information" }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole("textbox", { name: "Email Address" }),
+  ).toHaveCount(0)
+  await expect(firstNameInput).toBeVisible()
+  await expect(nextButton).toBeFocused()
 
   await page.keyboard.press("Escape")
 

@@ -2,12 +2,15 @@
 
 import { Dialog } from "@headlessui/react"
 import { Bars3Icon, DevicePhoneMobileIcon } from "@heroicons/react/24/solid"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useState } from "react"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
-import ButtonMotionPreference from "@/components/ButtonMotionPreference"
 import ReactConfetti from "@/components/ReactConfetti"
-import ThemeSwitch from "@/components/ThemeSwitch"
+
+const ToggleDarkMode = dynamic(() => import("@/components/ToggleDarkMode"), {
+  ssr: false,
+})
 
 function NavBarLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
@@ -74,14 +77,13 @@ export default function NavBar() {
     <>
       <nav className="flex w-full items-center justify-between bg-black p-6 text-xs tracking-widest text-white uppercase">
         <div className="flex items-center space-x-12">
-          <span className="text-base">NavBar</span>
+          <span className="text-base">@DoctorDerek</span>
           <div className="hidden items-center space-x-12 xl:flex">
             <NavBarLinks />
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <ButtonMotionPreference />
-          <ThemeSwitch />
+          <ToggleDarkMode />
         </div>
         <div className="hidden xl:flex">
           <PortfolioCRMHeading />

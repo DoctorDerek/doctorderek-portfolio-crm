@@ -153,6 +153,17 @@ describe("contact list", () => {
     expect(onReorderFilteredContacts).not.toHaveBeenCalled()
   })
 
+  it("ignores drag completion when filtered persistence is not configured", () => {
+    renderContactList()
+
+    act(() => {
+      capturedReorderHandler?.([3, 2, 1])
+      capturedDragEndHandler?.()
+    })
+
+    expect(document.querySelector('[aria-live="polite"]')).toHaveTextContent("")
+  })
+
   it("renders drag handles for accessible manual reordering", () => {
     renderContactList()
 

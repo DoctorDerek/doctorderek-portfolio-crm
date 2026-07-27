@@ -86,6 +86,28 @@ describe("contact discovery", () => {
     ).toBe(true)
   })
 
+  it("persists removing an existing favorite", async () => {
+    renderPhoneBookApp()
+    await screen.findByText("Jessica Christian")
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Add Jessica Christian to favorites",
+      }),
+    )
+    fireEvent.click(
+      await screen.findByRole("button", {
+        name: "Remove Jessica Christian from favorites",
+      }),
+    )
+
+    expect(
+      await screen.findByRole("button", {
+        name: "Add Jessica Christian to favorites",
+      }),
+    ).toHaveAttribute("aria-pressed", "false")
+  })
+
   it("persists directional contact reordering from the card controls", async () => {
     renderPhoneBookApp()
     await screen.findByText("Jessica Christian")

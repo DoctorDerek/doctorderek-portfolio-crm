@@ -26,7 +26,6 @@
     "react-dom": "^19",
     "react-hook-form": "^7",
     "react-toastify": "^11",
-    "react-transition-group": "^4",
     "xstate": "^5",
     "zod": "^4"
   },
@@ -48,7 +47,6 @@
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/react-transition-group": "^4",
     "@vitejs/plugin-react": "^6",
     "@vitest/coverage-v8": "^4",
     "eslint": "^9",

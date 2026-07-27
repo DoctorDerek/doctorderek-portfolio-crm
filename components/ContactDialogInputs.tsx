@@ -197,7 +197,9 @@ export default function ContactDialogInputs({
           errors={errors}
           disabled={!formValues.addressEnabled}
         />
-        {Object.values(errors).some(Boolean) && <ErrorMessage errors={errors} />}
+        {Object.values(errors).some(Boolean) && (
+          <ErrorMessage errors={errors} />
+        )}
       </section>
     ),
     review: (

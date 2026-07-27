@@ -1,9 +1,12 @@
-import { useEffect } from "react"
 import { render, screen } from "@testing-library/react"
+import { useEffect } from "react"
 import { useForm, useWatch } from "react-hook-form"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import ContactDialogInputs from "@/components/ContactDialogInputs"
-import { ContactFormValues, getContactFormDefaultValues } from "@/utils/contactForm"
+import {
+  ContactFormValues,
+  getContactFormDefaultValues,
+} from "@/utils/contactForm"
 
 let shouldReduceMotion: boolean | null = false
 
@@ -92,12 +95,7 @@ describe("contact dialog input errors", () => {
   })
 
   it("renders the fallback message for a root form error", async () => {
-    render(
-      <ContactDialogInputsHarness
-        errorField="streetAddress"
-        rootError
-      />,
-    )
+    render(<ContactDialogInputsHarness errorField="streetAddress" rootError />)
 
     expect(
       await screen.findByText("Please correct the highlighted field."),

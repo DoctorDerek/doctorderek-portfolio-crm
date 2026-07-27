@@ -26,6 +26,7 @@ describe("contact birthday parsing", () => {
     { birthYear: "2023", birthMonth: "02", birthDay: "29" },
     { birthYear: "2000", birthMonth: "13", birthDay: "01" },
     { birthYear: "2000", birthMonth: "04", birthDay: "31" },
+    { birthYear: "2000", birthMonth: "123", birthDay: "01" },
     { birthYear: "20", birthMonth: "01", birthDay: "01" },
     { birthYear: "year", birthMonth: "month", birthDay: "day" },
   ])(

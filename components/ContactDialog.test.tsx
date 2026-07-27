@@ -4,6 +4,18 @@ import Providers from "@/app/providers"
 import ContactDialog from "@/components/ContactDialog"
 import { Contact } from "@/types/Contact"
 
+let shouldReduceMotion = false
+
+vi.mock("motion/react", async () => {
+  const actual = await vi.importActual<typeof import("motion/react")>(
+    "motion/react",
+  )
+  return {
+    ...actual,
+    useReducedMotion: () => shouldReduceMotion,
+  }
+})
+
 const existingContact: Contact = {
   id: 7,
   firstName: "Ada",
@@ -314,6 +326,20 @@ describe("contact dialog validation and review", () => {
       "aria-current",
       "step",
     )
+  })
+
+  it("renders the reduced-motion dialog transition path", async () => {
+    shouldReduceMotion = true
+
+    try {
+      renderCreateDialog()
+      await showInformationStep()
+      expect(
+        screen.getByRole("region", { name: "Contact information" }),
+      ).toBeInTheDocument()
+    } finally {
+      shouldReduceMotion = false
+    }
   })
 
   it("validates a nonblank phone number during creation", async () => {

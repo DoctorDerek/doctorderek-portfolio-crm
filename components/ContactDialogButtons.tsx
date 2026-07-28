@@ -117,24 +117,22 @@ export default function ContactDialogButtons({
       closeDialog()
       return
     }
-    if (dialogStep === "email") {
+    if (dialogStep === "information") {
       closeDialog()
       return
     }
-    showStep(dialogStep === "review" ? "information" : "email")
+    showStep("information")
   }
   const getBackLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
       return "Cancel"
-    if (dialogStep === "email") return "Cancel"
+    if (dialogStep === "information") return "Cancel"
     return "Back"
   }
   const handleNext = async () => {
-    if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") return
-    if (dialogStep === "review") return
     const isCurrentStepValid = await validateStep()
     if (!isCurrentStepValid) return
-    showStep(dialogStep === "email" ? "information" : "review")
+    showStep("review")
   }
   const getNextLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")

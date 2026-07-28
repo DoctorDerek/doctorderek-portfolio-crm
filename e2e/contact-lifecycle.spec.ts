@@ -16,11 +16,6 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
     page.getByText("Create Phone Book Entry", { exact: true }),
   ).toBeVisible()
   await page.getByLabel("Email Address").fill("mapachito@example.com")
-  await page.getByRole("button", { name: "Next", exact: true }).click()
-  await expect(
-    page.getByRole("region", { name: "Contact information" }),
-  ).toBeVisible()
-
   await page.getByLabel("First Name").fill("Mapachito")
   await page.getByLabel("Last Name").fill("Austin")
   await page.getByLabel("Date of Birth - Month").fill("07")
@@ -43,7 +38,6 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
   await expect(page.getByRole("status")).toHaveText("Showing 7 of 7 contacts")
 
   await page.getByRole("button", { name: "Edit Mapachito Austin" }).click()
-  await page.getByRole("button", { name: "Next", exact: true }).click()
   await expect(
     page.getByRole("region", { name: "Contact information" }),
   ).toBeVisible()

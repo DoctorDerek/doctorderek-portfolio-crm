@@ -8,12 +8,7 @@ import { DialogState } from "@/types/DialogState"
 import transformBirthday from "@/utils/transformBirthday"
 
 function Address({ contact }: { contact: Contact }) {
-  const { streetAddress, city, state, zipCode } = contact || {
-    streetAddress: "",
-    city: "",
-    state: "",
-    zipCode: "",
-  }
+  const { streetAddress, city, state, zipCode } = contact
 
   return (
     <div className="flex flex-col">

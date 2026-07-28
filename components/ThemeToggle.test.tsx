@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import ThemeToggle from "@/components/ThemeToggle"
 
@@ -7,11 +7,13 @@ const themeToggleTestCases = [
     accessibleName: "Use dark mode",
     isPressed: false,
     isDarkTheme: false,
+    themeClass: "theme-toggle--light",
   },
   {
     accessibleName: "Use light mode",
     isPressed: true,
     isDarkTheme: true,
+    themeClass: "theme-toggle--dark",
   },
 ] as const
 
@@ -24,7 +26,7 @@ describe("theme toggle", () => {
 
   it.each(themeToggleTestCases)(
     "renders the $accessibleName state and delegates its action",
-    ({ accessibleName, isDarkTheme, isPressed }) => {
+    ({ accessibleName, isDarkTheme, isPressed, themeClass }) => {
       render(<ThemeToggle isDarkTheme={isDarkTheme} onToggle={onToggle} />)
 
       const themeSwitch = screen.getByRole("button", {
@@ -32,6 +34,7 @@ describe("theme toggle", () => {
       })
 
       expect(themeSwitch).toHaveAttribute("aria-pressed", String(isPressed))
+      expect(themeSwitch).toHaveClass(themeClass)
       expect(themeSwitch.querySelector("svg")).toHaveAttribute(
         "aria-hidden",
         "true",
@@ -43,25 +46,19 @@ describe("theme toggle", () => {
     },
   )
 
-  it("applies completed animation states to the referenced button", async () => {
+  it("updates the CSS theme state when the theme changes", () => {
     const { rerender } = render(
       <ThemeToggle isDarkTheme={false} onToggle={onToggle} />,
     )
 
     rerender(<ThemeToggle isDarkTheme onToggle={onToggle} />)
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole("button", { name: "Use light mode" }),
-      ).toHaveClass("switch-enter-done")
-    })
+    expect(screen.getByRole("button", { name: "Use light mode" })).toHaveClass(
+      "theme-toggle--dark",
+    )
 
     rerender(<ThemeToggle isDarkTheme={false} onToggle={onToggle} />)
-
-    await waitFor(() => {
-      expect(screen.getByRole("button", { name: "Use dark mode" })).toHaveClass(
-        "switch-exit-done",
-      )
-    })
+    expect(screen.getByRole("button", { name: "Use dark mode" })).toHaveClass(
+      "theme-toggle--light",
+    )
   })
 })

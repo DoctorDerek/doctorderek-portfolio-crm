@@ -75,19 +75,11 @@ function renderUpdateDialog(contact = existingContact) {
   return setDialogState
 }
 
-async function showInformationStep() {
-  fireEvent.change(screen.getByLabelText("Email Address"), {
-    target: { value: "ada@example.com" },
-  })
-  fireEvent.click(screen.getByRole("button", { name: "Next" }))
-
-  await expectInformationStep()
-}
-
 async function expectInformationStep() {
   expect(
     await screen.findByRole("region", { name: "Contact information" }),
   ).toBeInTheDocument()
+  expect(screen.getByLabelText("Email Address")).toBeInTheDocument()
   expect(
     screen.getByRole("list").querySelector('[aria-current="step"]'),
   ).toHaveTextContent("Contact information")
@@ -123,7 +115,7 @@ function fillContactInformation(birthDay: string) {
 describe("contact dialog validation and review", () => {
   it("keeps an impossible birthday off the review step", async () => {
     renderCreateDialog()
-    await showInformationStep()
+    await expectInformationStep()
     fillContactInformation("30")
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
@@ -140,7 +132,7 @@ describe("contact dialog validation and review", () => {
 
   it("presents a valid contact as a read-only review confirmation", async () => {
     renderCreateDialog()
-    await showInformationStep()
+    await expectInformationStep()
     fillContactInformation("29")
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
@@ -164,27 +156,25 @@ describe("contact dialog validation and review", () => {
 
   it("preserves form values across backward and forward step transitions", async () => {
     renderCreateDialog()
-    await showInformationStep()
+    await expectInformationStep()
+    fireEvent.change(screen.getByLabelText("Email Address"), {
+      target: { value: "ada@example.com" },
+    })
     fillContactInformation("29")
 
-    fireEvent.click(screen.getByRole("button", { name: "Back" }))
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole("region", { name: "Contact email" }),
-      ).toBeInTheDocument()
-    })
-    expect(screen.getByLabelText("Email Address")).toHaveValue(
-      "ada@example.com",
-    )
-
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
+    await expectReviewStep()
+    fireEvent.click(screen.getByRole("button", { name: "Back" }))
 
     await waitFor(() => {
       expect(
         screen.getByRole("region", { name: "Contact information" }),
       ).toBeInTheDocument()
     })
+    expect(screen.getByLabelText("Email Address")).toHaveValue(
+      "ada@example.com",
+    )
+
     expect(screen.getByLabelText("First Name")).toHaveValue("Ada")
     expect(screen.getByLabelText("Last Name")).toHaveValue("Lovelace")
     expect(screen.getByLabelText("Date of Birth - Day")).toHaveValue("29")
@@ -202,8 +192,6 @@ describe("contact dialog validation and review", () => {
     )
 
     expect(getByLabelText("Email Address")).toHaveValue(existingContact.email)
-    fireEvent.click(screen.getByRole("button", { name: "Next" }))
-    await expectInformationStep()
     expect(getByLabelText("First Name")).toHaveValue(existingContact.firstName)
 
     rerender(
@@ -219,14 +207,10 @@ describe("contact dialog validation and review", () => {
     expect(screen.getByLabelText("First Name")).toHaveValue(
       alternateContact.firstName,
     )
-    fireEvent.click(screen.getByRole("button", { name: "Back" }))
-    await waitFor(() => {
-      expect(screen.getByLabelText("Email Address")).toHaveValue(
-        alternateContact.email,
-      )
-    })
-    fireEvent.click(screen.getByRole("button", { name: "Next" }))
     await expectInformationStep()
+    expect(screen.getByLabelText("Email Address")).toHaveValue(
+      alternateContact.email,
+    )
     expect(
       screen.getByRole("list").querySelector('[aria-current="step"]'),
     ).toHaveTextContent("Contact information")
@@ -241,9 +225,6 @@ describe("contact dialog validation and review", () => {
     expect(screen.getByLabelText("Email Address")).toHaveValue(
       existingContact.email,
     )
-    fireEvent.click(screen.getByRole("button", { name: "Next" }))
-
-    await expectInformationStep()
     expect(screen.getByLabelText("First Name")).toHaveValue(
       existingContact.firstName,
     )
@@ -281,15 +262,17 @@ describe("contact dialog validation and review", () => {
     expect(
       await screen.findByText("Please enter a valid email address."),
     ).toBeInTheDocument()
-    expect(screen.getByText("Email").closest("li")).toHaveAttribute(
-      "aria-current",
-      "step",
-    )
+    expect(
+      screen.getByRole("list").querySelector('[aria-current="step"]'),
+    ).toHaveTextContent("Contact information")
 
     fireEvent.change(screen.getByLabelText("Email Address"), {
       target: { value: existingContact.email },
     })
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
+    await expectReviewStep()
+
+    fireEvent.click(screen.getByRole("button", { name: "Back" }))
     await expectInformationStep()
 
     fireEvent.change(screen.getByLabelText("Date of Birth - Month"), {
@@ -308,7 +291,7 @@ describe("contact dialog validation and review", () => {
     ).toHaveTextContent("Contact information")
   })
 
-  it("returns to the email step when native submission finds an email error", async () => {
+  it("returns to the information step when native submission finds an email error", async () => {
     renderCreateDialog()
     fireEvent.change(screen.getByLabelText("Email Address"), {
       target: { value: "not-an-email" },
@@ -321,10 +304,9 @@ describe("contact dialog validation and review", () => {
     expect(
       await screen.findByText("Please enter a valid email address."),
     ).toBeInTheDocument()
-    expect(screen.getByText("Email").closest("li")).toHaveAttribute(
-      "aria-current",
-      "step",
-    )
+    expect(
+      screen.getByRole("list").querySelector('[aria-current="step"]'),
+    ).toHaveTextContent("Contact information")
   })
 
   it("renders the reduced-motion dialog transition path", async () => {
@@ -332,7 +314,7 @@ describe("contact dialog validation and review", () => {
 
     try {
       renderCreateDialog()
-      await showInformationStep()
+      await expectInformationStep()
       expect(
         screen.getByRole("region", { name: "Contact information" }),
       ).toBeInTheDocument()
@@ -343,7 +325,7 @@ describe("contact dialog validation and review", () => {
 
   it("validates a nonblank phone number during creation", async () => {
     renderCreateDialog()
-    await showInformationStep()
+    await expectInformationStep()
     fillContactInformation("29")
     fireEvent.change(screen.getByLabelText("Phone Number"), {
       target: { value: "invalid phone" },
@@ -364,8 +346,6 @@ describe("contact dialog validation and review", () => {
     fireEvent.change(screen.getByLabelText("Email Address"), {
       target: { value: "" },
     })
-    fireEvent.click(screen.getByRole("button", { name: "Next" }))
-    await expectInformationStep()
 
     for (const label of [
       "Date of Birth - Month",

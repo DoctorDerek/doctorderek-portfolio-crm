@@ -32,16 +32,6 @@ export default function reorderContacts({
   if (filteredContactIdSet.size !== filteredContactIds.length)
     return contacts as Contact[]
 
-  const reorderedFilteredContactIdSet = new Set(reorderedFilteredContactIds)
-  if (
-    reorderedFilteredContactIdSet.size !== reorderedFilteredContactIds.length ||
-    reorderedFilteredContactIds.some(
-      (contactId) => !filteredContactIdSet.has(contactId),
-    )
-  ) {
-    return contacts as Contact[]
-  }
-
   const filteredContactById = new Map<number, Contact>()
   const visibleSlotIndexes: number[] = []
 

@@ -110,10 +110,10 @@ export default function ContactDialogInputs({
   })
 
   const dialogStepContent = {
-    email: (
-      <section aria-labelledby="contact-email-step-title">
-        <h3 id="contact-email-step-title" className="sr-only">
-          Contact email
+    information: (
+      <section aria-labelledby="contact-information-step-title">
+        <h3 id="contact-information-step-title" className="sr-only">
+          Contact information
         </h3>
         <ContactDialogInput
           label="Email Address"
@@ -121,14 +121,6 @@ export default function ContactDialogInputs({
           register={register}
           errors={errors}
         />
-        {errors?.email?.message && <ErrorMessage errors={errors} />}
-      </section>
-    ),
-    information: (
-      <section aria-labelledby="contact-information-step-title">
-        <h3 id="contact-information-step-title" className="sr-only">
-          Contact information
-        </h3>
         <ContactDialogInput
           label="First Name"
           fieldName="firstName"
@@ -205,16 +197,9 @@ export default function ContactDialogInputs({
           errors={errors}
           disabled={!formValues.addressEnabled}
         />
-        {(errors?.firstName?.message ||
-          errors?.lastName?.message ||
-          errors?.birthMonth?.message ||
-          errors?.birthDay?.message ||
-          errors?.birthYear?.message ||
-          errors?.phoneNumber?.message ||
-          errors?.streetAddress?.message ||
-          errors?.city?.message ||
-          errors?.state?.message ||
-          errors?.zipCode?.message) && <ErrorMessage errors={errors} />}
+        {Object.values(errors).some(Boolean) && (
+          <ErrorMessage errors={errors} />
+        )}
       </section>
     ),
     review: (

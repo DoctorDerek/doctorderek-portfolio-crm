@@ -124,8 +124,7 @@ export default function ContactList({
           onReorder={handleReorder}
         >
           {visibleContactIds.map((contactId, contactIndex) => {
-            const contact = findContactById(contactId)
-            if (!contact) return null
+            const contact = findContactById(contactId)!
 
             return (
               <SortableContact

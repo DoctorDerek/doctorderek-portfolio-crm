@@ -32,11 +32,7 @@ export default function ContactCardPhotoAndHeading({
   isFirst?: boolean
   isLast?: boolean
 }) {
-  const { firstName, lastName, photo } = contact || {
-    firstName: "",
-    lastName: "",
-    photo: "",
-  }
+  const { firstName, lastName, photo } = contact
   const contactName = `${firstName} ${lastName}`
   return (
     <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

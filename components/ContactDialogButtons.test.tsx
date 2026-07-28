@@ -6,7 +6,7 @@ import { DialogState } from "@/types/DialogState"
 
 function renderButtons({
   dialogState = { type: "CREATE" },
-  dialogStep = "email",
+  dialogStep = "information",
   validateStep = vi.fn().mockResolvedValue(true),
 }: {
   dialogState?: DialogState
@@ -48,28 +48,43 @@ describe("contact dialog navigation", () => {
     expect(validateStep).not.toHaveBeenCalled()
   })
 
-  it("moves from email to information after valid email input", async () => {
+  it("moves from information to review after valid form input", async () => {
     const { closeDialog, showStep, validateStep } = renderButtons()
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
     fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
-    await waitFor(() => expect(showStep).toHaveBeenCalledWith("information"))
-    expect(closeDialog).toHaveBeenCalledOnce()
+    await waitFor(() => expect(showStep).toHaveBeenCalledWith("review"))
+    expect(closeDialog).not.toHaveBeenCalled()
     expect(validateStep).toHaveBeenCalledOnce()
   })
 
-  it("returns to email and advances to review from information", async () => {
+  it("cancels the first form step without validation", () => {
+    const { closeDialog, showStep, validateStep } = renderButtons()
+
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
+
+    expect(closeDialog).toHaveBeenCalledOnce()
+    expect(showStep).not.toHaveBeenCalled()
+    expect(validateStep).not.toHaveBeenCalled()
+  })
+
+  it("returns to information from review", () => {
     const { showStep, validateStep } = renderButtons({
-      dialogStep: "information",
+      dialogStep: "review",
     })
 
     fireEvent.click(screen.getByRole("button", { name: "Back" }))
-    fireEvent.click(screen.getByRole("button", { name: "Next" }))
 
-    await waitFor(() => expect(validateStep).toHaveBeenCalledOnce())
-    expect(showStep).toHaveBeenNthCalledWith(1, "email")
-    expect(showStep).toHaveBeenNthCalledWith(2, "review")
+    expect(showStep).toHaveBeenNthCalledWith(1, "information")
+    expect(validateStep).not.toHaveBeenCalled()
+  })
+
+  it("renders exactly two progress indicators", () => {
+    renderButtons()
+
+    expect(screen.getByRole("list").querySelectorAll("li")).toHaveLength(2)
+    expect(screen.getByText("Contact information")).toBeInTheDocument()
+    expect(screen.getByText("Review")).toBeInTheDocument()
   })
 
   it("stays on the current information step when validation fails", async () => {

@@ -19,8 +19,7 @@ export default function PhoneBookApp() {
     if (phoneBookState.matches("idle")) send({ type: "READ" })
   }, [phoneBookState, send])
 
-  const { context } = phoneBookState || {}
-  const { contacts, persistenceFailure } = context || {}
+  const { contacts, persistenceFailure } = phoneBookState.context
 
   useEffect(() => {
     if (!persistenceFailure) return

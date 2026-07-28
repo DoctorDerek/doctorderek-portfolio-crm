@@ -56,200 +56,110 @@ body {
  * https://codesandbox.io/s/dark-mode-toggle-si6k2?file=/src/DarkModeToggle.js
  */
 
-.switch-enter .cloud1 {
-  transform: translateX(0);
+.switch {
+  display: block;
+  width: 170px;
+  height: 70px;
 }
 
-.switch-enter-done .cloud1 {
-  transform: translateX(-100px);
-  transition: transform 0.8s;
-}
-
-.switch-exit .cloud1 {
-  transform: translateX(-100px);
-}
-
-.switch-exit-done .cloud1 {
-  transform: translateX(0);
-  transition: transform 0.8s;
-}
-
-.switch-enter .cloud2 {
-  transform: translateX(0);
-}
-
-.switch-enter-done .cloud2 {
-  transform: translateX(60px);
-  transition: transform 0.8s;
-}
-
-.switch-exit .cloud2 {
-  transform: translateX(60px);
-}
-
-.switch-exit-done .cloud2 {
-  transform: translateX(0);
-  transition: transform 0.8s;
-}
-
-.switch-enter .sun {
-  transform: translateY(0);
-}
-
-.switch-enter-done .sun {
-  transform: translateY(50px);
-  transition: transform 0.8s;
-}
-
-.switch-exit .sun {
-  transform: translateY(50px);
-}
-
-.switch-exit-done .sun {
-  transform: translateY(0);
+.cloud1,
+.cloud2,
+.sun {
   transition: transform 0.8s;
 }
 
 .moon {
   transform: translateY(-40px);
-}
-
-.switch-enter .moon {
-  transform: translateY(-40px);
-}
-
-.switch-enter-done .moon {
-  transform: translateY(0px);
   transition: transform 0.7s;
 }
 
-.switch-exit .moon {
-  transform: translateY(0px);
+.mountain3,
+.mountain2,
+.mountain1,
+.trees {
+  transition: fill 0.8s;
 }
 
-.switch-exit-done .moon {
+.background-top-color,
+.background-bottom-color {
+  transition: stop-color 0.7s;
+}
+
+.theme-toggle--dark .cloud1 {
+  transform: translateX(-100px);
+}
+
+.theme-toggle--dark .cloud2 {
+  transform: translateX(60px);
+}
+
+.theme-toggle--dark .sun {
+  transform: translateY(50px);
+}
+
+.theme-toggle--dark .moon {
+  transform: translateY(0);
+}
+
+.theme-toggle--dark .mountain3 {
+  fill: #858585;
+}
+
+.theme-toggle--dark .mountain2 {
+  fill: #4d4d4d;
+}
+
+.theme-toggle--dark .mountain1 {
+  fill: #262626;
+}
+
+.theme-toggle--dark .trees {
+  fill: #1a1a1a;
+}
+
+.theme-toggle--dark .background-top-color {
+  stop-color: #000;
+}
+
+.theme-toggle--dark .background-bottom-color {
+  stop-color: #210658;
+}
+
+.theme-toggle--light .cloud1,
+.theme-toggle--light .cloud2 {
+  transform: translateX(0);
+}
+
+.theme-toggle--light .sun {
+  transform: translateY(0);
+}
+
+.theme-toggle--light .moon {
   transform: translateY(-40px);
-  transition: transform 0.7s;
 }
 
-.switch-enter .mountain3 {
-  fill: #858585;
-  transition: fill 0.8s;
-}
-
-.switch-enter-done .mountain3 {
-  fill: #858585;
-  transition: fill 0.8s;
-}
-
-.switch-exit .mountain3 {
+.theme-toggle--light .mountain3 {
   fill: #729971;
-  transition: fill 0.8s;
 }
 
-.switch-exit-done .mountain3 {
-  fill: #729971;
-  transition: fill 0.8s;
-}
-
-.switch-enter .mountain2 {
-  fill: #4d4d4d;
-  transition: fill 0.8s;
-}
-
-.switch-enter-done .mountain2 {
-  fill: #4d4d4d;
-  transition: fill 0.8s;
-}
-
-.switch-exit .mountain2 {
+.theme-toggle--light .mountain2 {
   fill: #316930;
-  transition: fill 0.8s;
 }
 
-.switch-exit-done .mountain2 {
-  fill: #316930;
-  transition: fill 0.8s;
-}
-
-.switch-enter .mountain1 {
-  fill: #262626;
-  transition: fill 0.8s;
-}
-
-.switch-enter-done .mountain1 {
-  fill: #262626;
-  transition: fill 0.8s;
-}
-
-.switch-exit .mountain1 {
+.theme-toggle--light .mountain1 {
   fill: #0d3f0c;
-  transition: fill 0.8s;
 }
 
-.switch-exit-done .mountain1 {
-  fill: #0d3f0c;
-  transition: fill 0.8s;
-}
-
-.switch-enter .trees {
-  fill: #1a1a1a;
-  transition: fill 0.8s;
-}
-
-.switch-enter-done .trees {
-  fill: #1a1a1a;
-  transition: fill 0.8s;
-}
-
-.switch-exit .trees {
+.theme-toggle--light .trees {
   fill: #092b08;
-  transition: fill 0.8s;
 }
 
-.switch-exit-done .trees {
-  fill: #092b08;
-  transition: fill 0.8s;
-}
-
-.switch-enter .background-top-color {
-  stop-color: #000;
-  transition: stop-color 0.7s;
-}
-
-.switch-enter-done .background-top-color {
-  stop-color: #000;
-  transition: stop-color 0.7s;
-}
-
-.switch-exit .background-top-color {
+.theme-toggle--light .background-top-color {
   stop-color: #75daf0;
-  transition: stop-color 0.7s;
 }
 
-.switch-exit-done .background-top-color {
-  stop-color: #75daf0;
-  transition: stop-color 0.7s;
-}
-
-.switch-enter .background-bottom-color {
-  stop-color: #210658;
-  transition: stop-color 0.7s;
-}
-
-.switch-enter-done .background-bottom-color {
-  stop-color: #210658;
-  transition: stop-color 0.7s;
-}
-
-.switch-exit .background-bottom-color {
+.theme-toggle--light .background-bottom-color {
   stop-color: #c3eff8;
-  transition: stop-color 0.7s;
-}
-
-.switch-exit-done .background-bottom-color {
-  stop-color: #c3eff8;
-  transition: stop-color 0.7s;
 }
 
 .star1 {
@@ -315,88 +225,47 @@ body {
   transform: scale(0);
 }
 
-.switch-enter .star1,
-.switch-enter .star2,
-.switch-enter .star3,
-.switch-enter .star4,
-.switch-enter .star5,
-.switch-enter .star6,
-.switch-enter .star7,
-.switch-enter .star8,
-.switch-enter .star9,
-.switch-enter .star10,
-.switch-enter .star11,
-.switch-enter .star12 {
-  transform: scale(0);
-}
-
-.switch-enter-done .star1,
-.switch-enter-done .star5,
-.switch-enter-done .star9 {
-  transform: scale(1);
+.star1,
+.star5,
+.star9 {
   transition: transform 0.2s;
 }
 
-.switch-enter-done .star2,
-.switch-enter-done .star6,
-.switch-enter-done .star10 {
-  transform: scale(1);
+.star2,
+.star6,
+.star10 {
   transition: transform 0.4s;
 }
 
-.switch-enter-done .star3,
-.switch-enter-done .star7,
-.switch-enter-done .star11 {
-  transform: scale(1);
+.star3,
+.star7,
+.star11 {
   transition: transform 0.6s;
 }
 
-.switch-enter-done .star4,
-.switch-enter-done .star8,
-.switch-enter-done .star12 {
-  transform: scale(1);
+.star4,
+.star8,
+.star12 {
   transition: transform 0.8s;
 }
 
-.switch-exit .star1,
-.switch-exit .star2,
-.switch-exit .star3,
-.switch-exit .star4,
-.switch-exit .star5,
-.switch-exit .star6,
-.switch-exit .star7,
-.switch-exit .star8,
-.switch-exit .star9,
-.switch-exit .star10,
-.switch-exit .star11,
-.switch-exit .star12 {
+.theme-toggle--dark .star1,
+.theme-toggle--dark .star2,
+.theme-toggle--dark .star3,
+.theme-toggle--dark .star4,
+.theme-toggle--dark .star5,
+.theme-toggle--dark .star6,
+.theme-toggle--dark .star7,
+.theme-toggle--dark .star8,
+.theme-toggle--dark .star9,
+.theme-toggle--dark .star10,
+.theme-toggle--dark .star11,
+.theme-toggle--dark .star12 {
   transform: scale(1);
 }
 
-.switch-exit-done .star1,
-.switch-exit-done .star5,
-.switch-exit-done .star9 {
-  transform: scale(0);
-  transition: transform 0.2s;
-}
-
-.switch-exit-done .star2,
-.switch-exit-done .star6,
-.switch-exit-done .star10 {
-  transform: scale(0);
-  transition: transform 0.4s;
-}
-
-.switch-exit-done .star3,
-.switch-exit-done .star7,
-.switch-exit-done .star11 {
-  transform: scale(0);
-  transition: transform 0.6s;
-}
-
-.switch-exit-done .star4,
-.switch-exit-done .star8,
-.switch-exit-done .star12 {
-  transform: scale(0);
-  transition: transform 0.8s;
+@media (prefers-reduced-motion: reduce) {
+  .switch * {
+    transition-duration: 0s;
+  }
 }

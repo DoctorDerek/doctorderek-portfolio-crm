@@ -10,11 +10,7 @@ export default function ContactCardNameAndCity({
   contact: Contact
   setDialogState?: Dispatch<SetStateAction<DialogState>>
 }) {
-  const { firstName, lastName, city } = contact || {
-    firstName: "",
-    lastName: "",
-    city: "",
-  }
+  const { firstName, lastName, city } = contact
   const contactName = `${firstName} ${lastName}`
 
   return (

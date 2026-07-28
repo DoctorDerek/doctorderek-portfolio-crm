@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import ReactConfetti from "@/components/ReactConfetti"
 
-let shouldReduceMotion = false
+let shouldReduceMotion: boolean | null = false
 
 vi.mock("motion/react", async () => {
   const actual =
@@ -60,6 +60,14 @@ describe("confetti viewport", () => {
 
   it("omits decorative confetti when reduced motion is active", () => {
     shouldReduceMotion = true
+
+    renderConfetti()
+
+    expect(screen.queryByLabelText("Confetti viewport")).not.toBeInTheDocument()
+  })
+
+  it("omits decorative confetti when motion preference is unresolved", () => {
+    shouldReduceMotion = null
 
     renderConfetti()
 

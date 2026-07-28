@@ -18,7 +18,7 @@ function ensureContactOrder(contacts: Contact[]) {
   }))
 
   return normalizedContactEntries
-    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .sort((a, b) => a.order - b.order)
     .map((contact, index) => ({ ...contact, order: index }))
 }
 
@@ -91,32 +91,34 @@ function moveContactToContact(
   )
 }
 
+type PhoneBookEvent =
+  | { type: "CREATE"; contact: Contact }
+  | { type: "READ" }
+  | { type: "UPDATE"; contact: Contact }
+  | { type: "DELETE"; contact: Contact }
+  | { type: "TOGGLE_FAVORITE"; contactId: number }
+  | { type: "MOVE_CONTACT"; contactId: number; direction: "up" | "down" }
+  | {
+      type: "MOVE_CONTACT_TO_CONTACT"
+      contactId: number
+      targetContactId: number
+      insertAfter: boolean
+    }
+  | {
+      type: "REORDER_FILTERED_CONTACTS"
+      filteredContactIds: number[]
+      reorderedFilteredContactIds: number[]
+    }
+  | { type: "CLEAR_PERSISTENCE_FAILURE" }
+  | { type: "RESET" }
+
 const phoneBookMachine = setup({
   types: {} as {
     context: {
       contacts: Contact[]
       persistenceFailure: PersistenceFailure | null
     }
-    events:
-      | { type: "CREATE"; contact: Contact }
-      | { type: "READ" }
-      | { type: "UPDATE"; contact: Contact }
-      | { type: "DELETE"; contact: Contact }
-      | { type: "TOGGLE_FAVORITE"; contactId: number }
-      | { type: "MOVE_CONTACT"; contactId: number; direction: "up" | "down" }
-      | {
-          type: "MOVE_CONTACT_TO_CONTACT"
-          contactId: number
-          targetContactId: number
-          insertAfter: boolean
-        }
-      | {
-          type: "REORDER_FILTERED_CONTACTS"
-          filteredContactIds: number[]
-          reorderedFilteredContactIds: number[]
-        }
-      | { type: "CLEAR_PERSISTENCE_FAILURE" }
-      | { type: "RESET" }
+    events: PhoneBookEvent
   },
   actions: {
     readPhoneBookFromLocalStorage: assign(() => {
@@ -143,10 +145,10 @@ const phoneBookMachine = setup({
     }),
     createContact: assign({
       contacts: ({ context, event }) => {
-        if (event.type !== "CREATE") return context.contacts
-        const { birthYear, birthMonth, birthDay } = event.contact
+        const createEvent = event as Extract<PhoneBookEvent, { type: "CREATE" }>
+        const { birthYear, birthMonth, birthDay } = createEvent.contact
         const newContact = {
-          ...event.contact,
+          ...createEvent.contact,
           age: calculateAge({ birthYear, birthMonth, birthDay }),
           order: context.contacts.length,
         }
@@ -155,10 +157,10 @@ const phoneBookMachine = setup({
     }),
     updateContact: assign({
       contacts: ({ context, event }) => {
-        if (event.type !== "UPDATE") return context.contacts
-        const { birthYear, birthMonth, birthDay } = event.contact
+        const updateEvent = event as Extract<PhoneBookEvent, { type: "UPDATE" }>
+        const { birthYear, birthMonth, birthDay } = updateEvent.contact
         const updatedContact = {
-          ...event.contact,
+          ...updateEvent.contact,
           age: calculateAge({ birthYear, birthMonth, birthDay }),
         }
         return context.contacts.map((contact) =>
@@ -168,9 +170,9 @@ const phoneBookMachine = setup({
     }),
     deleteContact: assign({
       contacts: ({ context, event }) => {
-        if (event.type !== "DELETE") return context.contacts
         const currentPhoneBookEntries = [...context.contacts]
-        const deletedContact = event.contact
+        const deleteEvent = event as Extract<PhoneBookEvent, { type: "DELETE" }>
+        const deletedContact = deleteEvent.contact
         const filteredPhoneBookEntries = currentPhoneBookEntries.filter(
           ({ id }) => id !== deletedContact.id,
         )
@@ -179,10 +181,13 @@ const phoneBookMachine = setup({
     }),
     toggleContactFavorite: assign({
       contacts: ({ context, event }) => {
-        if (event.type !== "TOGGLE_FAVORITE") return context.contacts
+        const favoriteEvent = event as Extract<
+          PhoneBookEvent,
+          { type: "TOGGLE_FAVORITE" }
+        >
 
         return context.contacts.map((contact) =>
-          contact.id === event.contactId
+          contact.id === favoriteEvent.contactId
             ? { ...contact, isFavorite: !contact.isFavorite }
             : contact,
         )
@@ -212,23 +217,30 @@ const phoneBookMachine = setup({
     }),
     reorderContact: assign({
       contacts: ({ context, event }) => {
-        if (event.type !== "MOVE_CONTACT") return context.contacts
-        return moveContactInOrder(context.contacts, event)
+        return moveContactInOrder(
+          context.contacts,
+          event as Extract<PhoneBookEvent, { type: "MOVE_CONTACT" }>,
+        )
       },
     }),
     reorderContactToContact: assign({
       contacts: ({ context, event }) => {
-        if (event.type !== "MOVE_CONTACT_TO_CONTACT") return context.contacts
-        return moveContactToContact(context.contacts, event)
+        return moveContactToContact(
+          context.contacts,
+          event as Extract<PhoneBookEvent, { type: "MOVE_CONTACT_TO_CONTACT" }>,
+        )
       },
     }),
     reorderFilteredContacts: assign({
       contacts: ({ context, event }) => {
-        if (event.type !== "REORDER_FILTERED_CONTACTS") return context.contacts
+        const reorderEvent = event as Extract<
+          PhoneBookEvent,
+          { type: "REORDER_FILTERED_CONTACTS" }
+        >
         const nextContacts = reorderContacts({
           contacts: context.contacts,
-          filteredContactIds: event.filteredContactIds,
-          reorderedFilteredContactIds: event.reorderedFilteredContactIds,
+          filteredContactIds: reorderEvent.filteredContactIds,
+          reorderedFilteredContactIds: reorderEvent.reorderedFilteredContactIds,
         })
         if (nextContacts === context.contacts) return context.contacts
         return ensureContactOrder(

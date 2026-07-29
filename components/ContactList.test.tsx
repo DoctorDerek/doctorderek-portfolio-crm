@@ -186,6 +186,17 @@ describe("contact list", () => {
     expect(mockDragStart).toHaveBeenCalledOnce()
   })
 
+  it("labels the contact results with a level-two heading", () => {
+    renderContactList()
+
+    expect(
+      screen.getByRole("region", { name: "Contact results" }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { name: "Contact results", level: 2 }),
+    ).toBeInTheDocument()
+  })
+
   it("exposes directional controls for keyboard reordering", () => {
     const onMoveContact = vi.fn()
     renderContactList({ onMoveContact })

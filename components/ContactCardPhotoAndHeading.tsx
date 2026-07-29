@@ -12,8 +12,8 @@ import ContactCardName from "@/components/ContactCardName"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
 
-export const IMAGE_SIZES =
-  "(max-width: 640px) 5rem, (max-width: 1280px) 5rem, 5rem"
+export const IMAGE_SIZES = "80px"
+export const IMAGE_QUALITY = 75
 
 export default function ContactCardPhotoAndHeading({
   contact,
@@ -45,6 +45,7 @@ export default function ContactCardPhotoAndHeading({
               fill
               className="object-fit rounded-full"
               sizes={IMAGE_SIZES}
+              quality={IMAGE_QUALITY}
             />
           )}
           {!photo && (

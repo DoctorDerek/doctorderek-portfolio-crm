@@ -44,6 +44,27 @@ test("loads the public Portfolio CRM with seeded contacts", async ({
   await expect(page.getByText("Jessica Christian")).toBeVisible()
 })
 
+for (const viewport of [
+  { width: 320, height: 568 },
+  { width: 390, height: 844 },
+]) {
+  test(`contains the mobile layout at ${viewport.width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport)
+    await page.goto("/")
+
+    const documentWidth = await page.evaluate(() => ({
+      documentScrollWidth: document.documentElement.scrollWidth,
+      viewportWidth: window.innerWidth,
+    }))
+
+    expect(documentWidth.documentScrollWidth).toBeLessThanOrEqual(
+      documentWidth.viewportWidth,
+    )
+  })
+}
+
 test("switches theme through its accessible control", async ({ page }) => {
   await page.evaluate(() => localStorage.setItem("theme", "light"))
   await page.reload()

@@ -235,67 +235,6 @@ describe("phoneBookMachine persistence", () => {
     phoneBookActor.stop()
   })
 
-  it("reorders contacts relative to a drop target", () => {
-    const phoneBookActor = createActor(phoneBookMachine).start()
-    phoneBookActor.send({ type: "READ" })
-    const originalContactEntries = phoneBookActor.getSnapshot().context.contacts
-    const firstContact = originalContactEntries[0]
-    const fourthContact = originalContactEntries[3]
-    expect(firstContact).toBeDefined()
-    expect(fourthContact).toBeDefined()
-
-    phoneBookActor.send({
-      type: "MOVE_CONTACT_TO_CONTACT",
-      contactId: firstContact.id,
-      targetContactId: fourthContact.id,
-      insertAfter: true,
-    })
-
-    const contactsAfterMove = phoneBookActor.getSnapshot().context.contacts
-    expect(contactsAfterMove[3]).toEqual(
-      expect.objectContaining({ id: firstContact.id }),
-    )
-
-    const storedContacts = JSON.parse(
-      localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
-    ) as { id: number; order?: number; age?: number }[]
-    expect(storedContacts[3]).toEqual(
-      expect.objectContaining({ id: firstContact.id, order: 3 }),
-    )
-    expect(storedContacts[3]).not.toHaveProperty("age")
-    phoneBookActor.stop()
-  })
-
-  it("inserts a contact before a valid drop target", () => {
-    const phoneBookActor = createActor(phoneBookMachine).start()
-    phoneBookActor.send({ type: "READ" })
-
-    const originalContacts = phoneBookActor.getSnapshot().context.contacts
-    const firstContact = originalContacts[0]
-    const fourthContact = originalContacts[3]
-    expect(firstContact).toBeDefined()
-    expect(fourthContact).toBeDefined()
-
-    phoneBookActor.send({
-      type: "MOVE_CONTACT_TO_CONTACT",
-      contactId: firstContact.id,
-      targetContactId: fourthContact.id,
-      insertAfter: false,
-    })
-
-    expect(
-      phoneBookActor.getSnapshot().context.contacts.map(({ id }) => id),
-    ).toEqual([
-      originalContacts[1].id,
-      originalContacts[2].id,
-      originalContacts[0].id,
-      originalContacts[3].id,
-      originalContacts[4].id,
-      originalContacts[5].id,
-    ])
-    phoneBookActor.stop()
-  })
-
   it("keeps order stable when a move reaches a list boundary", () => {
     const phoneBookActor = createActor(phoneBookMachine).start()
     phoneBookActor.send({ type: "READ" })
@@ -332,24 +271,6 @@ describe("phoneBookMachine persistence", () => {
       type: "MOVE_CONTACT",
       contactId: 99999,
       direction: "down",
-    })
-
-    expect(phoneBookActor.getSnapshot().context.contacts).toEqual(
-      originalContacts,
-    )
-    phoneBookActor.stop()
-  })
-
-  it("keeps order stable when a drop target cannot be found", () => {
-    const phoneBookActor = createActor(phoneBookMachine).start()
-    phoneBookActor.send({ type: "READ" })
-    const originalContacts = phoneBookActor.getSnapshot().context.contacts
-
-    phoneBookActor.send({
-      type: "MOVE_CONTACT_TO_CONTACT",
-      contactId: originalContacts[0].id,
-      targetContactId: 99999,
-      insertAfter: false,
     })
 
     expect(phoneBookActor.getSnapshot().context.contacts).toEqual(

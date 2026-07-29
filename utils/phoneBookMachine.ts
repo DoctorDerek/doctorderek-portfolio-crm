@@ -54,43 +54,6 @@ function moveContactInOrder(
   )
 }
 
-function moveContactToContact(
-  contacts: Contact[],
-  event: {
-    type: "MOVE_CONTACT_TO_CONTACT"
-    contactId: number
-    targetContactId: number
-    insertAfter: boolean
-  },
-) {
-  const orderedContacts = ensureContactOrder(contacts)
-  const { contactId, targetContactId, insertAfter } = event
-  const sourceIndex = orderedContacts.findIndex(({ id }) => id === contactId)
-  const targetIndex = orderedContacts.findIndex(
-    ({ id }) => id === targetContactId,
-  )
-
-  if (sourceIndex < 0 || targetIndex < 0 || sourceIndex === targetIndex) {
-    return orderedContacts
-  }
-
-  const nextContacts = [...orderedContacts]
-  const [movedContact] = nextContacts.splice(sourceIndex, 1)
-
-  const adjustedTargetIndex = nextContacts.findIndex(
-    ({ id }) => id === targetContactId,
-  )
-  const insertionIndex = Math.min(
-    Math.max(adjustedTargetIndex + (insertAfter ? 1 : 0), 0),
-    nextContacts.length,
-  )
-  nextContacts.splice(insertionIndex, 0, movedContact)
-
-  return ensureContactOrder(
-    nextContacts.map((contact) => ({ ...contact, order: undefined })),
-  )
-}
-
 type PhoneBookEvent =
   | { type: "CREATE"; contact: Contact }
   | { type: "READ" }
@@ -98,12 +61,6 @@ type PhoneBookEvent =
   | { type: "DELETE"; contact: Contact }
   | { type: "TOGGLE_FAVORITE"; contactId: number }
   | { type: "MOVE_CONTACT"; contactId: number; direction: "up" | "down" }
-  | {
-      type: "MOVE_CONTACT_TO_CONTACT"
-      contactId: number
-      targetContactId: number
-      insertAfter: boolean
-    }
   | {
       type: "REORDER_FILTERED_CONTACTS"
       filteredContactIds: number[]
@@ -223,14 +180,6 @@ const phoneBookMachine = setup({
         )
       },
     }),
-    reorderContactToContact: assign({
-      contacts: ({ context, event }) => {
-        return moveContactToContact(
-          context.contacts,
-          event as Extract<PhoneBookEvent, { type: "MOVE_CONTACT_TO_CONTACT" }>,
-        )
-      },
-    }),
     reorderFilteredContacts: assign({
       contacts: ({ context, event }) => {
         const reorderEvent = event as Extract<
@@ -281,9 +230,6 @@ const phoneBookMachine = setup({
         },
         MOVE_CONTACT: {
           actions: ["reorderContact", "writePhoneBookToLocalStorage"],
-        },
-        MOVE_CONTACT_TO_CONTACT: {
-          actions: ["reorderContactToContact", "writePhoneBookToLocalStorage"],
         },
         REORDER_FILTERED_CONTACTS: {
           actions: ["reorderFilteredContacts", "writePhoneBookToLocalStorage"],

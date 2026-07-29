@@ -74,20 +74,20 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="flex w-full flex-wrap items-center justify-center gap-3 bg-black p-4 text-xs tracking-widest text-white uppercase xl:flex-nowrap xl:justify-between xl:gap-0 xl:p-6">
-        <div className="order-1 flex min-w-0 items-center justify-center space-x-12 xl:order-none">
+      <nav className="flex w-full flex-wrap items-center justify-center gap-3 bg-black p-4 text-xs tracking-widest text-white uppercase lg:flex-nowrap lg:justify-between lg:gap-0 lg:p-6">
+        <div className="order-1 flex min-w-0 items-center justify-center space-x-12 lg:order-none">
           <span className="text-base">@DoctorDerek</span>
-          <div className="hidden items-center space-x-12 xl:flex">
+          <div className="hidden items-center space-x-12 lg:flex">
             <NavBarLinks />
           </div>
         </div>
-        <div className="order-3 flex basis-full items-center justify-center gap-2 xl:order-none xl:basis-auto">
+        <div className="order-3 flex basis-full items-center justify-center gap-2 lg:order-none lg:basis-auto">
           <ToggleDarkMode />
         </div>
-        <div className="hidden xl:flex">
+        <div className="hidden lg:flex">
           <PortfolioCRMHeading />
         </div>
-        <div className="order-2 block xl:order-none xl:hidden">
+        <div className="order-2 block lg:order-none lg:hidden">
           <button
             type="button"
             aria-label="Open navigation"

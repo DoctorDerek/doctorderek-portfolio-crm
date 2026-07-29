@@ -66,6 +66,41 @@ for (const viewport of [
   })
 }
 
+test("serves immutable portraits without runtime transformations", async ({
+  page,
+}) => {
+  const transformationRequests: string[] = []
+
+  page.on("request", (request) => {
+    if (new URL(request.url()).pathname === "/_next/image")
+      transformationRequests.push(request.url())
+  })
+
+  await page.reload()
+  await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
+
+  const portraitSources = await page
+    .locator("#main-content img[alt]")
+    .evaluateAll((images) =>
+      images.map((image) => new URL((image as HTMLImageElement).src).pathname),
+    )
+
+  expect(portraitSources).toHaveLength(6)
+  expect(new Set(portraitSources).size).toBe(6)
+  for (const portraitSource of portraitSources) {
+    expect(portraitSource).toMatch(
+      /^\/_next\/static\/media\/[a-z-]+\.[a-z0-9_-]+\.webp$/,
+    )
+
+    const portraitResponse = await page.request.get(portraitSource)
+    expect(portraitResponse.status()).toBe(200)
+    expect(portraitResponse.headers()["cache-control"]).toMatch(
+      /max-age=31536000.*immutable/,
+    )
+  }
+  expect(transformationRequests).toEqual([])
+})
+
 test("switches theme through its accessible control", async ({ page }) => {
   await page.evaluate(() => localStorage.setItem("theme", "light"))
   await page.reload()

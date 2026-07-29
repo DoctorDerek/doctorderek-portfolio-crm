@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: "Portfolio CRM by @DoctorDerek",
   description:
     "A local-first portfolio CRM with accessible contact workflows, composed filtering, favorites, and animated theming.",
-  icons: "/favicon.ico",
 }
 
 export const viewport: Viewport = {

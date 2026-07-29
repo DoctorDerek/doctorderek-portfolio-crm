@@ -1,3 +1,4 @@
+import { render, screen } from "@testing-library/react"
 import { ReactElement, ReactNode } from "react"
 import { describe, expect, it, vi } from "vitest"
 import RootLayout from "@/app/layout"
@@ -32,5 +33,15 @@ describe("root layout", () => {
     expect(layout.props.className).toBe("mock-inter")
     expect(body.type).toBe("body")
     expect(body.props.className).toContain("bg-gray-100")
+  })
+
+  it("owns the document main landmark and navigation target", () => {
+    render(
+      RootLayout({
+        children: <p>Route content</p>,
+      }),
+    )
+
+    expect(screen.getByRole("main")).toHaveAttribute("id", "main-content")
   })
 })

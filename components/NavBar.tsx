@@ -16,10 +16,9 @@ function NavBarLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       <Link
-        href="#top"
+        href="#main-content"
         onClick={onNavigate}
         className="hover:text-gray-300 dark:hover:text-gray-500"
-        id="top"
       >
         Home
       </Link>

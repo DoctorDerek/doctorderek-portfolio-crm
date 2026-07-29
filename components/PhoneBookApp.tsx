@@ -75,10 +75,7 @@ export default function PhoneBookApp() {
 
       <h1 className="sr-only">Portfolio CRM</h1>
 
-      <main
-        id="top"
-        className="mx-auto flex w-full max-w-[76rem] flex-col items-center justify-center space-y-6 px-4 py-4 sm:px-6 md:px-8"
-      >
+      <div className="mx-auto flex w-full max-w-[76rem] flex-col items-center justify-center space-y-6 px-4 py-4 sm:px-6 md:px-8">
         <div id="filter" className="flex w-full flex-col gap-4">
           <SearchBar
             contactFilters={contactFilters}
@@ -115,7 +112,7 @@ export default function PhoneBookApp() {
           onMoveContact={reorderContact}
           onReorderFilteredContacts={reorderFilteredContacts}
         />
-      </main>
+      </div>
     </>
   )
 }

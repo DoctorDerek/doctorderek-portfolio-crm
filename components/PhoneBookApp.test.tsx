@@ -26,7 +26,6 @@ describe("contact discovery", () => {
     expect(
       screen.getByRole("heading", { name: "Portfolio CRM", level: 1 }),
     ).toBeInTheDocument()
-    expect(screen.getByRole("main")).toHaveAttribute("id", "top")
     await screen.findByText("Jessica Christian")
 
     fireEvent.change(

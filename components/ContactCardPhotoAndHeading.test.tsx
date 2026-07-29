@@ -1,26 +1,22 @@
 import { fireEvent, render, screen } from "@testing-library/react"
-import type { ComponentProps } from "react"
+import type { ImageProps } from "next/image"
 import { describe, expect, it, vi } from "vitest"
-import ContactCardPhotoAndHeading, {
-  IMAGE_QUALITY,
-  IMAGE_SIZES,
-} from "@/components/ContactCardPhotoAndHeading"
+import ContactCardPhotoAndHeading from "@/components/ContactCardPhotoAndHeading"
 import { Contact } from "@/types/Contact"
 
-type MockImageProps = ComponentProps<"img"> & {
-  fill?: boolean
-  quality?: number
-  sizes?: string
+function getImageSource(source: ImageProps["src"]) {
+  if (typeof source === "string") return source
+  if ("src" in source) return source.src
+  return source.default.src
 }
 
 vi.mock("next/image", () => ({
-  default: ({ fill: _fill, quality, sizes, ...props }: MockImageProps) => (
+  default: ({ src, alt, unoptimized }: ImageProps) => (
     <div
       role="img"
-      aria-label={props.alt}
-      data-quality={quality}
-      data-sizes={sizes}
-      data-src={props.src}
+      aria-label={alt}
+      data-src={getImageSource(src)}
+      data-unoptimized={unoptimized}
     />
   ),
 }))
@@ -29,19 +25,18 @@ const contact: Contact = {
   id: 1,
   firstName: "Ada",
   lastName: "Lovelace",
-  photo: "Ada Lovelace.png",
+  photo: "Unsplash Jessica Christian.png",
   phoneNumber: "555-555-5555",
 }
 
 describe("contact card photo and heading", () => {
-  it("renders an optimized avatar with the fixed display dimensions", () => {
+  it("renders an immutable avatar without runtime transformation", () => {
     render(<ContactCardPhotoAndHeading contact={contact} />)
 
     const image = screen.getByRole("img", { name: "Ada Lovelace" })
 
-    expect(image).toHaveAttribute("data-src", "/contacts/Ada Lovelace.png")
-    expect(image).toHaveAttribute("data-sizes", IMAGE_SIZES)
-    expect(image).toHaveAttribute("data-quality", String(IMAGE_QUALITY))
+    expect(image.getAttribute("data-src")).toContain("jessica-christian")
+    expect(image).toHaveAttribute("data-unoptimized", "true")
     expect(
       screen.queryByRole("button", {
         name: "Reorder Ada Lovelace by dragging",
@@ -50,8 +45,16 @@ describe("contact card photo and heading", () => {
   })
 
   it("renders the avatar fallback when no photo is available", () => {
-    render(
+    const { rerender } = render(
       <ContactCardPhotoAndHeading contact={{ ...contact, photo: undefined }} />,
+    )
+
+    expect(screen.queryByRole("img")).not.toBeInTheDocument()
+
+    rerender(
+      <ContactCardPhotoAndHeading
+        contact={{ ...contact, photo: "Unknown portrait.png" }}
+      />,
     )
 
     expect(screen.queryByRole("img")).not.toBeInTheDocument()

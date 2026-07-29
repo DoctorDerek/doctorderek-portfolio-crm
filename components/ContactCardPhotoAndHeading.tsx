@@ -9,11 +9,9 @@ import { Dispatch, PointerEvent, SetStateAction } from "react"
 import ButtonDelete from "@/components/ButtonDelete"
 import ButtonFavorite from "@/components/ButtonFavorite"
 import ContactCardName from "@/components/ContactCardName"
+import getContactPortrait from "@/contacts/CONTACT_PHOTOS"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
-
-export const IMAGE_SIZES = "80px"
-export const IMAGE_QUALITY = 75
 
 export default function ContactCardPhotoAndHeading({
   contact,
@@ -34,21 +32,22 @@ export default function ContactCardPhotoAndHeading({
 }) {
   const { firstName, lastName, photo } = contact
   const contactName = `${firstName} ${lastName}`
+  const contactPortrait = getContactPortrait(photo)
+
   return (
     <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div className="flex min-w-0 items-center gap-4">
         <div className="relative h-20 w-20 shrink-0">
-          {photo && (
+          {contactPortrait && (
             <Image
-              src={`/contacts/${photo}`}
+              src={contactPortrait}
               alt={`${firstName} ${lastName}`}
               fill
-              className="object-fit rounded-full"
-              sizes={IMAGE_SIZES}
-              quality={IMAGE_QUALITY}
+              className="rounded-full object-cover"
+              unoptimized
             />
           )}
-          {!photo && (
+          {!contactPortrait && (
             <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-300 dark:bg-gray-200">
               <UserIcon className="h-3/4 w-3/4 text-gray-100 dark:text-gray-400" />
             </div>

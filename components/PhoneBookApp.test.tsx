@@ -161,6 +161,22 @@ describe("contact discovery", () => {
     )
   })
 
+  it("restores demo contacts when browser storage reads are unavailable", async () => {
+    vi.spyOn(localStorage, "getItem").mockImplementation(() => {
+      throw new Error("Storage unavailable")
+    })
+
+    renderPhoneBookApp()
+
+    expect(await screen.findByText("Jessica Christian")).toBeInTheDocument()
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Saved contacts couldn’t be loaded. Demo contacts restored.",
+    )
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Showing 6 of 6 contacts",
+    )
+  })
+
   it("keeps an in-memory favorite and explains a failed persistence write", async () => {
     renderPhoneBookApp()
     await screen.findByText("Jessica Christian")

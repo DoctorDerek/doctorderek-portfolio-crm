@@ -50,6 +50,77 @@ test("loads the public Portfolio CRM with seeded contacts", async ({
   await expect(page.getByText("Jessica Christian")).toBeVisible()
 })
 
+test("uses one desktop header row and a compact mobile stack", async ({
+  page,
+}) => {
+  const navigation = page.getByRole("navigation")
+  const owner = navigation.getByText("@DoctorDerek", { exact: true })
+  const home = navigation.getByRole("link", { name: "Home" })
+  const filter = navigation.getByRole("link", { name: "Filter" })
+  const themeToggle = navigation.getByRole("button", {
+    name: /Use (dark|light) mode/,
+  })
+  const portfolioHeading = navigation.getByText("Portfolio CRM", {
+    exact: true,
+  })
+  const openNavigation = navigation.getByRole("button", {
+    name: "Open navigation",
+  })
+
+  await page.setViewportSize({ width: 1024, height: 768 })
+  await page.reload()
+  await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
+
+  for (const desktopHeaderElement of [
+    owner,
+    home,
+    filter,
+    themeToggle,
+    portfolioHeading,
+  ]) {
+    await expect(desktopHeaderElement).toBeVisible()
+  }
+  await expect(openNavigation).toBeHidden()
+
+  const desktopElementVerticalCenters = await Promise.all(
+    [owner, home, filter, themeToggle, portfolioHeading].map(
+      async (desktopHeaderElement) => {
+        const boundingBox = await desktopHeaderElement.boundingBox()
+        expect(boundingBox).not.toBeNull()
+        return boundingBox!.y + boundingBox!.height / 2
+      },
+    ),
+  )
+  expect(
+    Math.max(...desktopElementVerticalCenters) -
+      Math.min(...desktopElementVerticalCenters),
+  ).toBeLessThanOrEqual(1)
+
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.reload()
+  await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
+
+  await expect(owner).toBeVisible()
+  await expect(openNavigation).toBeVisible()
+  await expect(themeToggle).toBeVisible()
+  await expect(home).toBeHidden()
+  await expect(filter).toBeHidden()
+  await expect(portfolioHeading).toBeHidden()
+
+  const ownerBoundingBox = await owner.boundingBox()
+  const openNavigationBoundingBox = await openNavigation.boundingBox()
+  const themeToggleBoundingBox = await themeToggle.boundingBox()
+  expect(ownerBoundingBox).not.toBeNull()
+  expect(openNavigationBoundingBox).not.toBeNull()
+  expect(themeToggleBoundingBox).not.toBeNull()
+  expect(themeToggleBoundingBox!.y).toBeGreaterThan(
+    Math.max(
+      ownerBoundingBox!.y + ownerBoundingBox!.height,
+      openNavigationBoundingBox!.y + openNavigationBoundingBox!.height,
+    ),
+  )
+})
+
 for (const viewport of [
   { width: 320, height: 568 },
   { width: 390, height: 844 },

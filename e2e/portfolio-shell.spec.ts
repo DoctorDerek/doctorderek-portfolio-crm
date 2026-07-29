@@ -53,6 +53,7 @@ for (const viewport of [
   }) => {
     await page.setViewportSize(viewport)
     await page.goto("/")
+    await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
 
     const documentWidth = await page.evaluate(() => ({
       documentScrollWidth: document.documentElement.scrollWidth,

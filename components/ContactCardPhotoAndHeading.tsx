@@ -1,5 +1,4 @@
 import {
-  Bars3Icon,
   ChevronDownIcon,
   ChevronUpIcon,
   UserIcon,
@@ -12,6 +11,24 @@ import ContactCardName from "@/components/ContactCardName"
 import getContactPortrait from "@/contacts/CONTACT_PHOTOS"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
+
+function DragHandleIcon() {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      className="h-5 w-5"
+      aria-hidden="true"
+    >
+      <circle cx="7" cy="4" r="1.5" />
+      <circle cx="13" cy="4" r="1.5" />
+      <circle cx="7" cy="10" r="1.5" />
+      <circle cx="13" cy="10" r="1.5" />
+      <circle cx="7" cy="16" r="1.5" />
+      <circle cx="13" cy="16" r="1.5" />
+    </svg>
+  )
+}
 
 export default function ContactCardPhotoAndHeading({
   contact,
@@ -68,7 +85,7 @@ export default function ContactCardPhotoAndHeading({
               event.currentTarget.blur()
             }}
           >
-            <Bars3Icon className="h-5 w-5" aria-hidden="true" />
+            <DragHandleIcon />
           </button>
           <button
             type="button"

@@ -40,6 +40,12 @@ test("loads the public Portfolio CRM with seeded contacts", async ({
   await expect(
     page.getByText("Portfolio CRM", { exact: true }).first(),
   ).toBeVisible()
+  await expect(page.getByRole("main")).toHaveCount(1)
+  await expect(page.locator("#main-content")).toHaveCount(1)
+  await expect(page.getByRole("link", { name: "Home" })).toHaveAttribute(
+    "href",
+    "#main-content",
+  )
   await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
   await expect(page.getByText("Jessica Christian")).toBeVisible()
 })

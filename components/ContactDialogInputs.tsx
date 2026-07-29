@@ -28,6 +28,9 @@ function ContactDialogInput({
   disabled?: boolean
   placeholder?: string
 }) {
+  const errorMessage = errors[fieldName]?.message
+  const errorMessageId = `${fieldName}-error`
+
   const getInputType = () => {
     if (fieldName === "email") return "email"
     if (fieldName === "phoneNumber") return "tel"
@@ -50,31 +53,18 @@ function ContactDialogInput({
           errors[fieldName] ? "ring-2 ring-red-500 dark:ring-red-900" : "",
         )}
         placeholder={placeholder}
+        aria-describedby={errorMessage ? errorMessageId : undefined}
+        aria-invalid={errorMessage ? true : undefined}
         {...register(fieldName)}
         disabled={disabled}
       />
+      {errorMessage && (
+        <p id={errorMessageId} className="mt-2 text-sm text-red-500">
+          {errorMessage}
+        </p>
+      )}
     </div>
   )
-}
-
-function ErrorMessage({ errors }: { errors: FieldErrors<ContactFormValues> }) {
-  const getErrorMessage = () => {
-    return (
-      errors?.email?.message ||
-      errors?.firstName?.message ||
-      errors?.lastName?.message ||
-      errors?.birthMonth?.message ||
-      errors?.birthDay?.message ||
-      errors?.birthYear?.message ||
-      errors?.phoneNumber?.message ||
-      errors?.streetAddress?.message ||
-      errors?.city?.message ||
-      errors?.state?.message ||
-      errors?.zipCode?.message ||
-      "Please correct the highlighted field."
-    )
-  }
-  return <div className="mt-2 text-red-500">{getErrorMessage()}</div>
 }
 
 export default function ContactDialogInputs({
@@ -197,8 +187,10 @@ export default function ContactDialogInputs({
           errors={errors}
           disabled={!formValues.addressEnabled}
         />
-        {Object.values(errors).some(Boolean) && (
-          <ErrorMessage errors={errors} />
+        {errors.root && (
+          <p role="alert" className="mt-2 text-red-500">
+            {errors.root.message ?? "Please correct the highlighted field."}
+          </p>
         )}
       </section>
     ),

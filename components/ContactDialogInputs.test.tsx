@@ -32,7 +32,7 @@ function ContactDialogInputsHarness({
   errorField,
   rootError = false,
 }: {
-  errorField: AddressErrorField
+  errorField?: AddressErrorField
   rootError?: boolean
 }) {
   const { control, formState, register, setError, setValue } =
@@ -46,15 +46,18 @@ function ContactDialogInputsHarness({
   })
 
   useEffect(() => {
+    setValue("addressEnabled", true)
     if (rootError) {
       setError("root", { type: "manual" })
       return
     }
+    if (!errorField) return
+
     setError(errorField, {
       type: "manual",
       message: `Validation failed for ${errorField}.`,
     })
-  }, [errorField, rootError, setError])
+  }, [errorField, rootError, setError, setValue])
 
   return (
     <ContactDialogInputs
@@ -83,6 +86,35 @@ describe("contact dialog input errors", () => {
       ).toBeInTheDocument()
     },
   )
+
+  it("associates an invalid field with its own message", async () => {
+    render(<ContactDialogInputsHarness errorField="streetAddress" />)
+
+    const validationMessage = await screen.findByText(
+      "Validation failed for streetAddress.",
+    )
+    const streetAddressInput = screen.getByRole("textbox", {
+      name: "Street Address",
+    })
+
+    expect(validationMessage).toHaveAttribute("id", "streetAddress-error")
+    expect(streetAddressInput).toHaveAttribute("aria-invalid", "true")
+    expect(streetAddressInput).toHaveAttribute(
+      "aria-describedby",
+      "streetAddress-error",
+    )
+  })
+
+  it("does not describe valid fields as invalid", async () => {
+    render(<ContactDialogInputsHarness />)
+
+    const emailInput = await screen.findByRole("textbox", {
+      name: "Email Address",
+    })
+
+    expect(emailInput).not.toHaveAttribute("aria-invalid")
+    expect(emailInput).not.toHaveAttribute("aria-describedby")
+  })
 
   it("uses a reduced-motion-safe transition while preference is unresolved", async () => {
     shouldReduceMotion = null

@@ -57,7 +57,7 @@ export default function ContactCardPhotoAndHeading({
         <ContactCardName contact={contact} setDialogState={setDialogState} />
       </div>
       {onToggleFavorite && setDialogState && (
-        <div className="flex items-center gap-1 self-end sm:self-start">
+        <div className="flex flex-wrap items-center justify-end gap-1 self-end sm:self-start">
           <button
             type="button"
             aria-label={`Reorder ${contactName} by dragging`}

@@ -122,14 +122,14 @@ const phoneBookMachine = setup({
   },
   actions: {
     readPhoneBookFromLocalStorage: assign(() => {
-      const storedContacts = localStorage.getItem(CONTACTS_STORAGE_KEY)
-      if (!storedContacts)
-        return {
-          contacts: createDemonstrationContacts(),
-          persistenceFailure: null,
-        }
-
       try {
+        const storedContacts = localStorage.getItem(CONTACTS_STORAGE_KEY)
+        if (!storedContacts)
+          return {
+            contacts: createDemonstrationContacts(),
+            persistenceFailure: null,
+          }
+
         const contacts = ensureContactOrder(parseStoredContacts(storedContacts))
         const contactsWithAge = reassignContactAges(contacts)
         return { contacts: contactsWithAge, persistenceFailure: null }

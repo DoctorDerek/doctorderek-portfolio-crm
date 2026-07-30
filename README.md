@@ -35,6 +35,8 @@ A local-first portfolio CRM with accessible CRUD workflows, age and favorites fi
 
 The XState machine owns contact lifecycle transitions and browser persistence. React components remain focused on rendering and interaction, while static data, validation, filtering, and transformation logic stay in their domain modules.
 
+The six bundled portraits are precompressed, content-hashed WebP assets served through Next.js static imports with immutable caching and no runtime image transformations.
+
 ## Local-first data
 
 Contact records are stored only in browser `localStorage`. The application does not require sign-in and does not send contact data to an application server. Clearing site data removes local edits; Reset restores the bundled demonstration contacts.

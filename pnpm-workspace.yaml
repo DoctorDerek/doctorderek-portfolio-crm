@@ -2,6 +2,7 @@ packages:
   - "."
 
 overrides:
+  minimatch@>=10.2.2 <10.2.6: "^10.2.6"
   postcss@<8.5.10: "^8.5.10"
   sharp@<0.35.3: "^0.35.3"
 

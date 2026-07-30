@@ -31,9 +31,10 @@ describe("navigation", () => {
 
     expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
       "href",
-      "#top",
+      "#main-content",
     )
-    expect(screen.getByText("@DoctorDerek")).toBeInTheDocument()
+    expect(screen.getByText("CRM by @DoctorDerek")).toBeInTheDocument()
+    expect(screen.getByText("by @DoctorDerek")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Filter" })).toHaveAttribute(
       "href",
       "#filter",

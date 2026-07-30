@@ -26,7 +26,6 @@ describe("contact discovery", () => {
     expect(
       screen.getByRole("heading", { name: "Portfolio CRM", level: 1 }),
     ).toBeInTheDocument()
-    expect(screen.getByRole("main")).toHaveAttribute("id", "top")
     await screen.findByText("Jessica Christian")
 
     fireEvent.change(
@@ -150,6 +149,22 @@ describe("contact discovery", () => {
 
   it("restores demo contacts and explains an invalid saved payload", async () => {
     localStorage.setItem(CONTACTS_STORAGE_KEY, "invalid contact data")
+
+    renderPhoneBookApp()
+
+    expect(await screen.findByText("Jessica Christian")).toBeInTheDocument()
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Saved contacts couldn’t be loaded. Demo contacts restored.",
+    )
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Showing 6 of 6 contacts",
+    )
+  })
+
+  it("restores demo contacts when browser storage reads are unavailable", async () => {
+    vi.spyOn(localStorage, "getItem").mockImplementation(() => {
+      throw new Error("Storage unavailable")
+    })
 
     renderPhoneBookApp()
 

@@ -2,14 +2,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
-  --spacing-160: 42rem;
-  --spacing-176: 46rem;
-  --spacing-192: 50rem;
-  --spacing-208: 54rem;
-  --spacing-224: 58rem;
-}
-
 /*
  * ONE-TIME EXCEPTION TO NO CODE COMMENT RULE:
  * Preserve Tailwind CSS v3 border colors under Tailwind CSS v4 defaults.

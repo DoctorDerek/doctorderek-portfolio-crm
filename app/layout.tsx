@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: "Portfolio CRM by @DoctorDerek",
   description:
     "A local-first portfolio CRM with accessible contact workflows, composed filtering, favorites, and animated theming.",
-  icons: "/favicon.ico",
 }
 
 export const viewport: Viewport = {
@@ -26,8 +25,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Providers>
           <NavBar />
           <main
-            id="top"
-            className="mx-auto flex min-h-screen w-[95vw] flex-col p-8"
+            id="main-content"
+            className="mx-auto flex min-h-screen w-full min-w-0 flex-col px-4 py-8 sm:px-6 md:px-8"
           >
             {children}
           </main>

@@ -96,7 +96,13 @@ export default function ContactList({
     filteredPhoneBookEntries.find(({ id }) => id === contactId)
 
   return (
-    <section className="relative w-full space-y-4" aria-label="Contact results">
+    <section
+      className="relative w-full space-y-4"
+      aria-labelledby="contact-results-heading"
+    >
+      <h2 id="contact-results-heading" className="sr-only">
+        Contact results
+      </h2>
       <p aria-live="polite" aria-atomic="true" className="sr-only">
         {reorderAnnouncement}
       </p>

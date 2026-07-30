@@ -1,5 +1,4 @@
 import {
-  Bars3Icon,
   ChevronDownIcon,
   ChevronUpIcon,
   UserIcon,
@@ -9,11 +8,27 @@ import { Dispatch, PointerEvent, SetStateAction } from "react"
 import ButtonDelete from "@/components/ButtonDelete"
 import ButtonFavorite from "@/components/ButtonFavorite"
 import ContactCardName from "@/components/ContactCardName"
+import getContactPortrait from "@/contacts/CONTACT_PHOTOS"
 import { Contact } from "@/types/Contact"
 import { DialogState } from "@/types/DialogState"
 
-export const IMAGE_SIZES = "80px"
-export const IMAGE_QUALITY = 75
+function DragHandleIcon() {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      className="h-5 w-5"
+      aria-hidden="true"
+    >
+      <circle cx="7" cy="4" r="1.5" />
+      <circle cx="13" cy="4" r="1.5" />
+      <circle cx="7" cy="10" r="1.5" />
+      <circle cx="13" cy="10" r="1.5" />
+      <circle cx="7" cy="16" r="1.5" />
+      <circle cx="13" cy="16" r="1.5" />
+    </svg>
+  )
+}
 
 export default function ContactCardPhotoAndHeading({
   contact,
@@ -34,21 +49,22 @@ export default function ContactCardPhotoAndHeading({
 }) {
   const { firstName, lastName, photo } = contact
   const contactName = `${firstName} ${lastName}`
+  const contactPortrait = getContactPortrait(photo)
+
   return (
     <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div className="flex min-w-0 items-center gap-4">
         <div className="relative h-20 w-20 shrink-0">
-          {photo && (
+          {contactPortrait && (
             <Image
-              src={`/contacts/${photo}`}
+              src={contactPortrait}
               alt={`${firstName} ${lastName}`}
               fill
-              className="object-fit rounded-full"
-              sizes={IMAGE_SIZES}
-              quality={IMAGE_QUALITY}
+              className="rounded-full object-cover"
+              unoptimized
             />
           )}
-          {!photo && (
+          {!contactPortrait && (
             <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-300 dark:bg-gray-200">
               <UserIcon className="h-3/4 w-3/4 text-gray-100 dark:text-gray-400" />
             </div>
@@ -57,7 +73,7 @@ export default function ContactCardPhotoAndHeading({
         <ContactCardName contact={contact} setDialogState={setDialogState} />
       </div>
       {onToggleFavorite && setDialogState && (
-        <div className="flex items-center gap-1 self-end sm:self-start">
+        <div className="flex flex-wrap items-center justify-end gap-1 self-end sm:self-start">
           <button
             type="button"
             aria-label={`Reorder ${contactName} by dragging`}
@@ -69,7 +85,7 @@ export default function ContactCardPhotoAndHeading({
               event.currentTarget.blur()
             }}
           >
-            <Bars3Icon className="h-5 w-5" aria-hidden="true" />
+            <DragHandleIcon />
           </button>
           <button
             type="button"

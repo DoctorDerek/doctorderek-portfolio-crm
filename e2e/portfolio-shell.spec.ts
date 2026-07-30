@@ -70,7 +70,7 @@ test("uses expanded, compact, and narrow header layouts", async ({ page }) => {
     name: "Open navigation",
   })
 
-  await page.setViewportSize({ width: 1024, height: 768 })
+  await page.setViewportSize({ width: 1280, height: 800 })
   await page.reload()
   await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
 
@@ -101,7 +101,7 @@ test("uses expanded, compact, and narrow header layouts", async ({ page }) => {
       Math.min(...desktopElementVerticalCenters),
   ).toBeLessThanOrEqual(1)
 
-  await page.setViewportSize({ width: 640, height: 800 })
+  await page.setViewportSize({ width: 1024, height: 768 })
   await page.reload()
   await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
 

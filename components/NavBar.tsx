@@ -74,25 +74,25 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="flex w-full flex-wrap items-center justify-center gap-3 bg-black p-4 text-xs tracking-widest text-white uppercase sm:flex-nowrap sm:justify-between sm:gap-0 lg:p-6">
-        <div className="order-1 flex min-w-0 items-center justify-center sm:order-none lg:space-x-12">
+      <nav className="flex w-full flex-wrap items-center justify-center gap-3 bg-black p-4 text-xs tracking-widest text-white uppercase sm:flex-nowrap sm:justify-between sm:gap-0 xl:p-6">
+        <div className="order-1 flex min-w-0 items-center justify-center sm:order-none xl:space-x-12">
           <span className="normal-case">
-            <span className="text-sm sm:text-base lg:hidden">
+            <span className="text-sm sm:text-base xl:hidden">
               CRM by @DoctorDerek
             </span>
-            <span className="hidden text-base lg:inline">by @DoctorDerek</span>
+            <span className="hidden text-base xl:inline">by @DoctorDerek</span>
           </span>
-          <div className="hidden items-center space-x-12 lg:flex">
+          <div className="hidden items-center space-x-12 xl:flex">
             <NavBarLinks />
           </div>
         </div>
         <div className="order-3 flex basis-full items-center justify-center gap-2 sm:order-none sm:basis-auto">
           <ToggleDarkMode />
         </div>
-        <div className="hidden lg:flex">
+        <div className="hidden xl:flex">
           <PortfolioCRMHeading />
         </div>
-        <div className="order-2 block sm:order-none lg:hidden">
+        <div className="order-2 block sm:order-none xl:hidden">
           <button
             type="button"
             aria-label="Open navigation"

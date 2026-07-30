@@ -50,9 +50,7 @@ test("loads the public Portfolio CRM with seeded contacts", async ({
   await expect(page.getByText("Jessica Christian")).toBeVisible()
 })
 
-test("uses one desktop header row and a compact mobile stack", async ({
-  page,
-}) => {
+test("uses expanded, compact, and narrow header layouts", async ({ page }) => {
   const navigation = page.getByRole("navigation")
   const compactIdentity = navigation.getByText("CRM by @DoctorDerek", {
     exact: true,
@@ -87,6 +85,7 @@ test("uses one desktop header row and a compact mobile stack", async ({
   }
   await expect(compactIdentity).toBeHidden()
   await expect(openNavigation).toBeHidden()
+  await expect(desktopAttribution).toHaveCSS("text-transform", "none")
 
   const desktopElementVerticalCenters = await Promise.all(
     [desktopAttribution, home, filter, themeToggle, portfolioHeading].map(
@@ -100,6 +99,33 @@ test("uses one desktop header row and a compact mobile stack", async ({
   expect(
     Math.max(...desktopElementVerticalCenters) -
       Math.min(...desktopElementVerticalCenters),
+  ).toBeLessThanOrEqual(1)
+
+  await page.setViewportSize({ width: 640, height: 800 })
+  await page.reload()
+  await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
+
+  await expect(compactIdentity).toBeVisible()
+  await expect(compactIdentity).toHaveCSS("text-transform", "none")
+  await expect(desktopAttribution).toBeHidden()
+  await expect(openNavigation).toBeVisible()
+  await expect(themeToggle).toBeVisible()
+  await expect(home).toBeHidden()
+  await expect(filter).toBeHidden()
+  await expect(portfolioHeading).toBeHidden()
+
+  const compactElementVerticalCenters = await Promise.all(
+    [compactIdentity, themeToggle, openNavigation].map(
+      async (compactHeaderElement) => {
+        const boundingBox = await compactHeaderElement.boundingBox()
+        expect(boundingBox).not.toBeNull()
+        return boundingBox!.y + boundingBox!.height / 2
+      },
+    ),
+  )
+  expect(
+    Math.max(...compactElementVerticalCenters) -
+      Math.min(...compactElementVerticalCenters),
   ).toBeLessThanOrEqual(1)
 
   await page.setViewportSize({ width: 390, height: 844 })

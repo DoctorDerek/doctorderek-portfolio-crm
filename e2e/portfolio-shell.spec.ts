@@ -54,7 +54,12 @@ test("uses one desktop header row and a compact mobile stack", async ({
   page,
 }) => {
   const navigation = page.getByRole("navigation")
-  const owner = navigation.getByText("@DoctorDerek", { exact: true })
+  const compactIdentity = navigation.getByText("CRM by @DoctorDerek", {
+    exact: true,
+  })
+  const desktopAttribution = navigation.getByText("by @DoctorDerek", {
+    exact: true,
+  })
   const home = navigation.getByRole("link", { name: "Home" })
   const filter = navigation.getByRole("link", { name: "Filter" })
   const themeToggle = navigation.getByRole("button", {
@@ -72,7 +77,7 @@ test("uses one desktop header row and a compact mobile stack", async ({
   await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
 
   for (const desktopHeaderElement of [
-    owner,
+    desktopAttribution,
     home,
     filter,
     themeToggle,
@@ -80,10 +85,11 @@ test("uses one desktop header row and a compact mobile stack", async ({
   ]) {
     await expect(desktopHeaderElement).toBeVisible()
   }
+  await expect(compactIdentity).toBeHidden()
   await expect(openNavigation).toBeHidden()
 
   const desktopElementVerticalCenters = await Promise.all(
-    [owner, home, filter, themeToggle, portfolioHeading].map(
+    [desktopAttribution, home, filter, themeToggle, portfolioHeading].map(
       async (desktopHeaderElement) => {
         const boundingBox = await desktopHeaderElement.boundingBox()
         expect(boundingBox).not.toBeNull()
@@ -100,22 +106,30 @@ test("uses one desktop header row and a compact mobile stack", async ({
   await page.reload()
   await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
 
-  await expect(owner).toBeVisible()
+  await expect(compactIdentity).toBeVisible()
+  await expect(desktopAttribution).toBeHidden()
   await expect(openNavigation).toBeVisible()
   await expect(themeToggle).toBeVisible()
   await expect(home).toBeHidden()
   await expect(filter).toBeHidden()
   await expect(portfolioHeading).toBeHidden()
 
-  const ownerBoundingBox = await owner.boundingBox()
+  const compactIdentityBoundingBox = await compactIdentity.boundingBox()
   const openNavigationBoundingBox = await openNavigation.boundingBox()
   const themeToggleBoundingBox = await themeToggle.boundingBox()
-  expect(ownerBoundingBox).not.toBeNull()
+  expect(compactIdentityBoundingBox).not.toBeNull()
   expect(openNavigationBoundingBox).not.toBeNull()
   expect(themeToggleBoundingBox).not.toBeNull()
+  expect(
+    Math.abs(
+      compactIdentityBoundingBox!.y +
+        compactIdentityBoundingBox!.height / 2 -
+        (openNavigationBoundingBox!.y + openNavigationBoundingBox!.height / 2),
+    ),
+  ).toBeLessThanOrEqual(1)
   expect(themeToggleBoundingBox!.y).toBeGreaterThan(
     Math.max(
-      ownerBoundingBox!.y + ownerBoundingBox!.height,
+      compactIdentityBoundingBox!.y + compactIdentityBoundingBox!.height,
       openNavigationBoundingBox!.y + openNavigationBoundingBox!.height,
     ),
   )

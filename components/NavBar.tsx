@@ -75,8 +75,13 @@ export default function NavBar() {
   return (
     <>
       <nav className="flex w-full flex-wrap items-center justify-center gap-3 bg-black p-4 text-xs tracking-widest text-white uppercase lg:flex-nowrap lg:justify-between lg:gap-0 lg:p-6">
-        <div className="order-1 flex min-w-0 items-center justify-center space-x-12 lg:order-none">
-          <span className="text-base">@DoctorDerek</span>
+        <div className="order-1 flex min-w-0 items-center justify-center lg:order-none lg:space-x-12">
+          <span>
+            <span className="text-sm sm:text-base lg:hidden">
+              CRM by @DoctorDerek
+            </span>
+            <span className="hidden text-base lg:inline">by @DoctorDerek</span>
+          </span>
           <div className="hidden items-center space-x-12 lg:flex">
             <NavBarLinks />
           </div>

@@ -141,9 +141,11 @@ test("uses expanded, compact, and narrow header layouts", async ({ page }) => {
   await expect(portfolioHeading).toBeHidden()
 
   const compactIdentityBoundingBox = await compactIdentity.boundingBox()
+  const navigationBoundingBox = await navigation.boundingBox()
   const openNavigationBoundingBox = await openNavigation.boundingBox()
   const themeToggleBoundingBox = await themeToggle.boundingBox()
   expect(compactIdentityBoundingBox).not.toBeNull()
+  expect(navigationBoundingBox).not.toBeNull()
   expect(openNavigationBoundingBox).not.toBeNull()
   expect(themeToggleBoundingBox).not.toBeNull()
   expect(
@@ -159,6 +161,13 @@ test("uses expanded, compact, and narrow header layouts", async ({ page }) => {
       openNavigationBoundingBox!.y + openNavigationBoundingBox!.height,
     ),
   )
+  expect(
+    Math.abs(
+      themeToggleBoundingBox!.x +
+        themeToggleBoundingBox!.width / 2 -
+        (navigationBoundingBox!.x + navigationBoundingBox!.width / 2),
+    ),
+  ).toBeLessThanOrEqual(1)
 })
 
 for (const viewport of [

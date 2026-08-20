@@ -9,6 +9,8 @@
     "start": "next start",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "lighthouse": "lhci autorun",
+    "lighthouse:prepare": "node scripts/runTypeScript.mjs scripts/lighthouse/prepareLighthouseReports.cli.ts",
     "test": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"

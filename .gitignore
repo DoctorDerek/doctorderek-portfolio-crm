@@ -14,6 +14,8 @@
 /test-results/
 /playwright-report/
 /blob-report/
+/lighthouse-results/
+/lighthouse-pages/
 
 # next.js
 /.next/

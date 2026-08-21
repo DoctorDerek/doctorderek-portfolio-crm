@@ -21,6 +21,20 @@ describe("contact discovery", () => {
     vi.restoreAllMocks()
   })
 
+  it("exposes filters as a named programmatic navigation destination", async () => {
+    renderPhoneBookApp()
+    await screen.findByText("Jessica Christian")
+
+    const filterRegion = screen.getByRole("region", {
+      name: "Contact filters and actions",
+    })
+    expect(filterRegion).toHaveAttribute("id", "filter")
+    expect(filterRegion).toHaveAttribute("tabindex", "-1")
+    expect(
+      screen.getByRole("searchbox", { name: "Search contacts" }),
+    ).not.toHaveFocus()
+  })
+
   it("composes free-text search and age-range selection", async () => {
     renderPhoneBookApp()
     expect(

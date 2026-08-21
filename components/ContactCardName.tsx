@@ -19,7 +19,7 @@ export default function ContactCardNameAndCity({
         <span className="text-2xl leading-7 font-semibold tracking-widest uppercase">
           {contactName}
         </span>
-        <span className="text-xs font-semibold tracking-wider text-gray-400 dark:text-gray-300">
+        <span className="text-xs font-semibold tracking-wider text-gray-600 dark:text-gray-300">
           {city}
         </span>
       </h3>

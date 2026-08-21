@@ -63,6 +63,7 @@ test("uses expanded, compact, and narrow header layouts", async ({ page }) => {
   const themeToggle = navigation.getByRole("button", {
     name: /Use (dark|light) mode/,
   })
+  const themeToggleArtwork = themeToggle.locator("svg")
   const portfolioHeading = navigation.getByText("Portfolio CRM", {
     exact: true,
   })
@@ -144,10 +145,12 @@ test("uses expanded, compact, and narrow header layouts", async ({ page }) => {
   const navigationBoundingBox = await navigation.boundingBox()
   const openNavigationBoundingBox = await openNavigation.boundingBox()
   const themeToggleBoundingBox = await themeToggle.boundingBox()
+  const themeToggleArtworkBoundingBox = await themeToggleArtwork.boundingBox()
   expect(compactIdentityBoundingBox).not.toBeNull()
   expect(navigationBoundingBox).not.toBeNull()
   expect(openNavigationBoundingBox).not.toBeNull()
   expect(themeToggleBoundingBox).not.toBeNull()
+  expect(themeToggleArtworkBoundingBox).not.toBeNull()
   expect(
     Math.abs(
       compactIdentityBoundingBox!.y +
@@ -168,6 +171,13 @@ test("uses expanded, compact, and narrow header layouts", async ({ page }) => {
         (navigationBoundingBox!.x + navigationBoundingBox!.width / 2),
     ),
   ).toBeLessThanOrEqual(1)
+  expect(themeToggleArtworkBoundingBox!.width).toBeLessThan(
+    themeToggleBoundingBox!.width,
+  )
+  expect(
+    themeToggleArtworkBoundingBox!.width /
+      themeToggleArtworkBoundingBox!.height,
+  ).toBeCloseTo(17 / 7, 2)
 })
 
 for (const viewport of [

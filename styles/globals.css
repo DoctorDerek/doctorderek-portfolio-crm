@@ -48,12 +48,6 @@ body {
  * https://codesandbox.io/s/dark-mode-toggle-si6k2?file=/src/DarkModeToggle.js
  */
 
-.switch {
-  display: block;
-  width: 170px;
-  height: 70px;
-}
-
 .cloud1,
 .cloud2,
 .sun {

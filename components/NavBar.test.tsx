@@ -5,6 +5,7 @@ import {
   waitFor,
   within,
 } from "@testing-library/react"
+import { ReactNode } from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import Providers from "@/app/providers"
 import NavBar from "@/components/NavBar"
@@ -13,8 +14,13 @@ vi.mock("@/components/ReactConfetti", () => ({
   default: () => <div aria-hidden="true" />,
 }))
 
+vi.mock("next/dynamic", () => ({
+  default: (_loader: unknown, options: { loading: () => ReactNode }) =>
+    options.loading,
+}))
+
 function renderNavigation() {
-  render(
+  return render(
     <Providers>
       <NavBar />
     </Providers>,
@@ -24,6 +30,17 @@ function renderNavigation() {
 describe("navigation", () => {
   beforeEach(() => {
     localStorage.clear()
+  })
+
+  it("reserves theme toggle geometry while its adapter loads", () => {
+    const { container } = renderNavigation()
+    const placeholder = container.querySelector('nav [aria-hidden="true"].w-28')
+
+    expect(placeholder).toHaveClass("p-1", "sm:w-36")
+    expect(placeholder?.firstElementChild).toHaveClass(
+      "aspect-[17/7]",
+      "w-full",
+    )
   })
 
   it("opens the accessible mobile menu and closes it after navigation", async () => {

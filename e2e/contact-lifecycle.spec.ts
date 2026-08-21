@@ -66,7 +66,7 @@ test("creates updates deletes and resets local contacts", async ({ page }) => {
 
   await page
     .getByRole("button", {
-      name: "Delete all contacts and restore the demonstration contacts",
+      name: "Reset contacts to the demonstration contacts",
     })
     .click()
   await expect(page.getByText("Reset Contacts", { exact: true })).toBeVisible()

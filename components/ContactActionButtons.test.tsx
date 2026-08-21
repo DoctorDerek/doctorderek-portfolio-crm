@@ -19,7 +19,7 @@ describe("contact action buttons", () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: "Delete all contacts and restore the demonstration contacts",
+        name: "Reset contacts to the demonstration contacts",
       }),
     )
 

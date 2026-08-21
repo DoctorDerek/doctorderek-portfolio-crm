@@ -4,18 +4,9 @@ import { Dialog } from "@headlessui/react"
 import { Bars3Icon, DevicePhoneMobileIcon } from "@heroicons/react/24/solid"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ReactConfetti from "@/components/ReactConfetti"
-
-const FILTER_SECTION_ID = "filter"
-
-function focusFilterSection() {
-  const filterSection = document.getElementById(
-    FILTER_SECTION_ID,
-  ) as HTMLElement
-  filterSection.focus()
-}
 
 function ThemeToggleLoadingPlaceholder() {
   return (
@@ -30,25 +21,19 @@ const ToggleDarkMode = dynamic(() => import("@/components/ToggleDarkMode"), {
   loading: ThemeToggleLoadingPlaceholder,
 })
 
-function NavBarLinks({
-  onHomeNavigate,
-  onFilterNavigate,
-}: {
-  onHomeNavigate?: () => void
-  onFilterNavigate?: () => void
-}) {
+function NavBarLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       <Link
         href="#main-content"
-        onClick={onHomeNavigate}
+        onClick={onNavigate}
         className="hover:text-gray-300 dark:hover:text-gray-500"
       >
         Home
       </Link>
       <Link
-        href={`#${FILTER_SECTION_ID}`}
-        onClick={onFilterNavigate}
+        href="#filter"
+        onClick={onNavigate}
         className="text-gray-500 hover:text-gray-300 dark:text-gray-300 dark:hover:text-gray-500"
       >
         Filter
@@ -69,11 +54,9 @@ function PortfolioCRMHeading() {
 function MobileNavigationMenu({
   isDialogOpen,
   closeDialog,
-  navigateToFilter,
 }: {
   isDialogOpen: boolean
   closeDialog: () => void
-  navigateToFilter: () => void
 }) {
   return (
     <Dialog open={isDialogOpen} onClose={closeDialog} className="relative z-50">
@@ -86,10 +69,7 @@ function MobileNavigationMenu({
         <ReactConfetti />
         <div className="flex flex-col items-center space-y-12">
           <PortfolioCRMHeading />
-          <NavBarLinks
-            onHomeNavigate={closeDialog}
-            onFilterNavigate={navigateToFilter}
-          />
+          <NavBarLinks onNavigate={closeDialog} />
         </div>
       </Dialog.Panel>
     </Dialog>
@@ -98,26 +78,8 @@ function MobileNavigationMenu({
 
 export default function NavBar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const shouldFocusFilterAfterDialogClose = useRef(false)
   const closeDialog = () => setIsDialogOpen(false)
   const openDialog = () => setIsDialogOpen(true)
-
-  useEffect(() => {
-    if (isDialogOpen || !shouldFocusFilterAfterDialogClose.current) return
-
-    shouldFocusFilterAfterDialogClose.current = false
-    queueMicrotask(focusFilterSection)
-  }, [isDialogOpen])
-
-  const navigateToFilter = () => {
-    if (!isDialogOpen) {
-      focusFilterSection()
-      return
-    }
-
-    shouldFocusFilterAfterDialogClose.current = true
-    closeDialog()
-  }
 
   return (
     <>
@@ -130,7 +92,7 @@ export default function NavBar() {
             <span className="hidden text-base xl:inline">by @DoctorDerek</span>
           </span>
           <div className="hidden items-center space-x-12 xl:flex">
-            <NavBarLinks onFilterNavigate={navigateToFilter} />
+            <NavBarLinks />
           </div>
         </div>
         <div className="order-3 flex basis-full items-center justify-center gap-2 sm:order-none sm:basis-auto">
@@ -155,7 +117,6 @@ export default function NavBar() {
       <MobileNavigationMenu
         isDialogOpen={isDialogOpen}
         closeDialog={closeDialog}
-        navigateToFilter={navigateToFilter}
       />
     </>
   )

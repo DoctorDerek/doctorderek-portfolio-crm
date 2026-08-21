@@ -17,7 +17,6 @@ function renderNavigation() {
   return render(
     <Providers>
       <NavBar />
-      <section id="filter" tabIndex={-1} />
     </Providers>,
   )
 }

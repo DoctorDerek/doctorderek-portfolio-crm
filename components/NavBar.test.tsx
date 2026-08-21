@@ -5,18 +5,12 @@ import {
   waitFor,
   within,
 } from "@testing-library/react"
-import { ReactNode } from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import Providers from "@/app/providers"
 import NavBar from "@/components/NavBar"
 
 vi.mock("@/components/ReactConfetti", () => ({
   default: () => <div aria-hidden="true" />,
-}))
-
-vi.mock("next/dynamic", () => ({
-  default: (_loader: unknown, options: { loading: () => ReactNode }) =>
-    options.loading,
 }))
 
 function renderNavigation() {

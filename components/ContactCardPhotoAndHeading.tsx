@@ -62,6 +62,8 @@ export default function ContactCardPhotoAndHeading({
               fill
               className="rounded-full object-cover"
               unoptimized
+              loading={isFirst ? "eager" : "lazy"}
+              fetchPriority={isFirst ? "high" : "low"}
             />
           )}
           {!contactPortrait && (

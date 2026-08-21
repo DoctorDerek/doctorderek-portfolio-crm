@@ -11,12 +11,14 @@ function getImageSource(source: ImageProps["src"]) {
 }
 
 vi.mock("next/image", () => ({
-  default: ({ src, alt, unoptimized }: ImageProps) => (
+  default: ({ src, alt, unoptimized, loading, fetchPriority }: ImageProps) => (
     <div
       role="img"
       aria-label={alt}
       data-src={getImageSource(src)}
       data-unoptimized={unoptimized}
+      data-loading={loading}
+      data-fetch-priority={fetchPriority}
     />
   ),
 }))
@@ -37,6 +39,8 @@ describe("contact card photo and heading", () => {
 
     expect(image.getAttribute("data-src")).toContain("jessica-christian")
     expect(image).toHaveAttribute("data-unoptimized", "true")
+    expect(image).toHaveAttribute("data-loading", "lazy")
+    expect(image).toHaveAttribute("data-fetch-priority", "low")
     expect(
       screen.queryByRole("button", {
         name: "Reorder Ada Lovelace by dragging",
@@ -118,5 +122,13 @@ describe("contact card photo and heading", () => {
     expect(
       screen.getByRole("button", { name: "Move Ada Lovelace down" }),
     ).toBeDisabled()
+    expect(screen.getByRole("img", { name: "Ada Lovelace" })).toHaveAttribute(
+      "data-fetch-priority",
+      "high",
+    )
+    expect(screen.getByRole("img", { name: "Ada Lovelace" })).toHaveAttribute(
+      "data-loading",
+      "eager",
+    )
   })
 })

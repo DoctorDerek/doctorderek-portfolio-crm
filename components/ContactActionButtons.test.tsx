@@ -8,7 +8,10 @@ describe("contact action buttons", () => {
     const setDialogState = vi.fn()
     render(<ButtonCreate setDialogState={setDialogState} />)
 
-    fireEvent.click(screen.getByRole("button", { name: "+ Add Contact" }))
+    const createButton = screen.getByRole("button", { name: "+ Add Contact" })
+
+    expect(createButton).toHaveClass("bg-blue-600")
+    fireEvent.click(createButton)
 
     expect(setDialogState).toHaveBeenCalledWith({ type: "CREATE" })
   })
@@ -17,11 +20,12 @@ describe("contact action buttons", () => {
     const setDialogState = vi.fn()
     render(<ButtonReset setDialogState={setDialogState} />)
 
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: "Delete all contacts and restore the demonstration contacts",
-      }),
-    )
+    const resetButton = screen.getByRole("button", {
+      name: "Reset contacts to the demonstration contacts",
+    })
+
+    expect(resetButton).toHaveClass("text-red-700")
+    fireEvent.click(resetButton)
 
     expect(setDialogState).toHaveBeenCalledWith({ type: "RESET" })
   })

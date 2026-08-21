@@ -8,8 +8,17 @@ import { useState } from "react"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ReactConfetti from "@/components/ReactConfetti"
 
+function ThemeToggleLoadingPlaceholder() {
+  return (
+    <div aria-hidden="true" className="mx-1 w-28 shrink-0 p-1 sm:w-36">
+      <div className="aspect-[17/7] w-full" />
+    </div>
+  )
+}
+
 const ToggleDarkMode = dynamic(() => import("@/components/ToggleDarkMode"), {
   ssr: false,
+  loading: ThemeToggleLoadingPlaceholder,
 })
 
 function NavBarLinks({ onNavigate }: { onNavigate?: () => void }) {

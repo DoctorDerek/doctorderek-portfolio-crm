@@ -63,5 +63,31 @@ test("operates and dismisses mobile navigation entirely from the keyboard", asyn
 
   await expect(filterLink).toBeHidden()
   await expect(page).toHaveURL(/#filter$/)
-  await expect(openNavigationButton).toBeFocused()
+  await expect(
+    page.getByRole("region", { name: "Contact filters and actions" }),
+  ).toBeFocused()
+  await expect(
+    page.getByRole("searchbox", { name: "Search contacts" }),
+  ).not.toBeFocused()
+})
+
+test("moves desktop filter navigation to its chosen destination", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.goto("/")
+
+  const filterLink = page.getByRole("navigation").getByRole("link", {
+    name: "Filter",
+  })
+  await filterLink.focus()
+  await page.keyboard.press("Enter")
+
+  await expect(page).toHaveURL(/#filter$/)
+  await expect(
+    page.getByRole("region", { name: "Contact filters and actions" }),
+  ).toBeFocused()
+  await expect(
+    page.getByRole("searchbox", { name: "Search contacts" }),
+  ).not.toBeFocused()
 })

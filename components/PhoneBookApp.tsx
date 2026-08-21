@@ -76,7 +76,12 @@ export default function PhoneBookApp() {
       <h1 className="sr-only">Portfolio CRM</h1>
 
       <div className="mx-auto flex w-full max-w-[76rem] min-w-0 flex-col items-center justify-center space-y-6 py-4">
-        <div id="filter" className="flex w-full flex-col gap-4">
+        <section
+          id="filter"
+          aria-label="Contact filters and actions"
+          className="flex w-full flex-col gap-4"
+          tabIndex={-1}
+        >
           <SearchBar
             contactFilters={contactFilters}
             onSearchQueryChange={(searchQuery) =>
@@ -103,7 +108,7 @@ export default function PhoneBookApp() {
             <ButtonReset setDialogState={setDialogState} />
             <ButtonCreate setDialogState={setDialogState} />
           </div>
-        </div>
+        </section>
         <ContactList
           contacts={contacts}
           contactFilters={contactFilters}

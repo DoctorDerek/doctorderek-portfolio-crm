@@ -10,21 +10,17 @@ describe("Lighthouse configuration", () => {
     })
   })
 
-  it("configures authenticated Preview runs without hardcoding credentials", () => {
+  it("accepts explicit local collection overrides", () => {
     expect(
       getLighthouseCollectionConfiguration({
-        LIGHTHOUSE_TARGET_URL: "https://preview.example.com",
+        LIGHTHOUSE_TARGET_URL: "https://target.example.com",
         LIGHTHOUSE_NUMBER_OF_RUNS: "3",
-        LIGHTHOUSE_OUTPUT_DIRECTORY: "./preview-results",
-        LIGHTHOUSE_VERCEL_TRUSTED_OIDC_TOKEN: "short-lived-token",
+        LIGHTHOUSE_OUTPUT_DIRECTORY: "./target-results",
       }),
     ).toEqual({
-      extraHeaders: {
-        "x-vercel-trusted-oidc-idp-token": "short-lived-token",
-      },
       numberOfRuns: 3,
-      outputDirectory: "./preview-results",
-      targetUrl: "https://preview.example.com",
+      outputDirectory: "./target-results",
+      targetUrl: "https://target.example.com",
     })
   })
 

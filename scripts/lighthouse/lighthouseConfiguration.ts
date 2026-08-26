@@ -1,5 +1,4 @@
 export type LighthouseCollectionConfiguration = {
-  extraHeaders?: Record<string, string>
   numberOfRuns: number
   outputDirectory: string
   targetUrl: string
@@ -9,7 +8,6 @@ type LighthouseEnvironment = {
   LIGHTHOUSE_NUMBER_OF_RUNS?: string
   LIGHTHOUSE_OUTPUT_DIRECTORY?: string
   LIGHTHOUSE_TARGET_URL?: string
-  LIGHTHOUSE_VERCEL_TRUSTED_OIDC_TOKEN?: string
 }
 
 export const LIGHTHOUSE_CATEGORIES = [
@@ -28,8 +26,6 @@ export const getLighthouseCollectionConfiguration = (
     LIGHTHOUSE_NUMBER_OF_RUNS: process.env.LIGHTHOUSE_NUMBER_OF_RUNS,
     LIGHTHOUSE_OUTPUT_DIRECTORY: process.env.LIGHTHOUSE_OUTPUT_DIRECTORY,
     LIGHTHOUSE_TARGET_URL: process.env.LIGHTHOUSE_TARGET_URL,
-    LIGHTHOUSE_VERCEL_TRUSTED_OIDC_TOKEN:
-      process.env.LIGHTHOUSE_VERCEL_TRUSTED_OIDC_TOKEN,
   },
 ): LighthouseCollectionConfiguration => {
   const numberOfRuns = Number.parseInt(
@@ -40,19 +36,10 @@ export const getLighthouseCollectionConfiguration = (
   if (!Number.isInteger(numberOfRuns) || numberOfRuns < 1)
     throw new Error("LIGHTHOUSE_NUMBER_OF_RUNS must be a positive integer.")
 
-  const trustedOidcToken = environment.LIGHTHOUSE_VERCEL_TRUSTED_OIDC_TOKEN
-
   return {
     numberOfRuns,
     outputDirectory:
       environment.LIGHTHOUSE_OUTPUT_DIRECTORY ?? DEFAULT_OUTPUT_DIRECTORY,
     targetUrl: environment.LIGHTHOUSE_TARGET_URL ?? PRODUCTION_URL,
-    ...(trustedOidcToken
-      ? {
-          extraHeaders: {
-            "x-vercel-trusted-oidc-idp-token": trustedOidcToken,
-          },
-        }
-      : {}),
   }
 }

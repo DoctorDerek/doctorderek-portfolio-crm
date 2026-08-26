@@ -38,7 +38,10 @@ describe("collectLighthouseReports", () => {
 
     launchChromeAdapter.mockResolvedValue({ kill: killChrome, port: 9222 })
     runLighthouseAdapter.mockResolvedValue({
-      lhr: { categories: {} },
+      lhr: {
+        categories: {},
+        finalDisplayedUrl: "https://portfolio-crm.doctorderek.com/ready",
+      },
       report: "adapter-report",
     })
 
@@ -104,20 +107,25 @@ describe("collectLighthouseReports", () => {
     const runLighthouse = vi
       .fn()
       .mockResolvedValueOnce({
-        lighthouseResult: { run: 1 },
+        lighthouseResult: {
+          finalDisplayedUrl: "https://target.example.com/first",
+          run: 1,
+        },
         report: "first-report",
       })
       .mockResolvedValueOnce({
-        lighthouseResult: { run: 2 },
+        lighthouseResult: {
+          finalDisplayedUrl: "https://target.example.com/second",
+          run: 2,
+        },
         report: "second-report",
       })
 
     const manifest = await collectLighthouseReports(
       {
-        extraHeaders: { "x-vercel-trusted-oidc-idp-token": "token" },
         numberOfRuns: 2,
         outputDirectory,
-        targetUrl: "https://preview.example.com",
+        targetUrl: "https://target.example.com",
       },
       { launchChrome, runLighthouse },
     )
@@ -129,9 +137,8 @@ describe("collectLighthouseReports", () => {
     expect(runLighthouse).toHaveBeenCalledTimes(2)
     expect(runLighthouse).toHaveBeenNthCalledWith(
       1,
-      "https://preview.example.com",
+      "https://target.example.com",
       {
-        extraHeaders: { "x-vercel-trusted-oidc-idp-token": "token" },
         formFactor: "mobile",
         logLevel: "info",
         onlyCategories: [
@@ -156,8 +163,66 @@ describe("collectLighthouseReports", () => {
     )
     expect(
       JSON.parse(fs.readFileSync(manifest[1]?.jsonPath ?? "", "utf8")),
-    ).toEqual({ run: 2 })
+    ).toEqual({
+      finalDisplayedUrl: "https://target.example.com/second",
+      run: 2,
+    })
   })
+
+  it("rejects a Lighthouse run that leaves the requested origin", async () => {
+    const killChrome = vi.fn(async () => undefined)
+
+    await expect(
+      collectLighthouseReports(
+        {
+          numberOfRuns: 1,
+          outputDirectory: createTemporaryDirectory(),
+          targetUrl: "https://portfolio-crm.doctorderek.com/",
+        },
+        {
+          launchChrome: async () => ({ kill: killChrome, port: 9222 }),
+          runLighthouse: async () => ({
+            lighthouseResult: {
+              finalDisplayedUrl: "https://vercel.com/login",
+            },
+            report: "authentication-report",
+          }),
+        },
+      ),
+    ).rejects.toThrow(
+      "left the target origin: expected https://portfolio-crm.doctorderek.com, received https://vercel.com",
+    )
+    expect(killChrome).toHaveBeenCalledOnce()
+  })
+
+  it.each([
+    undefined,
+    { finalDisplayedUrl: undefined },
+    { finalDisplayedUrl: "not a URL" },
+  ])(
+    "rejects malformed final navigation result %#",
+    async (lighthouseResult) => {
+      const killChrome = vi.fn(async () => undefined)
+
+      await expect(
+        collectLighthouseReports(
+          {
+            numberOfRuns: 1,
+            outputDirectory: createTemporaryDirectory(),
+            targetUrl: "https://portfolio-crm.doctorderek.com/",
+          },
+          {
+            launchChrome: async () => ({ kill: killChrome, port: 9222 }),
+            runLighthouse: async () => ({
+              lighthouseResult,
+              report: "invalid-destination-report",
+            }),
+          },
+        ),
+      ).rejects.toThrow("did not return a valid final URL")
+      expect(killChrome).toHaveBeenCalledOnce()
+    },
+  )
 
   it("always closes Chrome when a run fails", async () => {
     const killChrome = vi.fn(async () => undefined)
@@ -200,7 +265,10 @@ describe("collectLighthouseReports", () => {
         {
           launchChrome: async () => ({ kill: killChrome, port: 9222 }),
           runLighthouse: async () => ({
-            lighthouseResult: { categories: {} },
+            lighthouseResult: {
+              categories: {},
+              finalDisplayedUrl: "https://portfolio-crm.doctorderek.com/",
+            },
             report: "completed-report",
           }),
         },
@@ -235,7 +303,10 @@ describe("collectLighthouseReports", () => {
         {
           launchChrome: async () => ({ kill: killChrome, port: 9222 }),
           runLighthouse: async () => ({
-            lighthouseResult: { categories: {} },
+            lighthouseResult: {
+              categories: {},
+              finalDisplayedUrl: "https://portfolio-crm.doctorderek.com/",
+            },
             report: "completed-report",
           }),
         },

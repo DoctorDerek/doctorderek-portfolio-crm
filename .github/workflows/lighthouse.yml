@@ -61,8 +61,21 @@ jobs:
                 const latestStatus = statuses[0];
 
                 if (latestStatus?.state === "success") {
+                  const deploymentUrl = new URL(
+                    latestStatus.environment_url ?? latestStatus.target_url,
+                  );
+
+                  if (
+                    deploymentUrl.protocol !== "https:" ||
+                    !deploymentUrl.hostname.endsWith(".vercel.app")
+                  ) {
+                    throw new Error(
+                      `Untrusted Vercel Production deployment URL: ${deploymentUrl}.`,
+                    );
+                  }
+
                   core.info(
-                    `Vercel Production deployment ${matchingDeployment.id} is ready.`,
+                    `Vercel Production deployment ${matchingDeployment.id} is ready at ${deploymentUrl}; measuring the canonical Production URL.`,
                   );
                   return;
                 }
@@ -91,6 +104,8 @@ jobs:
 
       - name: Checkout Repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10

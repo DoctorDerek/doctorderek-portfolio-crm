@@ -3,6 +3,8 @@ name: Lint & Test Pipeline
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
 
 permissions:
   pull-requests: write
@@ -20,6 +22,7 @@ jobs:
 
     steps:
       - name: Initialize PR Quality Comments
+        if: github.event_name == 'pull_request'
         continue-on-error: true
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
@@ -75,6 +78,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install Dependencies
+        id: install-dependencies
         run: pnpm install
 
       - name: Run Lint and Capture Output
@@ -97,7 +101,7 @@ jobs:
           echo "LINT_OUTPUT_FILE=$RUNNER_TEMP/lint-output.txt" >> "$GITHUB_ENV"
 
       - name: Post Lint PR Comment
-        if: always()
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
         continue-on-error: true
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
@@ -155,7 +159,7 @@ jobs:
 
       - name: Run Vitest and Capture Summary
         id: vitest
-        if: always()
+        if: ${{ !cancelled() && steps.install-dependencies.outcome == 'success' }}
         run: |
           set +e
           pnpm vitest run --coverage --passWithNoTests 2>&1 | tee "$RUNNER_TEMP/vitest-output.txt"
@@ -164,9 +168,59 @@ jobs:
 
           echo "VITEST_EXIT_CODE=$VITEST_EXIT_CODE" >> "$GITHUB_ENV"
           echo "VITEST_OUTPUT_FILE=$RUNNER_TEMP/vitest-output.txt" >> "$GITHUB_ENV"
+          exit "$VITEST_EXIT_CODE"
+
+      - name: Inspect Vitest Evidence
+        if: ${{ !cancelled() }}
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
+        with:
+          retries: 3
+          script: |
+            const fs = require('node:fs');
+            const path = require('node:path');
+            const expectedReports = ['coverage/lcov.info', 'coverage/coverage-final.json', 'coverage/index.html'];
+            const availableReports = expectedReports.filter(file => fs.existsSync(file) && fs.statSync(file).size > 0);
+            const missingReports = expectedReports.filter(file => !availableReports.includes(file));
+            let sourceFiles = [];
+            if (availableReports.includes('coverage/lcov.info')) {
+              sourceFiles = [...fs.readFileSync('coverage/lcov.info', 'utf8').matchAll(/^SF:(.+)$/gm)].map(match => match[1].trim());
+              if (sourceFiles.length === 0 || sourceFiles.some(file => !fs.existsSync(path.resolve(file)))) {
+                core.warning('Vitest LCOV source mappings are unavailable or reference missing files. Do not treat this as complete coverage.');
+              }
+            }
+            if (availableReports.includes('coverage/coverage-final.json')) {
+              try {
+                const jsonSources = Object.keys(JSON.parse(fs.readFileSync('coverage/coverage-final.json', 'utf8')));
+                const mappedSources = new Set(sourceFiles.map(file => path.resolve(file)));
+                if (jsonSources.length === 0 || jsonSources.length !== mappedSources.size || jsonSources.some(file => !mappedSources.has(path.resolve(file)))) {
+                  core.warning('Vitest JSON and LCOV source contributions differ. Available coverage may be partial.');
+                }
+              } catch {
+                core.warning('Vitest JSON coverage is unreadable. Preserve the available evidence without claiming complete coverage.');
+              }
+            }
+            if (missingReports.length > 0) {
+              core.warning(`Unavailable Vitest evidence: ${missingReports.join(', ')}. Available reports may be partial, not zero coverage.`);
+            }
+            const checkoutSha = (await exec.getExecOutput('git', ['rev-parse', 'HEAD'])).stdout.trim();
+            await core.summary
+              .addHeading('Vitest evidence')
+              .addRaw(`Single root package; no shards. Runner exit: ${process.env.VITEST_EXIT_CODE ?? 'unavailable'}. Codecov flag: vitest.\n\n`)
+              .addRaw(`Tested checkout: ${checkoutSha}. Report commit: ${context.payload.pull_request?.head.sha ?? context.sha}.\n\n`)
+              .addRaw(`Available: ${availableReports.join(', ') || 'none'}. Missing: ${missingReports.join(', ') || 'none'}. LCOV source files: ${sourceFiles.length}.\n\n`)
+              .addRaw('Report presence is not proof of complete execution. Inspect the runner result and missing-source warnings before comparing coverage.\n')
+              .write();
+
+      - name: Upload Vitest Coverage Evidence
+        if: ${{ !cancelled() && hashFiles('coverage/**') != '' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: vitest-coverage
+          path: coverage/
+          retention-days: 14
 
       - name: Post Vitest PR Comment
-        if: always()
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
         continue-on-error: true
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
@@ -223,9 +277,12 @@ jobs:
             }
 
       - name: Upload coverage to Codecov
+        if: ${{ !cancelled() && hashFiles('coverage/lcov.info') != '' }}
         uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45 # v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+          disable_search: true
           flags: vitest
 
       - name: Enforce Test and Tooling Results

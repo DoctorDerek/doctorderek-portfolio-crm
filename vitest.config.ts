@@ -15,6 +15,7 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     coverage: {
       provider: "v8",
+      reportOnFailure: true,
       include: [
         "app/**/*.{ts,tsx}",
         "components/**/*.{ts,tsx}",

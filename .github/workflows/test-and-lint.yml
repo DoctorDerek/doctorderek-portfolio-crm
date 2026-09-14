@@ -3,6 +3,8 @@ name: Lint & Test Pipeline
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
 
 permissions:
   pull-requests: write
@@ -20,6 +22,7 @@ jobs:
 
     steps:
       - name: Initialize PR Quality Comments
+        if: github.event_name == 'pull_request'
         continue-on-error: true
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
@@ -98,7 +101,7 @@ jobs:
           echo "LINT_OUTPUT_FILE=$RUNNER_TEMP/lint-output.txt" >> "$GITHUB_ENV"
 
       - name: Post Lint PR Comment
-        if: always()
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
         continue-on-error: true
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
@@ -203,7 +206,7 @@ jobs:
             await core.summary
               .addHeading('Vitest evidence')
               .addRaw(`Single root package; no shards. Runner exit: ${process.env.VITEST_EXIT_CODE ?? 'unavailable'}. Codecov flag: vitest.\n\n`)
-              .addRaw(`Tested checkout: ${checkoutSha}. PR head: ${context.payload.pull_request.head.sha}.\n\n`)
+              .addRaw(`Tested checkout: ${checkoutSha}. Report commit: ${context.payload.pull_request?.head.sha ?? context.sha}.\n\n`)
               .addRaw(`Available: ${availableReports.join(', ') || 'none'}. Missing: ${missingReports.join(', ') || 'none'}. LCOV source files: ${sourceFiles.length}.\n\n`)
               .addRaw('Report presence is not proof of complete execution. Inspect the runner result and missing-source warnings before comparing coverage.\n')
               .write();
@@ -217,7 +220,7 @@ jobs:
           retention-days: 14
 
       - name: Post Vitest PR Comment
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
         continue-on-error: true
         uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:

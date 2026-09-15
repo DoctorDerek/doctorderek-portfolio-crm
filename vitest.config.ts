@@ -20,7 +20,6 @@ export default defineConfig({
         "app/**/*.{ts,tsx}",
         "components/**/*.{ts,tsx}",
         "contacts/**/*.{ts,tsx}",
-        "scripts/**/*.{ts,tsx}",
         "types/**/*.{ts,tsx}",
         "utils/**/*.{ts,tsx}",
       ],

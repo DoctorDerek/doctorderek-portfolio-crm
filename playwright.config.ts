@@ -15,7 +15,7 @@ export default defineConfig({
     extraHTTPHeaders: vercelTrustedOidcToken
       ? { "x-vercel-trusted-oidc-idp-token": vercelTrustedOidcToken }
       : undefined,
-    trace: "on-first-retry",
+    trace: vercelTrustedOidcToken ? "off" : "on-first-retry",
   },
   projects: [
     {

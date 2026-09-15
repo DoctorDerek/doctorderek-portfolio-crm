@@ -1,0 +1,25 @@
+name: ESLint, Vitest, and XState Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    uses: DoctorDerek/DoctorDerekCICD/.github/workflows/eslint-vitest-xstate.yml@93e29ba0fcf1d35d8ff0040002816c36d763d966
+    with:
+      typecheck-command: pnpm exec next typegen && pnpm exec tsc --noEmit --incremental false
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

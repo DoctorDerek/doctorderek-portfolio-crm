@@ -2,7 +2,7 @@
 
 [![Production](https://img.shields.io/website?url=https%3A%2F%2Fportfolio-crm.doctorderek.com%2F&up_message=live&down_message=offline&label=production&logo=vercel&logoColor=white)](https://portfolio-crm.doctorderek.com/)
 [![Codecov](https://codecov.io/gh/DoctorDerek/doctorderek-portfolio-crm/graph/badge.svg)](https://app.codecov.io/gh/DoctorDerek/doctorderek-portfolio-crm)
-[![Lint and test](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/test-and-lint.yml/badge.svg)](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/test-and-lint.yml)
+[![Lint and test](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/eslint-vitest-xstate.yml/badge.svg)](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/eslint-vitest-xstate.yml)
 [![Playwright](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/playwright.yml/badge.svg)](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/playwright.yml)
 
 A local-first portfolio CRM with accessible CRUD workflows, age and favorites filtering, theme switching, and deterministic React state.

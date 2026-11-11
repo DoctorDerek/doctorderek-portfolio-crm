@@ -2,10 +2,16 @@ packages:
   - "."
 
 overrides:
-  brace-expansion@<1.1.18: "1.1.18"
-  brace-expansion@>=5.0.0 <5.0.9: "5.0.9"
-  js-yaml@>=4.0.0 <4.3.1: "4.3.1"
-  minimatch@>=10.2.2 <10.2.6: "^10.2.6"
+  "@typescript-eslint/typescript-estree@8.65.0>minimatch": "11.0.4"
+  baseline-browser-mapping@>=2.0.0 <2.11.0: "2.11.0"
+  browserslist@>=4.0.0 <4.28.7: "4.28.7"
+  lighthouse@13.4.1>puppeteer-core: "25.16.0"
+  source-map-js@>=1.0.0 <1.2.2: "1.2.2"
+  vite@>=8.0.0 <8.1.6: "8.1.6"
+  zod@>=4.0.0 <4.6.7: "4.6.7"
+  brace-expansion@<1.1.21: "1.1.21"
+  brace-expansion@>=5.0.0 <5.0.12: "5.0.12"
+  js-yaml@>=4.0.0 <4.3.2: "4.3.2"
   nanoid@<3.3.18: "3.3.18"
   postcss@<8.5.23: "8.5.25"
   sharp@<0.35.3: "^0.35.3"
@@ -14,3 +20,6 @@ allowBuilds:
   core-js: true
   sharp: true
   unrs-resolver: true
+
+patchedDependencies:
+  happy-dom@21.0.4: patches/happy-dom@21.0.4.patch

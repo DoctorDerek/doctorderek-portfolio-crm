@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   quality:
-    uses: DoctorDerek/DoctorDerekCICD/.github/workflows/eslint-vitest-xstate.yml@28018031ea1409487e9919b0c62dd58602a3e649
+    uses: DoctorDerek/DoctorDerekCICD/.github/workflows/eslint-vitest-xstate.yml@451abd174a5fb67b534e424cb3ffc337705e4200
     with:
       typecheck-command: pnpm exec next typegen && pnpm exec tsc --noEmit --incremental false
     secrets:

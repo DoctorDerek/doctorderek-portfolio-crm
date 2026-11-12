@@ -17,6 +17,6 @@ concurrency:
 
 jobs:
   lighthouse:
-    uses: DoctorDerek/DoctorDerekCICD/.github/workflows/lighthouse.yml@93e29ba0fcf1d35d8ff0040002816c36d763d966
+    uses: DoctorDerek/DoctorDerekCICD/.github/workflows/lighthouse.yml@451abd174a5fb67b534e424cb3ffc337705e4200
     with:
       production-url: https://portfolio-crm.doctorderek.com/

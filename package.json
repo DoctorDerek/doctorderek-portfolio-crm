@@ -55,7 +55,7 @@
     "eslint-config-next": "^16",
     "eslint-config-prettier": "^10",
     "eslint-plugin-only-warn": "^1",
-    "happy-dom": "^20",
+    "happy-dom": "^21",
     "jiti": "^2",
     "lighthouse": "^13",
     "postcss": "^8",

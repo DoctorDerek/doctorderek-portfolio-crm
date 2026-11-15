@@ -122,19 +122,37 @@ describe("contact discovery", () => {
   })
 
   it("persists directional contact reordering from the card controls", async () => {
-    renderPhoneBookApp()
+    const view = renderPhoneBookApp()
     await screen.findByText("Jessica Christian")
+    const visibleContactNames = () =>
+      screen.getAllByRole("heading", { level: 3 }).map((heading) =>
+        heading.querySelector("span")?.textContent,
+      )
+    const initialOrder = visibleContactNames()
+    const expectedOrder = [
+      initialOrder[0],
+      initialOrder[2],
+      initialOrder[1],
+      ...initialOrder.slice(3),
+    ]
 
     fireEvent.click(
       screen.getByRole("button", { name: "Move Jessica Christian down" }),
     )
 
     await waitFor(() => {
+      expect(visibleContactNames()).toEqual(expectedOrder)
       const storedContacts = JSON.parse(
         localStorage.getItem(CONTACTS_STORAGE_KEY) ?? "[]",
       ) as { id: number; order?: number }[]
       expect(storedContacts.find(({ id }) => id === 1)?.order).toBe(2)
       expect(storedContacts.find(({ id }) => id === 4)?.order).toBe(1)
+    })
+
+    view.unmount()
+    renderPhoneBookApp()
+    await waitFor(() => {
+      expect(visibleContactNames()).toEqual(expectedOrder)
     })
   })
 

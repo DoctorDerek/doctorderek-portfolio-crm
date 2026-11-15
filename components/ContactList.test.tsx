@@ -155,6 +155,8 @@ describe("contact list", () => {
 
     act(() => {
       capturedReorderHandler?.(ASSERTED_FILTERED_IDS)
+    })
+    act(() => {
       capturedDragEndHandler?.()
     })
 
@@ -166,6 +168,8 @@ describe("contact list", () => {
 
     act(() => {
       capturedReorderHandler?.([3, 2, 1])
+    })
+    act(() => {
       capturedDragEndHandler?.()
     })
 
@@ -215,15 +219,24 @@ describe("contact list", () => {
     expect(onMoveContact).toHaveBeenNthCalledWith(2, CONTACTS[1], "up")
   })
 
-  it("does not emit a reorder when drag output contains duplicate ids", () => {
+  it("renders canonical contacts when drag output contains duplicate ids", () => {
     const onReorderFilteredContacts = vi.fn()
 
     renderContactList({ onReorderFilteredContacts })
 
     act(() => {
       capturedReorderHandler?.([1, 1, 2])
-      capturedDragEndHandler?.()
     })
+
+    expect(onReorderFilteredContacts).not.toHaveBeenCalled()
+    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(3)
+  })
+
+  it("does not persist a gesture that produced no reorder preview", () => {
+    const onReorderFilteredContacts = vi.fn()
+    renderContactList({ onReorderFilteredContacts })
+
+    act(() => capturedDragEndHandler?.())
 
     expect(onReorderFilteredContacts).not.toHaveBeenCalled()
   })

@@ -1,5 +1,22 @@
 import { expect, test } from "@playwright/test"
 
+test("updates visible contact order from the keyboard and preserves it on reload", async ({
+  page,
+}) => {
+  await page.goto("/")
+  await page.evaluate(() => localStorage.clear())
+  await page.reload()
+  const contactNames = page
+    .getByRole("region", { name: "Contact results" })
+    .locator("h3 > span:first-child")
+  await expect(contactNames.first()).toHaveText("Lia Bekyan")
+  await page.getByRole("button", { name: "Move Lia Bekyan down" }).focus()
+  await page.keyboard.press("Enter")
+  await expect(contactNames.first()).toHaveText("Jessica Christian")
+  await page.reload()
+  await expect(contactNames.first()).toHaveText("Jessica Christian")
+})
+
 test("opens and dismisses the create dialog entirely from the keyboard", async ({
   page,
 }) => {

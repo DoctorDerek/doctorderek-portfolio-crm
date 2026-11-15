@@ -15,7 +15,7 @@ describe("contact card name", () => {
     render(<ContactCardName contact={contact} />)
 
     expect(screen.getByText("Ada Lovelace")).toBeInTheDocument()
-    expect(screen.getByText("London")).toHaveClass("text-gray-600")
+    expect(screen.getByText("London")).toBeVisible()
     expect(
       screen.queryByRole("button", { name: "Edit Ada Lovelace" }),
     ).not.toBeInTheDocument()

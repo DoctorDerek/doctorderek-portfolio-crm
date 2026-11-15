@@ -200,6 +200,53 @@ for (const viewport of [
       documentWidth.viewportWidth,
     )
   })
+
+  test(`keeps contacts and the editor usable with enlarged text at ${viewport.width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport)
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%"
+    })
+    await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBeLessThanOrEqual(viewport.width)
+    await page.getByRole("button", { name: "+ Add Contact" }).click()
+    const dialog = page.getByRole("dialog", { name: "Create Phone Book Entry" })
+    await expect(
+      dialog.getByRole("textbox", { name: "Email Address" }),
+    ).toBeVisible()
+    const titleBounds = await dialog
+      .getByRole("heading", { name: "Create Phone Book Entry" })
+      .boundingBox()
+    const closeBounds = await dialog
+      .getByRole("button", { name: "Close dialog" })
+      .boundingBox()
+    expect(titleBounds!.y).toBeGreaterThanOrEqual(
+      closeBounds!.y + closeBounds!.height,
+    )
+    await page
+      .getByRole("textbox", { name: "Email Address" })
+      .fill("enlarged@example.com")
+    await page.getByRole("textbox", { name: "First Name" }).fill("Enlarged")
+    await page.getByRole("textbox", { name: "Last Name" }).fill("Text")
+    await dialog.getByRole("button", { name: "Next", exact: true }).click()
+    await expect(
+      page.getByRole("region", { name: "Review and Submit" }),
+    ).toBeVisible()
+    const panel = dialog.locator("form > div")
+    expect(
+      await panel.evaluate(
+        (element) => element.scrollWidth - element.clientWidth,
+      ),
+    ).toBeLessThanOrEqual(1)
+    await dialog.getByRole("button", { name: "Submit", exact: true }).click()
+    await expect(dialog).toBeHidden()
+    await expect(
+      page.getByRole("heading", { name: "Enlarged Text", level: 3 }),
+    ).toBeVisible()
+  })
 }
 
 test("serves immutable portraits without runtime transformations", async ({

@@ -125,9 +125,9 @@ describe("contact discovery", () => {
     const view = renderPhoneBookApp()
     await screen.findByText("Jessica Christian")
     const visibleContactNames = () =>
-      screen.getAllByRole("heading", { level: 3 }).map((heading) =>
-        heading.querySelector("span")?.textContent,
-      )
+      screen
+        .getAllByRole("heading", { level: 3 })
+        .map((heading) => heading.querySelector("span")?.textContent)
     const initialOrder = visibleContactNames()
     const expectedOrder = [
       initialOrder[0],

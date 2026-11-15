@@ -87,7 +87,10 @@ export default function ContactList({
     if (reorderedFilteredContactIds && onReorderFilteredContacts) {
       if (!hasReorderedContactOrder) {
         announceReorder(reorderedFilteredContactIds)
-        onReorderFilteredContacts(filteredContactIds, reorderedFilteredContactIds)
+        onReorderFilteredContacts(
+          filteredContactIds,
+          reorderedFilteredContactIds,
+        )
       } else {
         setReorderAnnouncement("")
       }

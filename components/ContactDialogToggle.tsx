@@ -18,7 +18,7 @@ export default function ContactDialogToggle({
       <span className="flex min-w-0 grow flex-col">
         <Switch.Label
           as="span"
-          className="text-sm leading-6 font-medium text-gray-500 dark:text-gray-300"
+          className="text-sm leading-6 font-medium text-gray-700 dark:text-gray-300"
           passive
         >
           Show address fields

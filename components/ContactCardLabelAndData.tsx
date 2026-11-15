@@ -8,7 +8,7 @@ export default function ContactCardLabelAndData({
   data: ReactNode
 }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex min-w-0 flex-col wrap-anywhere">
       <span className="text-xs tracking-widest text-gray-600 dark:text-gray-300">
         {label}
       </span>

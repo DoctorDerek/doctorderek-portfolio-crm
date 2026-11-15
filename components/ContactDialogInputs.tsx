@@ -38,10 +38,10 @@ function ContactDialogInput({
   }
 
   return (
-    <div className="relative mt-4">
+    <div className="mt-4 min-w-0 space-y-1">
       <label
         htmlFor={fieldName}
-        className="absolute -top-3 left-3 inline-block bg-white px-1 text-sm font-medium text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+        className="block text-sm font-medium text-gray-900 dark:text-gray-100"
       >
         {label}
       </label>
@@ -49,7 +49,7 @@ function ContactDialogInput({
         type={getInputType()}
         id={fieldName}
         className={classNames(
-          "block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:ring-gray-700 dark:focus:ring-gray-500 dark:disabled:bg-gray-950 dark:disabled:text-gray-800 dark:disabled:ring-gray-950",
+          "block w-full min-w-0 rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 focus:ring-inset disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 dark:ring-gray-700 dark:focus:ring-gray-500 dark:disabled:bg-gray-950 dark:disabled:text-gray-800 dark:disabled:ring-gray-950",
           errors[fieldName] ? "ring-2 ring-red-500 dark:ring-red-900" : "",
         )}
         placeholder={placeholder}

@@ -2,8 +2,6 @@ import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/")
-  await page.evaluate(() => localStorage.clear())
-  await page.reload()
   await expect(page.getByRole("status")).toHaveText("Showing 6 of 6 contacts")
 })
 

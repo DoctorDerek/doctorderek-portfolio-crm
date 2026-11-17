@@ -42,10 +42,10 @@ function ProgressIndicator({
     <li
       aria-current={dialogStep === step ? "step" : undefined}
       className={classNames(
-        "flex items-center rounded-sm border border-solid pr-2",
+        "flex min-w-0 items-center rounded-sm border border-solid pr-2 wrap-anywhere",
         dialogStep === step
-          ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
-          : "border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-300",
+          ? "border-blue-700 text-blue-700 dark:border-blue-400 dark:text-blue-400"
+          : "border-gray-200 text-gray-700 dark:border-gray-700 dark:text-gray-300",
       )}
     >
       <span className="flex h-6 w-6 items-center justify-end font-bold sm:h-8 sm:w-8">
@@ -62,7 +62,7 @@ function ProgressIndicator({
 
 function ProgressIndicators({ dialogStep }: { dialogStep: ContactDialogStep }) {
   return (
-    <ol className="mt-4 flex w-full items-center justify-between text-center text-sm font-medium text-gray-500 sm:text-base dark:text-gray-400">
+    <ol className="mt-4 flex w-full flex-wrap items-center justify-between gap-2 text-center text-sm font-medium text-gray-500 sm:text-base dark:text-gray-400">
       {CONTACT_DIALOG_STEPS.map(({ id, label }) => (
         <ProgressIndicator key={id} dialogStep={dialogStep} step={id}>
           {label}
@@ -80,14 +80,14 @@ function ContactDialogButton({
   label: string
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   color:
-    | "bg-blue-400 text-white hover:bg-blue-500 hover:outline-blue-400"
+    | "bg-blue-700 text-white hover:bg-blue-800 hover:outline-blue-700"
     | "bg-gray-800 text-white hover:bg-gray-700 hover:outline-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:hover:outline-gray-700"
 }) {
   return (
     <button
       type="button"
       className={classNames(
-        "rounded-md px-6 py-2 hover:outline-1 hover:outline-solid",
+        "max-w-full rounded-md px-3 py-2 wrap-anywhere hover:outline-1 hover:outline-solid sm:px-6",
         color,
       )}
       onClick={onClick}
@@ -142,7 +142,7 @@ export default function ContactDialogButtons({
   }
   return (
     <>
-      <div className="flex w-full items-center justify-between space-x-2">
+      <div className="flex w-full flex-wrap items-center justify-between gap-2">
         <ContactDialogButton
           label={getBackLabel()}
           color="bg-gray-800 text-white hover:bg-gray-700 hover:outline-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:hover:outline-gray-700"
@@ -150,7 +150,7 @@ export default function ContactDialogButtons({
         />
         <ContactDialogButton
           label={getNextLabel()}
-          color="bg-blue-400 text-white hover:bg-blue-500 hover:outline-blue-400"
+          color="bg-blue-700 text-white hover:bg-blue-800 hover:outline-blue-700"
           onClick={
             (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE") ||
             dialogStep === "review"

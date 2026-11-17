@@ -2,7 +2,7 @@ export default function ContactCardEmail({ email }: { email: string }) {
   const splitEmail = email.split("@")
 
   return (
-    <div className="flex flex-wrap">
+    <div className="flex min-w-0 flex-wrap wrap-anywhere">
       {splitEmail.length === 2 && (
         <>
           <span>{splitEmail[0]}</span>

@@ -3,7 +3,6 @@
 import { Dialog } from "@headlessui/react"
 import { Bars3Icon, DevicePhoneMobileIcon } from "@heroicons/react/24/solid"
 import dynamic from "next/dynamic"
-import Link from "next/link"
 import { useState } from "react"
 import ContactDialogClose from "@/components/ButtonCloseDialog"
 import ReactConfetti from "@/components/ReactConfetti"
@@ -24,20 +23,20 @@ const ToggleDarkMode = dynamic(() => import("@/components/ToggleDarkMode"), {
 function NavBarLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
-      <Link
+      <a
         href="#main-content"
         onClick={onNavigate}
         className="hover:text-gray-300 dark:hover:text-gray-500"
       >
         Home
-      </Link>
-      <Link
+      </a>
+      <a
         href="#filter"
         onClick={onNavigate}
         className="text-gray-500 hover:text-gray-300 dark:text-gray-300 dark:hover:text-gray-500"
       >
         Filter
-      </Link>
+      </a>
     </>
   )
 }

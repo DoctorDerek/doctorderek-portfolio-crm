@@ -42,7 +42,7 @@ export default function ContactCard({
 }) {
   const { birthYear, birthMonth, birthDay, phoneNumber, email } = contact
   return (
-    <div className="flex w-full flex-col items-start justify-between space-y-6 border border-solid border-gray-200 p-6 uppercase shadow-lg filter xl:space-y-8 xl:p-8 dark:border-gray-800">
+    <div className="flex w-full min-w-0 flex-col items-start justify-between space-y-6 border border-solid border-gray-200 p-4 uppercase shadow-lg filter sm:p-6 xl:space-y-8 xl:p-8 dark:border-gray-800">
       <ContactCardPhotoAndHeading
         contact={contact}
         setDialogState={setDialogState}

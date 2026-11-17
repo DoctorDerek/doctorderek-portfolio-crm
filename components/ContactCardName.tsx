@@ -14,12 +14,12 @@ export default function ContactCardNameAndCity({
   const contactName = `${firstName} ${lastName}`
 
   return (
-    <div className="flex min-w-0 items-center gap-2">
-      <h3 className="flex min-w-0 flex-col items-start justify-center">
+    <div className="flex min-w-0 grow basis-40 flex-wrap items-center gap-2">
+      <h3 className="flex min-w-0 grow basis-32 flex-col items-start justify-center wrap-anywhere">
         <span className="text-2xl leading-7 font-semibold tracking-widest uppercase">
           {contactName}
         </span>
-        <span className="text-xs font-semibold tracking-wider text-gray-600 dark:text-gray-300">
+        <span className="text-xs font-semibold tracking-wider text-gray-700 dark:text-gray-300">
           {city}
         </span>
       </h3>

@@ -36,10 +36,11 @@ export default function ContactList({
   const shouldReduceMotion = useReducedMotion() ?? true
   const filteredContactIds = filteredPhoneBookEntries.map(({ id }) => id)
   const [reorderedFilteredContactIds, setReorderedFilteredContactIds] =
-    useState<number[]>(filteredContactIds)
+    useState<number[] | null>(null)
   const [reorderAnnouncement, setReorderAnnouncement] = useState("")
   const reorderedContactIdSet = new Set(reorderedFilteredContactIds)
   const hasReorderedContactIdSet =
+    reorderedFilteredContactIds !== null &&
     reorderedFilteredContactIds.length === filteredContactIds.length &&
     reorderedContactIdSet.size === filteredContactIds.length &&
     reorderedFilteredContactIds.every((contactId) =>
@@ -83,13 +84,18 @@ export default function ContactList({
   }
 
   const handleDragEnd = () => {
-    if (!onReorderFilteredContacts) return
-    if (!hasReorderedContactOrder) {
-      announceReorder(reorderedFilteredContactIds)
-      onReorderFilteredContacts(filteredContactIds, reorderedFilteredContactIds)
-    } else {
-      setReorderAnnouncement("")
+    if (reorderedFilteredContactIds && onReorderFilteredContacts) {
+      if (!hasReorderedContactOrder) {
+        announceReorder(reorderedFilteredContactIds)
+        onReorderFilteredContacts(
+          filteredContactIds,
+          reorderedFilteredContactIds,
+        )
+      } else {
+        setReorderAnnouncement("")
+      }
     }
+    setReorderedFilteredContactIds(null)
   }
 
   const findContactById = (contactId: number) =>

@@ -5,7 +5,7 @@
 [![Lint and test](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/eslint-vitest-xstate.yml/badge.svg)](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/eslint-vitest-xstate.yml)
 [![Playwright](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/playwright.yml/badge.svg)](https://github.com/DoctorDerek/doctorderek-portfolio-crm/actions/workflows/playwright.yml)
 
-A local-first portfolio CRM with accessible CRUD workflows, age and favorites filtering, theme switching, and deterministic React state.
+Keep track of contacts, mark your favorites, and arrange them how you like. No account required.
 
 [Explore the live demo](https://portfolio-crm.doctorderek.com/) · [View open issues](https://github.com/DoctorDerek/doctorderek-portfolio-crm/issues)
 

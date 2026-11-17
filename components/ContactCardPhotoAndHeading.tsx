@@ -53,7 +53,7 @@ export default function ContactCardPhotoAndHeading({
 
   return (
     <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-      <div className="flex min-w-0 items-center gap-4">
+      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-4">
         <div className="relative h-20 w-20 shrink-0">
           {contactPortrait && (
             <Image

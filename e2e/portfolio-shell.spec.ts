@@ -272,7 +272,7 @@ test("serves immutable portraits without runtime transformations", async ({
   expect(new Set(portraitSources).size).toBe(6)
   for (const portraitSource of portraitSources) {
     expect(portraitSource).toMatch(
-      /^\/_next\/static\/media\/[a-z-]+\.[a-z0-9_-]+\.webp$/,
+      /^\/_next\/static\/(?:immutable\/)?media\/[a-z-]+\.[a-z0-9_-]+\.webp$/,
     )
 
     const portraitResponse = await page.request.get(portraitSource)

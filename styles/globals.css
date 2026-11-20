@@ -1,3 +1,43 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+
+/*
+ * ONE-TIME EXCEPTION TO NO CODE COMMENT RULE:
+ * Preserve Tailwind CSS v3 border colors under Tailwind CSS v4 defaults.
+ */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html *,
+  html ::before,
+  html ::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}
+
+:focus-visible {
+  outline: 0.125rem solid #facc15;
+  outline-offset: 0.1875rem;
+}

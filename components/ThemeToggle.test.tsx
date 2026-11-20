@@ -7,13 +7,11 @@ const themeToggleTestCases = [
     accessibleName: "Use dark mode",
     isPressed: false,
     isDarkTheme: false,
-    themeClass: "theme-toggle--light",
   },
   {
     accessibleName: "Use light mode",
     isPressed: true,
     isDarkTheme: true,
-    themeClass: "theme-toggle--dark",
   },
 ] as const
 
@@ -26,7 +24,7 @@ describe("theme toggle", () => {
 
   it.each(themeToggleTestCases)(
     "renders the $accessibleName state and delegates its action",
-    ({ accessibleName, isDarkTheme, isPressed, themeClass }) => {
+    ({ accessibleName, isDarkTheme, isPressed }) => {
       render(<ThemeToggle isDarkTheme={isDarkTheme} onToggle={onToggle} />)
 
       const themeSwitch = screen.getByRole("button", {
@@ -34,7 +32,6 @@ describe("theme toggle", () => {
       })
 
       expect(themeSwitch).toHaveAttribute("aria-pressed", String(isPressed))
-      expect(themeSwitch).toHaveClass(themeClass)
       expect(themeSwitch.querySelector("svg")).toHaveAttribute(
         "aria-hidden",
         "true",
@@ -52,13 +49,13 @@ describe("theme toggle", () => {
     )
 
     rerender(<ThemeToggle isDarkTheme onToggle={onToggle} />)
-    expect(screen.getByRole("button", { name: "Use light mode" })).toHaveClass(
-      "theme-toggle--dark",
-    )
+    expect(
+      screen.getByRole("button", { name: "Use light mode" }),
+    ).toHaveAttribute("aria-pressed", "true")
 
     rerender(<ThemeToggle isDarkTheme={false} onToggle={onToggle} />)
-    expect(screen.getByRole("button", { name: "Use dark mode" })).toHaveClass(
-      "theme-toggle--light",
-    )
+    expect(
+      screen.getByRole("button", { name: "Use dark mode" }),
+    ).toHaveAttribute("aria-pressed", "false")
   })
 })

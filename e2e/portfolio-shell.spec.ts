@@ -378,7 +378,7 @@ test("uses the browser reduced-motion preference without an app override", async
   await expect
     .poll(() =>
       page
-        .locator(".sun")
+        .locator("[data-artwork='sun']")
         .evaluate((element) => getComputedStyle(element).transitionDuration),
     )
     .toBe("0s")

@@ -272,7 +272,7 @@ test("serves immutable portraits without runtime transformations", async ({
   expect(new Set(portraitSources).size).toBe(6)
   for (const portraitSource of portraitSources) {
     expect(portraitSource).toMatch(
-      /^\/_next\/static\/media\/[a-z-]+\.[a-z0-9_-]+\.webp$/,
+      /^\/_next\/static\/(?:immutable\/)?media\/[a-z-]+\.[a-z0-9_-]+\.webp$/,
     )
 
     const portraitResponse = await page.request.get(portraitSource)
@@ -378,7 +378,7 @@ test("uses the browser reduced-motion preference without an app override", async
   await expect
     .poll(() =>
       page
-        .locator(".sun")
+        .locator("[data-artwork='sun']")
         .evaluate((element) => getComputedStyle(element).transitionDuration),
     )
     .toBe("0s")

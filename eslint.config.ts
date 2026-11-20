@@ -20,6 +20,51 @@ const eslintConfig = defineConfig(
     files: ["**/*.{ts,tsx,mts,cts}"],
     extends: [nextTypeScript],
   },
+  {
+    name: "crm/web-component-styling",
+    files: ["{app,components}/**/*.{js,jsx,ts,tsx}"],
+    ignores: ["**/*.test.*", "**/*.spec.*", "**/generated/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@mui/*",
+                "@emotion/*",
+                "styled-components",
+                "styled-components/*",
+              ],
+              message:
+                "Use the project’s Tailwind utilities for component styling.",
+            },
+            {
+              group: ["*.css", "**/*.css", "!@/styles/globals.css"],
+              message:
+                "Import the shared Tailwind entry point and style components with utilities.",
+            },
+          ],
+        },
+      ],
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: [
+            "",
+            ":matches(TSAsExpression, TSSatisfiesExpression, ConditionalExpression, LogicalExpression) > ",
+          ]
+            .map(
+              (wrapper) =>
+                `JSXOpeningElement[name.type='JSXIdentifier'][name.name=/^[a-z]/] > JSXAttribute[name.name='style'] > JSXExpressionContainer > ${wrapper}ObjectExpression > Property[computed=false]:matches([key.type='Identifier'], [key.type='Literal'][key.value!=/^--/])`,
+            )
+            .join(", "),
+          message:
+            "Express DOM appearance with Tailwind utilities. Pass runtime data through CSS custom properties.",
+        },
+      ],
+    },
+  },
   eslintConfigPrettier,
 )
 

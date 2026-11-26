@@ -34,9 +34,9 @@ You must mentally and explicitly process every task through this sequence to pre
   - `style(formatting):` Code formatting (e.g., Prettier fixes, fixing missing semicolons) (no production code change).
   - `docs(scope):` Documentation updates (e.g., updating READMEs).
   - `test(scope):` Adding or refactoring tests (no production code change).
-- **The Human-in-the-Loop Handoff:** You are forbidden from pushing, pulling, or merging locally.
-  1.  _Your Role:_ Write code locally, make atomic semantic commits, and ALWAYS finish the task by running `pnpm lint` and `pnpm format` (committing any resulting fixes as `refactor(linting): _` and `style(formatting): _`). Then, open the PR via the GitHub MCP.
-  2.  _Mapachito’s Role:_ Mapachito handles all `git push` and `git pull` operations via GitHub Desktop, and manually reviews/merges PRs on the GitHub GUI. You must wait for this loop to close before advancing.
+- **The Human-in-the-Loop Handoff:** You are forbidden from pulling or merging locally.
+  1.  _Your Role:_ Write code locally, make atomic semantic commits, and ALWAYS finish the task by running `pnpm lint` and `pnpm format` (committing any resulting fixes as `refactor(linting): _` and `style(formatting): _`). Use `git push` to publish the verified local commits to the task branch, then open its PR via the GitHub MCP.
+  2.  _Mapachito’s Role:_ Mapachito handles all `git pull` operations via GitHub Desktop, and manually reviews/merges PRs on the GitHub GUI. You must wait for this loop to close before advancing.
 
 ## 4. TOOLING & PACKAGE MASTERY
 

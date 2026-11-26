@@ -14,12 +14,12 @@ You must mathematically optimize your code generation for the following three pr
 
 You must mentally and explicitly process every task through this sequence to prevent hallucination and over-engineering:
 
-- **Step 0: 0LIST (Audit & Impact).** Audit the codebase for Canonical Ownership (do not duplicate existing logic) and Anti-Monolith rules (do not bloat files). Identify the exact files you will touch.
-- **Step 1: 1PLAN (The Blueprint).** Formulate the architectural blueprint based strictly on MQA and the 40 coding pillars.
+- **Step 0: 0LIST (Audit & Impact).** Read the current Core/Coding Constitution and check this guide for material drift. Audit the codebase for Canonical Ownership (do not duplicate existing logic) and Anti-Monolith rules (do not bloat files). Identify the exact files you will touch.
+- **Step 1: 1PLAN (The Blueprint).** Formulate the architectural blueprint based strictly on MQA and all current coding pillars.
 - **Step 2: 2CHECK (Red Team).** Verify your 1PLAN against the codebase constraints. Ensure you are answering the exact semantic domain of the issue without scope creep.
 - **Step 3: 3CODE (Execution).** Emit the verbatim, unabridged implementation of the plan. No AI slop or unnecessary comments.
 - **Step 4: 4CHECK (Verification).** Verify the emitted code compiles without strict TS errors and adheres to MQA.
-- **Step 5: 5RUN (QA Checklist).** Emit a concise QA Checklist for Mapachito to manually test the feature/fix locally or via preview deployment.
+- **Step 5: 5RUN (QA Checklist).** Exercise the authorized paths through their normal entry points. Give Mapachito the tested revision, observed outcomes, and remaining checks for final QA acceptance. Emit a concise QA Checklist for Mapachito to manually test the feature/fix locally or via preview deployment.
 
 ## 3. GIT WORKFLOW & SEMANTIC COMMITS
 

@@ -32,7 +32,7 @@ function renderButtons({
 }
 
 describe("contact dialog navigation", () => {
-  it("cancels a non-edit dialog from either action", () => {
+  it("cancels or confirms deletion without validating the contact form", () => {
     const { closeDialog, submitDialog, validateStep } = renderButtons({
       dialogState: {
         type: "DELETE",
@@ -41,7 +41,7 @@ describe("contact dialog navigation", () => {
     })
 
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }))
+    fireEvent.click(screen.getByRole("button", { name: "Delete contact" }))
 
     expect(closeDialog).toHaveBeenCalledOnce()
     expect(submitDialog).toHaveBeenCalledOnce()

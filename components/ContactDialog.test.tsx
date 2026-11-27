@@ -383,15 +383,20 @@ describe("contact dialog validation and review", () => {
   it.each([
     {
       dialogState: { type: "DELETE", contact: existingContact } as const,
+      description:
+        "This will permanently delete Ada Lovelace from your contacts.",
+      action: "Delete contact",
       notification: "Contact deleted.",
     },
     {
       dialogState: { type: "RESET" } as const,
+      description: "This will permanently reset your contacts.",
+      action: "Submit",
       notification: "Contacts reset.",
     },
   ])(
     "submits $dialogState.type confirmations without form validation",
-    async ({ dialogState, notification }) => {
+    async ({ dialogState, description, action, notification }) => {
       const setDialogState = vi.fn()
       render(
         <Providers>
@@ -403,7 +408,10 @@ describe("contact dialog validation and review", () => {
         </Providers>,
       )
 
-      fireEvent.click(screen.getByRole("button", { name: "Submit" }))
+      expect(screen.getByRole("dialog")).toHaveAccessibleDescription(
+        description,
+      )
+      fireEvent.click(screen.getByRole("button", { name: action, exact: true }))
 
       expect(await screen.findByRole("alert")).toHaveTextContent(notification)
       expect(setDialogState).toHaveBeenCalledWith({ type: "CLOSED" })

@@ -136,7 +136,7 @@ export default function ContactDialogButtons({
   }
   const getNextLabel = () => {
     if (dialogState.type !== "CREATE" && dialogState.type !== "UPDATE")
-      return "Submit"
+      return dialogState.type === "DELETE" ? "Delete contact" : "Submit"
     if (dialogStep === "review") return "Submit"
     return "Next"
   }

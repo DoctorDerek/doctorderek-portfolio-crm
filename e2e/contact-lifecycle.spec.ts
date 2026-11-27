@@ -61,10 +61,15 @@ test("creates updates deletes and resets local contacts", async ({
   ).toBeVisible()
 
   await page.getByRole("button", { name: /Delete Mapachote Austin/ }).click()
-  await expect(
-    page.getByText("Delete Phone Book Entry", { exact: true }),
-  ).toBeVisible()
-  await page.getByRole("button", { name: "Submit", exact: true }).click()
+  const deleteDialog = page.getByRole("dialog", {
+    name: "Delete Phone Book Entry",
+  })
+  await expect(deleteDialog).toHaveAccessibleDescription(
+    "This will permanently delete Mapachote Austin from your contacts.",
+  )
+  await deleteDialog
+    .getByRole("button", { name: "Delete contact", exact: true })
+    .click()
 
   await expect(page.getByText("Contact deleted.")).toBeVisible()
   await expect(page.getByText("Mapachote Austin", { exact: true })).toBeHidden()

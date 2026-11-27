@@ -13,7 +13,7 @@ export default function ContactDialogDescription({
       {dialogState.type === "UPDATE" &&
         "This will update the entry in your contacts."}
       {dialogState.type === "DELETE" &&
-        "This will permanently delete the entry."}
+        `This will permanently delete ${dialogState.contact.firstName} ${dialogState.contact.lastName} from your contacts.`}
       {dialogState.type === "RESET" &&
         "This will permanently reset your contacts."}
     </Dialog.Description>

@@ -411,7 +411,7 @@ describe("contact dialog validation and review", () => {
       expect(screen.getByRole("dialog")).toHaveAccessibleDescription(
         description,
       )
-      fireEvent.click(screen.getByRole("button", { name: action, exact: true }))
+      fireEvent.click(screen.getByRole("button", { name: action }))
 
       expect(await screen.findByRole("alert")).toHaveTextContent(notification)
       expect(setDialogState).toHaveBeenCalledWith({ type: "CLOSED" })

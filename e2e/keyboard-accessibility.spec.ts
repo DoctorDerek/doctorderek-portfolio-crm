@@ -39,13 +39,19 @@ test("opens and dismisses the create dialog entirely from the keyboard", async (
     name: "First Name",
   })
   await expect(firstNameInput).toBeVisible()
+  const nextButton = page.getByRole("button", { name: "Next", exact: true })
+  await nextButton.focus()
+  await page.keyboard.press("Enter")
+  await expect(firstNameInput).toBeFocused()
+  await expect(
+    page.getByText("First name is required.", { exact: true }),
+  ).toBeInViewport({ ratio: 1 })
 
   await page
     .getByRole("textbox", { name: "Email Address" })
     .fill("keyboard@example.com")
   await firstNameInput.fill("Keyboard")
   await page.getByRole("textbox", { name: "Last Name" }).fill("User")
-  const nextButton = page.getByRole("button", { name: "Next", exact: true })
   await nextButton.focus()
   await page.keyboard.press("Enter")
 

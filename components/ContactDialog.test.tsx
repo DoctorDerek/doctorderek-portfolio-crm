@@ -262,6 +262,7 @@ describe("contact dialog validation and review", () => {
     expect(
       await screen.findByText("Please enter a valid email address."),
     ).toBeInTheDocument()
+    expect(screen.getByLabelText("Email Address")).toHaveFocus()
     expect(
       screen.getByRole("list").querySelector('[aria-current="step"]'),
     ).toHaveTextContent("Contact information")
